@@ -1,0 +1,14 @@
+auth:
+  jwt:
+    secret: ${JWT_SECRET:upgrade_test}
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: ${MYSQL_PASSWORD:}
+    url: jdbc:mysql://localhost:3306/userDB?serverTimezone=UTC&characterEncoding=UTF-8
+    username: ${MYSQL_USERNAME:}
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    generate-ddl: true
+    show-sql: true
