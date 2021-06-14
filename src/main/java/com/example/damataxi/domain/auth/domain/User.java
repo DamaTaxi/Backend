@@ -17,23 +17,24 @@ import javax.persistence.Id;
 public class User {
 
     @Id
+    @Column(name = "gcn", nullable = false)
     private Integer gcn;
 
-    @Column(name = "username", length = 10)
+    @Column(name = "username", length = 10, nullable = false)
     private String username;
 
-    @Column(name = "email", length = 45)
+    @Column(name = "email", length = 45, nullable = false)
     private String email;
 
-    @Column(name = "tel", length = 11)
+    @Column(name = "tel", length = 11, nullable = true)
     private String tel;
 
-    @Column(name = "latitude")
+    @Column(name = "latitude", nullable = true)
     private double latitude;
 
-    @Column(name = "longitude")
+    @Column(name = "longitude", nullable = true)
     private double longitude;
 
-    @Column(name = "reserved_pot")
+    @Column(name = "reserved_pot", nullable = true)
     private Integer reservedPot;
 }
