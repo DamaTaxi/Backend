@@ -16,11 +16,6 @@ public class AuthenticationFacade {
         return SecurityContextHolder.getContext().getAuthentication();
     }
 
-    public boolean isAdmin() {
-        Authentication auth = getAuthentication();
-        return ((UserDetails) auth.getPrincipal()).getPassword() != null;
-    }
-
     public User getUser() {
         Authentication auth = getAuthentication();
         return ((CustomUserDetails)auth).getUser();

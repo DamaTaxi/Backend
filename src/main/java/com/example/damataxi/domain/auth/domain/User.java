@@ -1,9 +1,6 @@
 package com.example.damataxi.domain.auth.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,15 +23,19 @@ public class User {
     @Column(name = "email", length = 45, nullable = false)
     private String email;
 
+    @Setter
     @Column(name = "tel", length = 11, nullable = true)
     private String tel;
 
+    @Setter
     @Column(name = "latitude", nullable = true)
     private double latitude;
 
+    @Setter
     @Column(name = "longitude", nullable = true)
     private double longitude;
 
+    @Setter
     @Column(name = "reserved_pot", nullable = true)
     private Integer reservedPot;
 }
