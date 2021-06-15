@@ -19,12 +19,15 @@ public class CustomUserDetailsService{
     private final AdminRepository adminRepository;
 
     public UserDetails loadUserByValue(String value) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findById(Integer.parseInt(value));
-        if(user.isPresent()){
-            return new CustomUserDetails(user.get());
+        try {
+            Optional<User> user = userRepository.findById(Integer.parseInt(value));
+            if (user.isPresent()) {
+                return new CustomUserDetails(user.get());
+            }
+        } catch (Exception e) {
+            return new AdminDetails(adminRepository.findById(value)
+                    .orElseThrow(() -> new UserNotFoundException(value)));
         }
-        return new AdminDetails(adminRepository.findById(value)
-                .orElseThrow(()->new UserNotFoundException(value)));
+        throw new UsernameNotFoundException(value);
     }
-
 }
