@@ -8,6 +8,8 @@ import com.example.damataxi.domain.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RequiredArgsConstructor
 @RequestMapping("/login")
 @RestController
@@ -16,12 +18,12 @@ public class LoginController {
     private final AuthService authService;
 
     @PostMapping
-    public UserTokenResponse userLogin(@RequestBody UserLoginRequest request){
+    public UserTokenResponse userLogin(@Valid @RequestBody UserLoginRequest request){
         return authService.userLogin(request.getAccessToken());
     }
 
     @PostMapping("/admin")
-    public TokenResponse adminLogin(@RequestBody AdminLoginRequest request){
+    public TokenResponse adminLogin(@Valid @RequestBody AdminLoginRequest request){
         return authService.adminLogin(request);
     }
 }
