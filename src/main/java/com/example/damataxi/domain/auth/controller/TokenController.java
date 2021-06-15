@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RequiredArgsConstructor
 @RequestMapping("/token-refresh")
 @RestController
@@ -17,7 +19,7 @@ public class TokenController {
     private final AuthService authService;
 
     @PatchMapping
-    public TokenResponse tokenRefresh(@RequestBody TokenRefreshRequest request){
+    public TokenResponse tokenRefresh(@Valid @RequestBody TokenRefreshRequest request){
         return authService.tokenRefresh(request);
     }
 }
