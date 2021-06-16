@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class mypageApiTest extends ApiTest {
+public class MypageApiTest extends ApiTest {
 
     @Autowired
     private UserRepository userRepository;
