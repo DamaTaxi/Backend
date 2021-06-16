@@ -12,7 +12,12 @@ public enum ErrorCode {
 
     INVALID_TOKEN(401, "A001", "Invalid Token"),
 
-    USER_NOT_FOUND(404, "S001", "User Not Found");
+    NOT_CREATOR(401, "S001", "Not Creator"),
+    ALREADY_APPLY(401, "S002", "Already Apply"),
+    IMPOSSIBLE_CHANGE(401, "S003", "Impossible Change"),
+    USER_NOT_FOUND(404, "S004", "User Not Found"),
+    TAXI_POT_NOT_FOUND(404, "S005", "Taxi Pot Not Found"),
+    APPLY_NOT_FOUND(404, "S006", "Did Not Apply");
 
     private final int status;
     private final String code;
