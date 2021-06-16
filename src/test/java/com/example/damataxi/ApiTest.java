@@ -1,5 +1,6 @@
 package com.example.damataxi;
 
+import com.example.damataxi.global.security.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ public class ApiTest extends IntegrationTest{
 
     @Autowired
     private MockMvc mvc;
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -30,5 +33,13 @@ public class ApiTest extends IntegrationTest{
         return mvc.perform(method
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());
+    }
+
+    protected String makeAccessToken(String user){
+        return jwtTokenProvider.generateAccessToken(user);
+    }
+
+    protected String makeRefreshToken(String user){
+        return jwtTokenProvider.generateRefreshToken(user);
     }
 }
