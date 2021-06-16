@@ -14,7 +14,7 @@ import javax.persistence.Id;
 public class User {
 
     @Id
-    @Column(name = "gcn", nullable = false)
+    @Column(name = "gcn")
     private Integer gcn;
 
     @Column(name = "username", length = 10, nullable = false)

@@ -1,14 +1,18 @@
 package com.example.damataxi.domain.mypage.dto.request;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class MypageRequest {
     @NotNull
-    @Pattern(regexp = "^01(?:0|1|[6-9])[.-]?(\\d{3}|\\d{4})[.-]?(\\d{4})$")
     private String tel;
     @NotNull
     private double latitude;

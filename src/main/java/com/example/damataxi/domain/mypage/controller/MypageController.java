@@ -3,7 +3,6 @@ package com.example.damataxi.domain.mypage.controller;
 import com.example.damataxi.domain.mypage.dto.request.MypageRequest;
 import com.example.damataxi.domain.mypage.dto.response.MypageResponse;
 import com.example.damataxi.domain.mypage.service.MypageService;
-import com.example.damataxi.global.error.exception.UserNotFoundException;
 import com.example.damataxi.global.security.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
-@RequestMapping("/mapage")
+@RequestMapping("/mypage")
 @RestController
 public class MypageController {
 

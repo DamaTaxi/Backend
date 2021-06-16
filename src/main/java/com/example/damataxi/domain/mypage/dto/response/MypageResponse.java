@@ -10,9 +10,9 @@ import lombok.*;
 public class MypageResponse {
     private String tel;
     private String email;
-    private double latitude;
-    private double longitude;
-    private int potId;
+    private Double latitude;
+    private Double longitude;
+    private Integer potId;
 
     public static MypageResponse from(User user){
         return MypageResponse.builder()
