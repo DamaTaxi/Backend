@@ -14,14 +14,14 @@ public class TaxiPotCheckProvider {
     private final ReservationRepository reservationRepository;
 
     public void checkAlreadyApply(User user) {
-        if ( !(user.getReservation()==null) || !(user.getReservedPot()==null) ) {
+        if ( !reservationRepository.findByIdUserGcn(user.getGcn()).isEmpty() ) {
             throw new AlreadyApplyException();
         }
     }
 
     public void checkIsCreator(User user, int id) {
         TaxiPot taxiPot = getTaxiPot(id);
-        if(!(taxiPot.getCreator() == user.getGcn())) {
+        if(taxiPot.getCreator().getGcn()== user.getGcn()) {
             throw new NotCreatorException(user.getUsername());
         }
     }

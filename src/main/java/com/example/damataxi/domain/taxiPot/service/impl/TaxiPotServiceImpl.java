@@ -8,6 +8,7 @@ import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotContentResponse;
 import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotInfoResponse;
 import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotListContentResponse;
 import com.example.damataxi.domain.taxiPot.service.TaxiPotService;
+import com.example.damataxi.global.error.exception.ApplyNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,7 @@ public class TaxiPotServiceImpl implements TaxiPotService {
     private int reserveCount() {
         int count = 0;
         for( TaxiPot taxiPot : taxiPotRepository.findAll() ) {
-            if(taxiPot.getReservations().size() == taxiPot.getAll()) {
+            if(taxiPot.getReservations().size() == taxiPot.getAmount()) {
                 count = count + 1;
             }
         }
@@ -60,7 +61,7 @@ public class TaxiPotServiceImpl implements TaxiPotService {
         taxiPotCheckProvider.checkAlreadyApply(user);
 
         TaxiPot taxiPot = TaxiPot.builder()
-                .creator(user.getGcn())
+                .creator(user)
                 .price(request.getPrice())
                 .target(TaxiPotTarget.valueOf(request.getTarget()))
                 .createdAt(LocalDateTime.now())
@@ -69,8 +70,7 @@ public class TaxiPotServiceImpl implements TaxiPotService {
                 .content(request.getContent())
                 .destinationLatitude(request.getLatitude())
                 .destinationLongitude(request.getLongitude())
-                .all(request.getAmount())
-                .user(user)
+                .amount(request.getAmount())
                 .build();
         taxiPotRepository.save(taxiPot);
 
@@ -85,10 +85,6 @@ public class TaxiPotServiceImpl implements TaxiPotService {
         reservations.add(reservation);
         taxiPot.setReservations(reservations);
         taxiPotRepository.save(taxiPot);
-
-        user.setTaxiPot(taxiPot);
-        user.setReservation(reservation);
-        userRepository.save(user);
     }
 
     @Override
@@ -98,7 +94,7 @@ public class TaxiPotServiceImpl implements TaxiPotService {
 
         TaxiPot taxiPot = TaxiPot.builder()
                 .id(id)
-                .creator(user.getGcn())
+                .creator(user)
                 .price(request.getPrice())
                 .target(TaxiPotTarget.valueOf(request.getTarget()))
                 .createdAt(LocalDateTime.now())
@@ -107,9 +103,17 @@ public class TaxiPotServiceImpl implements TaxiPotService {
                 .content(request.getContent())
                 .destinationLatitude(request.getLatitude())
                 .destinationLongitude(request.getLongitude())
-                .all(request.getAmount())
-                .user(user)
+                .amount(request.getAmount())
                 .build();
+        taxiPotRepository.save(taxiPot);
+        Reservation reservation = reservationRepository.findById(new ReservationId(user.getGcn(), id))
+                .orElseThrow(()-> { throw new ApplyNotFoundException(user.getUsername()); });
+        reservation.setTaxiPot(taxiPot);
+        reservationRepository.save(reservation);
+
+        List<Reservation> reservations = new ArrayList<>();
+        reservations.add(reservation);
+        taxiPot.setReservations(reservations);
         taxiPotRepository.save(taxiPot);
     }
 
@@ -119,13 +123,11 @@ public class TaxiPotServiceImpl implements TaxiPotService {
 
         reservationRepository.deleteById(new ReservationId(id, user.getGcn()));
         taxiPotRepository.deleteById(id);
-        user.setReservedPot(null);
-        user.setTaxiPot(null);
-        user.setReservation(null);
     }
 
     @Override
     public void applyTaxiPot(User user, int id) {
+        taxiPotCheckProvider.checkAlreadyApply(user);
         TaxiPot taxiPot = taxiPotCheckProvider.getTaxiPot(id);
 
         Reservation reservation = Reservation.builder()
@@ -134,11 +136,9 @@ public class TaxiPotServiceImpl implements TaxiPotService {
                 .taxiPot(taxiPot)
                 .build();
         reservationRepository.save(reservation);
+
         taxiPot.setReservations(reservationRepository.findByIdPotId(id));
         taxiPotRepository.save(taxiPot);
-        user.setReservedPot(id);
-        user.setReservation(reservation);
-        userRepository.save(user);
     }
 
     @Override
@@ -149,8 +149,5 @@ public class TaxiPotServiceImpl implements TaxiPotService {
         reservationRepository.delete(reservation);
         taxiPot.setReservations(reservationRepository.findByIdPotId(id));
         taxiPotRepository.save(taxiPot);
-        user.setReservedPot(null);
-        user.setReservation(null);
-        userRepository.save(user);
     }
 }

@@ -15,12 +15,12 @@ import java.util.List;
 @Table(name = "taxi_pot")
 public class TaxiPot {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Integer id;
 
-    @Column(name = "creator", nullable = false)
-    private int creator;
+    @OneToOne
+    @JoinColumn(name = "creator")
+    @Column(nullable = false)
+    private User creator;
 
     @Column(name = "price", nullable = false)
     private int price;
@@ -34,10 +34,10 @@ public class TaxiPot {
     @Column(name = "meeting_at", nullable = false)
     private LocalDateTime meetingAt;
 
-    @Column(name = "place", nullable = false)
+    @Column(name = "place", length = 45, nullable = false)
     private String place;
 
-    @Column(name = "content", nullable = true)
+    @Column(name = "content", length = 100)
     private String content;
 
     @Column(name = "destination_latitude", nullable = false)
@@ -46,13 +46,11 @@ public class TaxiPot {
     @Column(name = "destination_longitude", nullable = false)
     private double destinationLongitude;
 
-    @Column(name = "all", nullable = false)
-    private int all;
-
-    @OneToOne(mappedBy = "taxiPot")
-    private User user;
+    @Column(name = "amount", nullable = false)
+    private int amount;
 
     @Setter
     @OneToMany(mappedBy = "taxiPot")
     private List<Reservation> reservations;
+
 }

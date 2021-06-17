@@ -1,10 +1,7 @@
 package com.example.damataxi.domain.taxiPot.domain;
 
 import com.example.damataxi.domain.auth.domain.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -18,13 +15,14 @@ public class Reservation {
     @EmbeddedId
     private ReservationId id;
 
-    @OneToOne(mappedBy = "reservation")
+    @OneToOne
     @MapsId("userGcn")
-    @JoinColumn(name = "gcn")
+    @JoinColumn(name = "userGcn")
     private User user;
 
+    @Setter
     @ManyToOne
     @MapsId("potId")
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "potId")
     private TaxiPot taxiPot;
 }

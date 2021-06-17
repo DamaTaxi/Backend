@@ -31,7 +31,7 @@ public class TaxiPotContentResponse {
                 .target(taxiPot.getTarget().name())
                 .price(taxiPot.getPrice())
                 .reserve(taxiPot.getReservations().size())
-                .all(taxiPot.getAll())
+                .all(taxiPot.getAmount())
                 .latitude(taxiPot.getDestinationLatitude())
                 .longitude(taxiPot.getDestinationLongitude())
                 .place(taxiPot.getPlace())
