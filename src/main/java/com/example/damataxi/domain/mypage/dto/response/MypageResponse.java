@@ -15,12 +15,16 @@ public class MypageResponse {
     private Integer potId;
 
     public static MypageResponse from(User user){
+        Integer potId = null;
+        if(user.getReservation() != null){
+            potId = user.getReservation().getId().getPotId();
+        }
         return MypageResponse.builder()
                 .tel(user.getTel())
                 .email(user.getEmail())
                 .latitude(user.getLatitude())
                 .longitude(user.getLongitude())
-                .potId(user.getReservation().getId().getPotId())
+                .potId(potId)
                 .build();
     }
 }
