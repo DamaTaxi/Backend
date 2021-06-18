@@ -17,12 +17,12 @@ public class Reservation {
 
     @OneToOne
     @MapsId("userGcn")
-    @JoinColumn(name = "userGcn")
+    @JoinColumn(name = "user_gcn")
     private User user;
 
     @Setter
     @ManyToOne
     @MapsId("potId")
-    @JoinColumn(name = "potId")
+    @JoinColumn(name = "pot_id")
     private TaxiPot taxiPot;
 }

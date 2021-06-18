@@ -20,7 +20,7 @@ public class MypageResponse {
                 .email(user.getEmail())
                 .latitude(user.getLatitude())
                 .longitude(user.getLongitude())
-                .potId(user.getReservedPot())
+                .potId(user.getReservation().getId().getPotId())
                 .build();
     }
 }

@@ -27,7 +27,7 @@ public class TaxiPotContentResponse {
 
     public static TaxiPotContentResponse from(TaxiPot taxiPot) {
         return TaxiPotContentResponse.builder()
-                .creator(taxiPot.getUser().getUsername())
+                .creator(taxiPot.getCreator().getUsername())
                 .target(taxiPot.getTarget().name())
                 .price(taxiPot.getPrice())
                 .reserve(taxiPot.getReservations().size())

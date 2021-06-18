@@ -1,5 +1,6 @@
 package com.example.damataxi.domain.auth.domain;
 
+import com.example.damataxi.domain.taxiPot.domain.Reservation;
 import com.example.damataxi.domain.taxiPot.domain.TaxiPot;
 import lombok.*;
 
@@ -34,4 +35,8 @@ public class User {
     @Setter
     @Column(name = "longitude", nullable = true)
     private double longitude;
+
+    @Setter
+    @OneToOne(mappedBy = "user")
+    private Reservation reservation;
 }

@@ -15,11 +15,11 @@ import java.util.List;
 @Table(name = "taxi_pot")
 public class TaxiPot {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "creator")
-    @Column(nullable = false)
     private User creator;
 
     @Column(name = "price", nullable = false)
