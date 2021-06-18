@@ -1,16 +1,17 @@
 package com.example.damataxi.domain.auth.domain;
 
+import com.example.damataxi.domain.taxiPot.domain.Reservation;
+import com.example.damataxi.domain.taxiPot.domain.TaxiPot;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Entity
+@Table(name = "user")
 public class User {
 
     @Id
@@ -36,6 +37,6 @@ public class User {
     private double longitude;
 
     @Setter
-    @Column(name = "reserved_pot", nullable = true)
-    private Integer reservedPot;
+    @OneToOne(mappedBy = "user")
+    private Reservation reservation;
 }
