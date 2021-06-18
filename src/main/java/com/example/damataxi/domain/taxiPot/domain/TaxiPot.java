@@ -18,7 +18,7 @@ public class TaxiPot {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "creator")
     private User creator;
 

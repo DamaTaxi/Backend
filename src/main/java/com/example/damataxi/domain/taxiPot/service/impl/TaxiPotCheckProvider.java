@@ -21,7 +21,7 @@ public class TaxiPotCheckProvider {
 
     public void checkIsCreator(User user, int id) {
         TaxiPot taxiPot = getTaxiPot(id);
-        if(!(taxiPot.getCreator().getGcn() == user.getGcn())) {
+        if(!(taxiPot.getCreator().getGcn().equals(user.getGcn()))) {
             throw new NotCreatorException(user.getUsername());
         }
     }

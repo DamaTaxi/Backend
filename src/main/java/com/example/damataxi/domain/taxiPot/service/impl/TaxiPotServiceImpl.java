@@ -9,13 +9,12 @@ import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotInfoResponse;
 import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotListContentResponse;
 import com.example.damataxi.domain.taxiPot.service.TaxiPotService;
 import com.example.damataxi.global.error.exception.ApplyNotFoundException;
-import com.example.damataxi.global.error.exception.TaxiPotNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -59,6 +58,7 @@ public class TaxiPotServiceImpl implements TaxiPotService {
     }
 
     @Override
+    @Transactional
     public void makeTaxiPot(User user,TaxiPotContentRequest request) {
         taxiPotCheckProvider.checkAlreadyApply(user);
 
@@ -95,6 +95,7 @@ public class TaxiPotServiceImpl implements TaxiPotService {
     }
 
     @Override
+    @Transactional
     public void changeTaxiPotContent(User user, TaxiPotContentRequest request, int id) {
         taxiPotCheckProvider.checkIsCreator(user, id);
         taxiPotCheckProvider.checkChangePossible(id);
@@ -115,7 +116,7 @@ public class TaxiPotServiceImpl implements TaxiPotService {
         taxiPotRepository.save(taxiPot);
         TaxiPot newTaxiPot = taxiPotRefreshFacade.refreshTaxiPot(taxiPot);
 
-        Reservation reservation = reservationRepository.findById(new ReservationId(user.getGcn(), id))
+        Reservation reservation = reservationRepository.findById(new ReservationId(id, user.getGcn()))
                 .orElseThrow(()-> { throw new ApplyNotFoundException(user.getUsername()); });
 
         reservation.setTaxiPot(newTaxiPot);
@@ -131,16 +132,20 @@ public class TaxiPotServiceImpl implements TaxiPotService {
     }
 
     @Override
+    @Transactional
     public void deleteTaxiPot(User user, int id) {
         taxiPotCheckProvider.checkIsCreator(user, id);
+        taxiPotCheckProvider.checkChangePossible(id);
 
         reservationRepository.deleteById(new ReservationId(id, user.getGcn()));
         taxiPotRepository.deleteById(id);
+
         user.setReservation(null);
         userRepository.save(user);
     }
 
     @Override
+    @Transactional
     public void applyTaxiPot(User user, int id) {
         taxiPotCheckProvider.checkAlreadyApply(user);
         TaxiPot taxiPot = taxiPotCheckProvider.getTaxiPot(id);
@@ -161,11 +166,12 @@ public class TaxiPotServiceImpl implements TaxiPotService {
     }
 
     @Override
+    @Transactional
     public void cancleApplyTaxiPot(User user, int id) {
         TaxiPot taxiPot = taxiPotCheckProvider.getTaxiPot(id);
         Reservation reservation = taxiPotCheckProvider.getReservation(user, id);
 
-        reservationRepository.delete(reservation);
+        reservationRepository.deleteById(new ReservationId(id, user.getGcn()));
         taxiPot.setReservations(reservationRepository.findByIdPotId(id));
         taxiPotRepository.save(taxiPot);
 
