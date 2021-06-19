@@ -47,6 +47,11 @@ public class TaxiPotServiceImpl implements TaxiPotService {
     }
 
     @Override
+    public List<TaxiPotListContentResponse> getTaxiPotList(int size, int page) {
+        return taxiPotRepository.findAll(PageRequest.of(page, size))
+                .stream().map(TaxiPotListContentResponse::from).collect(Collectors.toList());
+    }
+    @Override
     public List<TaxiPotListContentResponse> getTaxiPotList(User user, int size, int page) {
         String target = null;
         if(String.valueOf(user.getGcn()).startsWith("1")){
@@ -62,10 +67,9 @@ public class TaxiPotServiceImpl implements TaxiPotService {
             target = "ALL";
         }
 
-        taxiPotRepository
+        return taxiPotRepository
                 .findByUsersTaxiPotWithPagination(user.getLatitude(), user.getLongitude(), target).subList(size*page, size*page+size)
         .stream().map(TaxiPotListContentResponse::from).collect(Collectors.toList());
-        return null;
     }
 
     @Override

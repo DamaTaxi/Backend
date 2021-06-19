@@ -1,5 +1,7 @@
 package com.example.damataxi.domain.taxiPot.domain;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -12,4 +14,5 @@ public interface TaxiPotRepository extends JpaRepository<TaxiPot, Integer> {
             "ORDER BY (u.destinationLatitude-:latitude)*(u.destinationLatitude-:latitude) + " +
             "(u.destinationLongitude-:longitude)*(u.destinationLongitude-:longitude)")
     List<TaxiPot> findByUsersTaxiPotWithPagination(double latitude, double longitude, String target);
+    Page<TaxiPot> findAll(Pageable pageable);
 }
