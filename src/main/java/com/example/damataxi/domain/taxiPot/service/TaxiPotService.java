@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface TaxiPotService {
     TaxiPotInfoResponse getTaxiPotInfo();
-    List<TaxiPotListContentResponse> getTaxiPotList(Authentication auth, int size, int page);
+    List<TaxiPotListContentResponse> getTaxiPotList(User user, int size, int page);
     TaxiPotContentResponse getTaxiPotContent(int id);
     void makeTaxiPot(User user,TaxiPotContentRequest request);
     void changeTaxiPotContent(User user,TaxiPotContentRequest request, int id);
