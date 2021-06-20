@@ -39,6 +39,7 @@ public class SuggestionServiceImpl implements SuggestionService {
                 .title(request.getTitle())
                 .content(request.getContent())
                 .build();
+        suggestionRepository.save(suggestion);
     }
 
     @Override

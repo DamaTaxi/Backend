@@ -6,6 +6,8 @@ import com.example.damataxi.domain.auth.domain.User;
 import com.example.damataxi.domain.auth.domain.UserRepository;
 import com.example.damataxi.domain.errorReport.domain.ErrorReport;
 import com.example.damataxi.domain.errorReport.domain.ErrorReportRepository;
+import com.example.damataxi.domain.suggestion.domain.Suggestion;
+import com.example.damataxi.domain.suggestion.domain.SuggestionRepository;
 import com.example.damataxi.domain.taxiPot.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,6 +27,8 @@ public class DummyDataCreatService{
     private ReservationRepository reservationRepository;
     @Autowired
     private ErrorReportRepository errorReportRepository;
+    @Autowired
+    private SuggestionRepository suggestionRepository;
 
     public User makeUser(int gcn){
         User user = User.builder()
@@ -115,5 +119,14 @@ public class DummyDataCreatService{
                 .build();
         errorReportRepository.save(errorReport);
         return errorReportRepository.findById(errorReport.getId()).get();
+    }
+
+    public Suggestion makeSuggestion() {
+        Suggestion suggestion = Suggestion.builder()
+                .title("testTitle")
+                .content("testContent")
+                .build();
+        suggestionRepository.save(suggestion);
+        return suggestionRepository.findById(suggestion.getId()).get();
     }
 }
