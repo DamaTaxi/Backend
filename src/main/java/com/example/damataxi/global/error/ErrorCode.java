@@ -18,7 +18,8 @@ public enum ErrorCode {
     USER_NOT_FOUND(404, "S004", "User Not Found"),
     TAXI_POT_NOT_FOUND(404, "S005", "Taxi Pot Not Found"),
     APPLY_NOT_FOUND(404, "S006", "Did Not Apply"),
-    ERROR_REPORT_NOT_FOUND(404, "S007", "Error Report Not Found");
+    ERROR_REPORT_NOT_FOUND(404, "S007", "Error Report Not Found"),
+    SUGGESTION_NOT_FOUND(404, "S008", "Suggestion Not Found");
 
     private final int status;
     private final String code;
