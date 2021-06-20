@@ -17,7 +17,8 @@ public enum ErrorCode {
     IMPOSSIBLE_CHANGE(401, "S003", "Impossible Change"),
     USER_NOT_FOUND(404, "S004", "User Not Found"),
     TAXI_POT_NOT_FOUND(404, "S005", "Taxi Pot Not Found"),
-    APPLY_NOT_FOUND(404, "S006", "Did Not Apply");
+    APPLY_NOT_FOUND(404, "S006", "Did Not Apply"),
+    ERROR_REPORT_NOT_FOUND(404, "S007", "Error Report Not Found");
 
     private final int status;
     private final String code;

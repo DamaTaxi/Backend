@@ -1,7 +1,11 @@
 package com.example.damataxi;
 
+import com.example.damataxi.domain.auth.domain.Admin;
+import com.example.damataxi.domain.auth.domain.AdminRepository;
 import com.example.damataxi.domain.auth.domain.User;
 import com.example.damataxi.domain.auth.domain.UserRepository;
+import com.example.damataxi.domain.errorReport.domain.ErrorReport;
+import com.example.damataxi.domain.errorReport.domain.ErrorReportRepository;
 import com.example.damataxi.domain.taxiPot.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,9 +18,13 @@ public class DummyDataCreatService{
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private AdminRepository adminRepository;
+    @Autowired
     private TaxiPotRepository taxiPotRepository;
     @Autowired
     private ReservationRepository reservationRepository;
+    @Autowired
+    private ErrorReportRepository errorReportRepository;
 
     public User makeUser(int gcn){
         User user = User.builder()
@@ -89,5 +97,23 @@ public class DummyDataCreatService{
         user.setReservation(newReservation);
         userRepository.save(user);
         return newReservation;
+    }
+
+    public Admin makeAdmin(String username) {
+        Admin admin = Admin.builder()
+                .username(username)
+                .password("password")
+                .build();
+        adminRepository.save(admin);
+        return adminRepository.findById(admin.getUsername()).get();
+    }
+
+    public ErrorReport makeErrorReport() {
+        ErrorReport errorReport = ErrorReport.builder()
+                .title("testTitle")
+                .content("testContent")
+                .build();
+        errorReportRepository.save(errorReport);
+        return errorReportRepository.findById(errorReport.getId()).get();
     }
 }
