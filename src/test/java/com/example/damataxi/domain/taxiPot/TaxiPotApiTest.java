@@ -5,16 +5,22 @@ import com.example.damataxi.DummyDataCreatService;
 import com.example.damataxi.domain.auth.domain.User;
 import com.example.damataxi.domain.auth.domain.UserRepository;
 import com.example.damataxi.domain.taxiPot.domain.*;
+import com.example.damataxi.domain.taxiPot.dto.TaxiPotListContentTestResponse;
 import com.example.damataxi.domain.taxiPot.dto.request.TaxiPotContentRequest;
+import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotListContentResponse;
 import com.example.damataxi.global.error.exception.TaxiPotNotFoundException;
 import com.example.damataxi.global.error.exception.UserNotFoundException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -32,6 +38,8 @@ public class TaxiPotApiTest extends ApiTest {
     private ReservationRepository reservationRepository;
     @Autowired
     private DummyDataCreatService dummyDataCreatService;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     public void clear() {
@@ -70,7 +78,114 @@ public class TaxiPotApiTest extends ApiTest {
         return requestMvc(get("/taxi-pot/info"));
     }
 
-    //TODO 택시팟 리스트
+    @Test
+    public void 택시팟_리스트_받아오기_토큰_없음_테스트() throws Exception {
+        // given
+        User creator1 = dummyDataCreatService.makeUser(1234);
+        TaxiPot taxiPot1 =dummyDataCreatService.makeTaxiPot(creator1);
+        dummyDataCreatService.makeReservation(taxiPot1, creator1);
+
+        User creator2 = dummyDataCreatService.makeUser(2345);
+        TaxiPot taxiPot2 =dummyDataCreatService.makeTaxiPot(creator2);
+        dummyDataCreatService.makeReservation(taxiPot2, creator2);
+
+        User creator3 = dummyDataCreatService.makeUser(3456);
+        TaxiPot taxiPot3 =dummyDataCreatService.makeTaxiPot(creator3);
+        dummyDataCreatService.makeReservation(taxiPot3, creator3);
+
+        User creator4 = dummyDataCreatService.makeUser(3210);
+        TaxiPot taxiPot4 =dummyDataCreatService.makeTaxiPot(creator4);
+        dummyDataCreatService.makeReservation(taxiPot4, creator4);
+
+        // when
+        ResultActions resultActions = requestGetTaxiPotList(3, 0);
+
+        // then
+        MvcResult result = resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+
+        List<TaxiPotListContentTestResponse> response = objectMapper.readValue(
+                result.getResponse().getContentAsString(), new TypeReference<List<TaxiPotListContentTestResponse>>() {});
+
+        Assertions.assertEquals(response.size(), 3);
+
+    }
+
+    private ResultActions requestGetTaxiPotList(int size, int page) throws Exception {
+        return requestMvc(get("/taxi-pot?size=" + size + "&page=" + page));
+    }
+
+    @Test
+    public void 택시팟_리스트_받아오기_토큰있음_target확인_테스트() throws Exception {
+        // given
+        User creator1 = dummyDataCreatService.makeUser(1234);
+        TaxiPot taxiPot1 =dummyDataCreatService.makeTaxiPot(creator1);
+        dummyDataCreatService.makeReservation(taxiPot1, creator1);
+
+        User creator3 = dummyDataCreatService.makeUser(2222);
+        TaxiPot taxiPot3 = dummyDataCreatService.makeTaxiPot(creator3, TaxiPotTarget.SOPHOMORE);
+        dummyDataCreatService.makeReservation(taxiPot3, creator3);
+
+        User creator4 = dummyDataCreatService.makeUser(1111);
+        TaxiPot taxiPot4 = dummyDataCreatService.makeTaxiPot(creator4, TaxiPotTarget.FRESHMAN);
+        dummyDataCreatService.makeReservation(taxiPot4, creator4);
+
+        User user = dummyDataCreatService.makeUser(1234);
+        String token = makeAccessToken(String.valueOf(user.getGcn()));
+        // when
+        ResultActions resultActions = requestGetTaxiPotList(3, 0, token);
+
+        // then
+        MvcResult result = resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+
+        List<TaxiPotListContentTestResponse> response = objectMapper.readValue(
+                result.getResponse().getContentAsString(), new TypeReference<List<TaxiPotListContentTestResponse>>() {});
+
+        Assertions.assertEquals(response.size(), 2);
+    }
+
+    @Test
+    public void 택시팟_리스트_받아오기_토큰있음_거리확인_테스트() throws Exception {
+        // given
+        User creator1 = dummyDataCreatService.makeUser(1111);
+        TaxiPot taxiPot1 = dummyDataCreatService.makeTaxiPot(creator1, 1.0000, 1.0000);
+        dummyDataCreatService.makeReservation(taxiPot1, creator1);
+
+        User creator2 = dummyDataCreatService.makeUser(2222);
+        TaxiPot taxiPot2 = dummyDataCreatService.makeTaxiPot(creator2, 2.0000, 2.0000);
+        dummyDataCreatService.makeReservation(taxiPot2, creator2);
+
+        User user = dummyDataCreatService.makeUser(3333);
+        user.setLatitude(3.0000);
+        user.setLongitude(3.0000);
+        userRepository.save(user);
+        String token = makeAccessToken(String.valueOf(user.getGcn()));
+
+        // when
+        ResultActions resultActions = requestGetTaxiPotList(3, 0, token);
+
+        // then
+        MvcResult result = resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+
+        List<TaxiPotListContentTestResponse> response = objectMapper.readValue(
+                result.getResponse().getContentAsString(), new TypeReference<List<TaxiPotListContentTestResponse>>() {});
+
+        Assertions.assertEquals(response.size(), 2);
+        Assertions.assertEquals(response.get(0).getLatitude(), 2.0000);
+        Assertions.assertEquals(response.get(0).getLongitude(), 2.0000);
+        Assertions.assertEquals(response.get(1).getLatitude(), 1.0000);
+        Assertions.assertEquals(response.get(1).getLongitude(), 1.0000);
+
+    }
+
+    private ResultActions requestGetTaxiPotList(int size, int page, String token) throws Exception {
+        return requestMvc(get("/taxi-pot?size=" + size + "&page=" + page).header("AUTHORIZATION", "Bearer " + token));
+    }
 
     @Test
     public void 택시팟_내용_받아오기_테스트() throws Exception {

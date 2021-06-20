@@ -10,12 +10,14 @@ import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotListContentRespon
 import com.example.damataxi.domain.taxiPot.service.TaxiPotService;
 import com.example.damataxi.global.error.exception.ApplyNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,9 +48,39 @@ public class TaxiPotServiceImpl implements TaxiPotService {
     }
 
     @Override
-    public List<TaxiPotListContentResponse> getTaxiPotList(Authentication auth, int size, int page) {
-        // TODO 모든 택시 팟 리스트
-        return null;
+    public List<TaxiPotListContentResponse> getTaxiPotList(int size, int page) {
+        return taxiPotRepository.findAll(PageRequest.of(page, size))
+                .stream().map(TaxiPotListContentResponse::from).collect(Collectors.toList());
+    }
+    @Override
+    public List<TaxiPotListContentResponse> getTaxiPotList(User user, int size, int page) {
+
+        TaxiPotTarget target = getTarget(user.getGcn());
+
+        List<TaxiPot> responses = taxiPotRepository
+                .findAllUsersTaxiPot(user.getLatitude(), user.getLongitude(), target);//.subList(size*page, size*page+size)
+
+        if(responses.size()<size*page) {
+            return Collections.emptyList();
+        } else if(responses.size()<size*page+size) {
+            return responses.subList(size*page, responses.size())
+                    .stream().map(TaxiPotListContentResponse::from).collect(Collectors.toList());
+        }
+        return responses.subList(size*page, size*page+size)
+                .stream().map(TaxiPotListContentResponse::from).collect(Collectors.toList());
+    }
+
+    private TaxiPotTarget getTarget(int gcn){
+        if(String.valueOf(gcn).startsWith("1")){
+            return TaxiPotTarget.FRESHMAN;
+        }
+        else if(String.valueOf(gcn).startsWith("2")){
+            return TaxiPotTarget.SOPHOMORE;
+        }
+        else if(String.valueOf(gcn).startsWith("3")){
+            return TaxiPotTarget.SENIOR;
+        }
+        return TaxiPotTarget.ALL;
     }
 
     @Override

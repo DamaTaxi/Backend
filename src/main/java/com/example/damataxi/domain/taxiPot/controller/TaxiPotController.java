@@ -27,7 +27,11 @@ public class TaxiPotController {
 
     @GetMapping
     public List<TaxiPotListContentResponse> getTaxiPotList(@RequestParam("size") int size, @RequestParam("page") int page) {
-        return taxiPotService.getTaxiPotList(authenticationFacade.getAuthentication(), size, page);
+        try {
+            return taxiPotService.getTaxiPotList(authenticationFacade.getUser(), size, page);
+        } catch (Exception e) {
+            return taxiPotService.getTaxiPotList(size, page);
+        }
     }
 
     @GetMapping("/{id}")
