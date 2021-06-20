@@ -25,6 +25,8 @@ public class TaxiPot {
     @Column(name = "price", nullable = false)
     private int price;
 
+    @Convert(converter = TaxiPotTargetConverter.class)
+    @Enumerated(EnumType.STRING)
     @Column(name = "target", nullable = false)
     private TaxiPotTarget target;
 
