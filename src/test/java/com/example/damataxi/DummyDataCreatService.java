@@ -44,6 +44,38 @@ public class DummyDataCreatService{
         return taxiPotRepository.findById(taxiPot.getId()).get();
     }
 
+    public TaxiPot makeTaxiPot(User user, double latitude, double longtitude){
+        TaxiPot taxiPot = TaxiPot.builder()
+                .creator(user)
+                .price(1000)
+                .target(TaxiPotTarget.ALL)
+                .createdAt(LocalDateTime.now())
+                .meetingAt(LocalDateTime.now())
+                .place("대마고")
+                .destinationLatitude(latitude)
+                .destinationLongitude(longtitude)
+                .amount(4)
+                .build();
+        taxiPotRepository.save(taxiPot);
+        return taxiPotRepository.findById(taxiPot.getId()).get();
+    }
+
+    public TaxiPot makeTaxiPot(User user, TaxiPotTarget target){
+        TaxiPot taxiPot = TaxiPot.builder()
+                .creator(user)
+                .price(1000)
+                .target(target)
+                .createdAt(LocalDateTime.now())
+                .meetingAt(LocalDateTime.now())
+                .place("대마고")
+                .destinationLatitude(12.1234)
+                .destinationLongitude(34.3456)
+                .amount(4)
+                .build();
+        taxiPotRepository.save(taxiPot);
+        return taxiPotRepository.findById(taxiPot.getId()).get();
+    }
+
     public Reservation makeReservation(TaxiPot taxiPot, User user){
         Reservation reservation = Reservation.builder()
                 .id(new ReservationId(taxiPot.getId(),user.getGcn()))
