@@ -181,6 +181,7 @@ public class TaxiPotServiceImpl implements TaxiPotService {
     public void applyTaxiPot(User user, int id) {
         taxiPotCheckProvider.checkAlreadyApply(user);
         TaxiPot taxiPot = taxiPotCheckProvider.getTaxiPot(id);
+        taxiPotCheckProvider.checkTaxiPotFinishedReservation(taxiPot);
 
         Reservation reservation = Reservation.builder()
                 .id(new ReservationId(taxiPot.getId(), user.getGcn()))

@@ -440,6 +440,29 @@ public class TaxiPotApiTest extends ApiTest {
     }
 
     @Test
+    public void 택시팟_신청_TaxiPotFinishedReservationException_테스트() throws Exception {
+        // given
+        User user = dummyDataCreatService.makeUser(1234);
+        String token = makeAccessToken(String.valueOf(user.getGcn()));
+
+        User creator = dummyDataCreatService.makeUser(2345);
+        TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(creator);
+        dummyDataCreatService.makeReservation(taxiPot, creator);
+
+        User user1 = dummyDataCreatService.makeUser(1111);
+        User user2 = dummyDataCreatService.makeUser(2222);
+        User user3 = dummyDataCreatService.makeUser(3333);
+        dummyDataCreatService.makeReservation(taxiPot, user1);
+        dummyDataCreatService.makeReservation(taxiPot, user2);
+        dummyDataCreatService.makeReservation(taxiPot, user3);
+        // when
+        ResultActions resultActions = requestApplyTaxiPot(taxiPot.getId(), token);
+        // then
+        resultActions.andExpect(status().is4xxClientError())
+                .andDo(print());
+    }
+
+    @Test
     public void 택시팟_신청_TaxiPotNotFoundException_테스트() throws Exception {
         // given
         User user = dummyDataCreatService.makeUser(2345);
