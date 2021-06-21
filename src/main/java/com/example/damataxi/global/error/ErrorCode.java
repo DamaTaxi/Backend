@@ -13,13 +13,14 @@ public enum ErrorCode {
     INVALID_TOKEN(401, "A001", "Invalid Token"),
 
     NOT_CREATOR(401, "S001", "Not Creator"),
-    ALREADY_APPLY(401, "S002", "Already Apply"),
-    IMPOSSIBLE_CHANGE(401, "S003", "Impossible Change"),
-    USER_NOT_FOUND(404, "S004", "User Not Found"),
-    TAXI_POT_NOT_FOUND(404, "S005", "Taxi Pot Not Found"),
-    APPLY_NOT_FOUND(404, "S006", "Did Not Apply"),
-    ERROR_REPORT_NOT_FOUND(404, "S007", "Error Report Not Found"),
-    SUGGESTION_NOT_FOUND(404, "S008", "Suggestion Not Found");
+    TAXI_POT_FINISHED_RESERVATION(401, "S002", "Taxi Pot Finished Reservation"),
+    ALREADY_APPLY(401, "S003", "Already Apply"),
+    IMPOSSIBLE_CHANGE(401, "S004", "Impossible Change"),
+    USER_NOT_FOUND(404, "S005", "User Not Found"),
+    TAXI_POT_NOT_FOUND(404, "S006", "Taxi Pot Not Found"),
+    APPLY_NOT_FOUND(404, "S007", "Did Not Apply"),
+    ERROR_REPORT_NOT_FOUND(404, "S008", "Error Report Not Found"),
+    SUGGESTION_NOT_FOUND(404, "S009", "Suggestion Not Found");
 
     private final int status;
     private final String code;

@@ -42,4 +42,10 @@ public class TaxiPotCheckProvider {
         return reservationRepository.findById(new ReservationId(id, user.getGcn()))
                 .orElseThrow(()-> { throw new ApplyNotFoundException(user.getUsername()); });
     }
+
+    public void checkTaxiPotFinishedReservation(TaxiPot taxiPot){
+        if(taxiPot.getReservations().size()==taxiPot.getAmount()) {
+            throw new TaxiPotFinishedReservationException(taxiPot.getId());
+        }
+    }
 }
