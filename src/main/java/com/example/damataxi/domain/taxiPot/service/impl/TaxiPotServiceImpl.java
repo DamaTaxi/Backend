@@ -32,14 +32,15 @@ public class TaxiPotServiceImpl implements TaxiPotService {
 
     @Override
     public TaxiPotInfoResponse getTaxiPotInfo() {
-        int all = taxiPotRepository.findAll().size();
-        int reserve = reserveCount();
+        List<TaxiPot> allTaxiPot = taxiPotRepository.findAll();
+        int all = allTaxiPot.size();
+        int reserve = reserveCount(allTaxiPot);
         return new TaxiPotInfoResponse(all, reserve);
     }
 
-    private int reserveCount() {
+    private int reserveCount(List<TaxiPot> allTaxiPot) {
         int count = 0;
-        for( TaxiPot taxiPot : taxiPotRepository.findAll() ) {
+        for( TaxiPot taxiPot : allTaxiPot ) {
             if(taxiPot.getReservations().size() == taxiPot.getAmount()) {
                 count = count + 1;
             }
@@ -200,7 +201,7 @@ public class TaxiPotServiceImpl implements TaxiPotService {
 
     @Override
     @Transactional
-    public void cancleApplyTaxiPot(User user, int id) {
+    public void cancelApplyTaxiPot(User user, int id) {
         TaxiPot taxiPot = taxiPotCheckProvider.getTaxiPot(id);
         Reservation reservation = taxiPotCheckProvider.getReservation(user, id);
 

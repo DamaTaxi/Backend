@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class DsmOauthAccountProvider implements com.example.damataxi.domain.auth.service.DsmOauthAccountProvider {
+public class DsmOauthAccountProviderImpl implements com.example.damataxi.domain.auth.service.DsmOauthAccountProvider {
 
     private final AccountProviderConnection accountProviderConnection;
 
