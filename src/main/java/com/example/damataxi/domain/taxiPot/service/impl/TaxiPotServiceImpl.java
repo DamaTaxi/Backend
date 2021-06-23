@@ -9,6 +9,7 @@ import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotInfoResponse;
 import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotListContentResponse;
 import com.example.damataxi.domain.taxiPot.service.TaxiPotService;
 import com.example.damataxi.global.error.exception.ApplyNotFoundException;
+import com.example.damataxi.global.querydsl.QueryDslRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class TaxiPotServiceImpl implements TaxiPotService {
     private final UserRepository userRepository;
     private final TaxiPotRepository taxiPotRepository;
     private final ReservationRepository reservationRepository;
+    private final QueryDslRepository queryDslRepository;
 
     @Override
     public TaxiPotInfoResponse getTaxiPotInfo() {
@@ -57,17 +59,9 @@ public class TaxiPotServiceImpl implements TaxiPotService {
     public List<TaxiPotListContentResponse> getTaxiPotList(User user, int size, int page) {
 
         TaxiPotTarget target = getTarget(user.getGcn());
-
-        List<TaxiPot> responses = taxiPotRepository
-                .findAllUsersTaxiPot(user.getLatitude(), user.getLongitude(), target);//.subList(size*page, size*page+size)
-
-        if(responses.size()<size*page) {
-            return Collections.emptyList();
-        } else if(responses.size()<size*page+size) {
-            return responses.subList(size*page, responses.size())
-                    .stream().map(TaxiPotListContentResponse::from).collect(Collectors.toList());
-        }
-        return responses.subList(size*page, size*page+size)
+        List<TaxiPot> responses = queryDslRepository
+                .getUsersTaxiPot(user.getLatitude(), user.getLongitude(), target, size, size*page);
+        return responses
                 .stream().map(TaxiPotListContentResponse::from).collect(Collectors.toList());
     }
 
