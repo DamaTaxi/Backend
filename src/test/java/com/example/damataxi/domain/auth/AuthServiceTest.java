@@ -8,7 +8,7 @@ import com.example.damataxi.domain.auth.dto.request.TokenRefreshRequest;
 import com.example.damataxi.domain.auth.dto.response.TokenResponse;
 import com.example.damataxi.domain.auth.dto.response.UserTokenResponse;
 import com.example.damataxi.domain.auth.retrofit.dto.DsmOauthResponse;
-import com.example.damataxi.domain.auth.service.AccountProvider;
+import com.example.damataxi.domain.auth.service.DsmOauthAccountProvider;
 import com.example.damataxi.domain.auth.service.impl.AuthServiceImpl;
 import com.example.damataxi.global.error.exception.InvalidTokenException;
 import com.example.damataxi.global.error.exception.UserNotFoundException;
@@ -35,7 +35,7 @@ public class AuthServiceTest extends ServiceTest {
     @Mock
     private JwtTokenProvider jwtTokenProvider;
     @Mock
-    private AccountProvider accountProvider;
+    private DsmOauthAccountProvider accountProvider;
     @InjectMocks
     private AuthServiceImpl authService;
 

@@ -70,7 +70,7 @@ public class TaxiPotController {
 
     @ApiOperation(value = "택시 팟 신청 취소하기", notes = "택시 팟 신청을 취소합니다 (유저)")
     @DeleteMapping("/sub/{id}")
-    public void cancleApplyTaxiPot(@PathVariable("id") int id) {
-        taxiPotService.cancleApplyTaxiPot(authenticationFacade.getUser(), id);
+    public void cancelApplyTaxiPot(@PathVariable("id") int id) {
+        taxiPotService.cancelApplyTaxiPot(authenticationFacade.getUser(), id);
     }
 }
