@@ -14,8 +14,8 @@ import java.io.Serializable;
 @Embeddable
 public class ReservationId implements Serializable {
     @Column(name = "pot_id", nullable = false)
-    private Integer potId;
+    private int potId;
 
     @Column(name = "user_gcn", nullable = false)
-    private Integer userGcn;
+    private int userGcn;
 }

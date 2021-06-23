@@ -18,5 +18,5 @@ public interface TaxiPotService {
     void changeTaxiPotContent(User user,TaxiPotContentRequest request, int id);
     void deleteTaxiPot(User user,int id);
     void applyTaxiPot(User user, int id);
-    void cancleApplyTaxiPot(User user, int id);
+    void cancelApplyTaxiPot(User user, int id);
 }
