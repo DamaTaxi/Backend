@@ -144,7 +144,7 @@ public class TaxiPotServiceImpl implements TaxiPotService {
         TaxiPot newTaxiPot = taxiPotRefreshFacade.refreshTaxiPot(taxiPot);
 
         Reservation reservation = reservationRepository.findById(new ReservationId(id, user.getGcn()))
-                .orElseThrow(()-> { throw new ApplyNotFoundException(user.getUsername()); });
+                .orElseThrow(()-> new ApplyNotFoundException(user.getUsername()));
 
         reservation.setTaxiPot(newTaxiPot);
         reservationRepository.save(reservation);
@@ -197,7 +197,7 @@ public class TaxiPotServiceImpl implements TaxiPotService {
     @Transactional
     public void cancelApplyTaxiPot(User user, int id) {
         TaxiPot taxiPot = taxiPotCheckProvider.getTaxiPot(id);
-        Reservation reservation = taxiPotCheckProvider.getReservation(user, id);
+        taxiPotCheckProvider.getReservation(user, id);
 
         reservationRepository.deleteById(new ReservationId(id, user.getGcn()));
         taxiPot.setReservations(reservationRepository.findByIdPotId(id));
