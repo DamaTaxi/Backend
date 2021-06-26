@@ -89,12 +89,15 @@ TaxiPotServiceImpl implements TaxiPotService {
     @Override
     @Transactional
     public void makeTaxiPot(User user,TaxiPotContentRequest request) {
+        TaxiPotTarget taxiPotTarget = TaxiPotTarget.valueOf(request.getTarget());
+
         taxiPotCheckProvider.checkAlreadyApply(user);
+        taxiPotCheckProvider.checkCorrectTarget(getTarget(user.getGcn()), taxiPotTarget);
 
         TaxiPot taxiPot = TaxiPot.builder()
                 .creator(user)
                 .price(request.getPrice())
-                .target(TaxiPotTarget.valueOf(request.getTarget()))
+                .target(taxiPotTarget)
                 .createdAt(LocalDateTime.now())
                 .meetingAt(request.getMeetingAt())
                 .place(request.getPlace())
@@ -126,14 +129,17 @@ TaxiPotServiceImpl implements TaxiPotService {
     @Override
     @Transactional
     public void changeTaxiPotContent(User user, TaxiPotContentRequest request, int id) {
+        TaxiPotTarget taxiPotTarget = TaxiPotTarget.valueOf(request.getTarget());
+
         taxiPotCheckProvider.checkIsCreator(user, id);
         taxiPotCheckProvider.checkChangePossible(id);
+        taxiPotCheckProvider.checkCorrectTarget(getTarget(user.getGcn()), taxiPotTarget);
 
         TaxiPot taxiPot = TaxiPot.builder()
                 .id(id)
                 .creator(user)
                 .price(request.getPrice())
-                .target(TaxiPotTarget.valueOf(request.getTarget()))
+                .target(taxiPotTarget)
                 .createdAt(LocalDateTime.now())
                 .meetingAt(request.getMeetingAt())
                 .place(request.getPlace())
@@ -179,6 +185,7 @@ TaxiPotServiceImpl implements TaxiPotService {
         taxiPotCheckProvider.checkAlreadyApply(user);
         TaxiPot taxiPot = taxiPotCheckProvider.getTaxiPot(id);
         taxiPotCheckProvider.checkTaxiPotFinishedReservation(taxiPot);
+        taxiPotCheckProvider.checkCorrectTarget(getTarget(user.getGcn()), taxiPot.getTarget());
 
         Reservation reservation = Reservation.builder()
                 .id(new ReservationId(taxiPot.getId(), user.getGcn()))

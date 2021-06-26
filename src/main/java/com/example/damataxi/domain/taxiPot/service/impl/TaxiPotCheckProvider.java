@@ -33,6 +33,12 @@ public class TaxiPotCheckProvider {
         }
     }
 
+    public void checkCorrectTarget(TaxiPotTarget userGrade, TaxiPotTarget taxiPotTarget){
+        if(!(userGrade.equals(taxiPotTarget) || taxiPotTarget.equals(TaxiPotTarget.ALL))) {
+            throw new InvalidInputValueException();
+        }
+    }
+
     public TaxiPot getTaxiPot(int id) {
         return taxiPotRepository.findById(id)
                 .orElseThrow(()-> new TaxiPotNotFoundException(id));
