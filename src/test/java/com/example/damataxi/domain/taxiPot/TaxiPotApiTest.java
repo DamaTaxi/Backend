@@ -219,7 +219,7 @@ public class TaxiPotApiTest extends ApiTest {
         // given
         User user = dummyDataCreatService.makeUser(1234);
         String token = makeAccessToken(String.valueOf(1234));
-        TaxiPotContentRequest request = makeTaxiPotContentRequest();
+        TaxiPotContentRequest request = makeTaxiPotContentRequest("ALL");
 
         // when
         ResultActions resultActions = requestMakeTaxiPot(request, token);
@@ -249,7 +249,7 @@ public class TaxiPotApiTest extends ApiTest {
         dummyDataCreatService.makeReservation(taxiPot, user);
         String token = makeAccessToken(String.valueOf(1234));
 
-        TaxiPotContentRequest request = makeTaxiPotContentRequest();
+        TaxiPotContentRequest request = makeTaxiPotContentRequest("ALL");
 
         // when
         ResultActions resultActions = requestMakeTaxiPot(request, token);
@@ -259,9 +259,24 @@ public class TaxiPotApiTest extends ApiTest {
                 .andDo(print());
     }
 
-    private TaxiPotContentRequest makeTaxiPotContentRequest() {
+    @Test
+    public void 택시팟_만들기_InvalidInputValueException_테스트() throws Exception {
+        // given
+        User user = dummyDataCreatService.makeUser(1234);
+        String token = makeAccessToken(String.valueOf(user.getGcn()));
+        TaxiPotContentRequest request = makeTaxiPotContentRequest("SENIOR");
+
+        // when
+        ResultActions resultActions = requestMakeTaxiPot(request, token);
+
+        // then
+        resultActions.andExpect(status().is4xxClientError())
+                .andDo(print());
+    }
+
+    private TaxiPotContentRequest makeTaxiPotContentRequest(String target) {
         return TaxiPotContentRequest.builder()
-                .target("ALL")
+                .target(target)
                 .meetingAt(LocalDateTime.now())
                 .place("기숙사 322호")
                 .latitude(12.3456)
@@ -282,7 +297,7 @@ public class TaxiPotApiTest extends ApiTest {
         String token = makeAccessToken(String.valueOf(user.getGcn()));
         TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(user);
         dummyDataCreatService.makeReservation(taxiPot, user);
-        TaxiPotContentRequest request = makeTaxiPotContentRequest();
+        TaxiPotContentRequest request = makeTaxiPotContentRequest("ALL");
 
         // when
         ResultActions resultActions = requestPatchTaxiPot(request, taxiPot.getId(), token);
@@ -312,7 +327,7 @@ public class TaxiPotApiTest extends ApiTest {
         User fakeUser = dummyDataCreatService.makeUser(2345);
         TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(fakeUser);
         dummyDataCreatService.makeReservation(taxiPot, fakeUser);
-        TaxiPotContentRequest request = makeTaxiPotContentRequest();
+        TaxiPotContentRequest request = makeTaxiPotContentRequest("ALL");
 
         // when
         ResultActions resultActions = requestPatchTaxiPot(request, taxiPot.getId(), token);
@@ -331,7 +346,24 @@ public class TaxiPotApiTest extends ApiTest {
 
         User reservedUser = dummyDataCreatService.makeUser(2345);
         dummyDataCreatService.makeReservation(taxiPot, reservedUser);
-        TaxiPotContentRequest request = makeTaxiPotContentRequest();
+        TaxiPotContentRequest request = makeTaxiPotContentRequest("ALL");
+
+        // when
+        ResultActions resultActions = requestPatchTaxiPot(request, taxiPot.getId(), token);
+        // then
+        resultActions.andExpect(status().is4xxClientError())
+                .andDo(print());
+    }
+
+    @Test
+    public void 택시팟_수정_InvalidInputValueException_테스트() throws Exception {
+        // given
+        User user = dummyDataCreatService.makeUser(1234);
+        String token = makeAccessToken(String.valueOf(user.getGcn()));
+        TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(user);
+        dummyDataCreatService.makeReservation(taxiPot, user);
+
+        TaxiPotContentRequest request = makeTaxiPotContentRequest("SENIOR");
 
         // when
         ResultActions resultActions = requestPatchTaxiPot(request, taxiPot.getId(), token);
@@ -469,6 +501,22 @@ public class TaxiPotApiTest extends ApiTest {
         String token = makeAccessToken(String.valueOf(user.getGcn()));
         // when
         ResultActions resultActions = requestApplyTaxiPot(1, token);
+        // then
+        resultActions.andExpect(status().is4xxClientError())
+                .andDo(print());
+    }
+
+    @Test
+    public void 택시팟_신청_InvalidInputValueException_테스트() throws Exception {
+        // given
+        User user = dummyDataCreatService.makeUser(3456);
+        String token = makeAccessToken(String.valueOf(user.getGcn()));
+
+        User creator = dummyDataCreatService.makeUser(1234);
+        TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(user, TaxiPotTarget.FRESHMAN);
+        dummyDataCreatService.makeReservation(taxiPot, creator);
+        // when
+        ResultActions resultActions = requestApplyTaxiPot(taxiPot.getId(), token);
         // then
         resultActions.andExpect(status().is4xxClientError())
                 .andDo(print());

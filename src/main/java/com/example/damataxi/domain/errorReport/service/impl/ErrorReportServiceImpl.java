@@ -29,7 +29,7 @@ public class ErrorReportServiceImpl implements ErrorReportService {
     @Override
     public ErrorReportContentResponse getErrorReportContent(int id) {
         ErrorReport errorReport = errorReportRepository.findById(id)
-                .orElseThrow(()-> { throw new ErrorReportNotFoundException(id); });
+                .orElseThrow(()-> new ErrorReportNotFoundException(id));
         return ErrorReportContentResponse.from(errorReport);
     }
 
@@ -45,7 +45,7 @@ public class ErrorReportServiceImpl implements ErrorReportService {
     @Override
     public void deleteErrorReport(int id) {
         errorReportRepository.findById(id)
-                .orElseThrow(()-> { throw new ErrorReportNotFoundException(id); });
+                .orElseThrow(()-> new ErrorReportNotFoundException(id));
         errorReportRepository.deleteById(id);
     }
 }

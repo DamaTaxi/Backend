@@ -27,20 +27,26 @@ public class TaxiPotCheckProvider {
     }
 
     public void checkChangePossible(int id) {
-        TaxiPot taxiPot = taxiPotRepository.findById(id).orElseThrow(()-> { throw new TaxiPotNotFoundException(id); } );
+        TaxiPot taxiPot = taxiPotRepository.findById(id).orElseThrow(()-> new TaxiPotNotFoundException(id));
         if(taxiPot.getReservations().size()>1){
             throw new ImpossibleChangeException();
         }
     }
 
+    public void checkCorrectTarget(TaxiPotTarget userGrade, TaxiPotTarget taxiPotTarget){
+        if(!(userGrade.equals(taxiPotTarget) || taxiPotTarget.equals(TaxiPotTarget.ALL))) {
+            throw new InvalidInputValueException();
+        }
+    }
+
     public TaxiPot getTaxiPot(int id) {
         return taxiPotRepository.findById(id)
-                .orElseThrow(()-> { throw new TaxiPotNotFoundException(id); });
+                .orElseThrow(()-> new TaxiPotNotFoundException(id));
     }
 
     public Reservation getReservation(User user, int id) {
         return reservationRepository.findById(new ReservationId(id, user.getGcn()))
-                .orElseThrow(()-> { throw new ApplyNotFoundException(user.getUsername()); });
+                .orElseThrow(()-> new ApplyNotFoundException(user.getUsername()));
     }
 
     public void checkTaxiPotFinishedReservation(TaxiPot taxiPot){
