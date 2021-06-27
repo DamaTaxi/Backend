@@ -29,7 +29,7 @@ public class SuggestionServiceImpl implements SuggestionService {
     @Override
     public SuggestionContentResponse getSuggestionContent(int id) {
         Suggestion suggestion = suggestionRepository.findById(id)
-                .orElseThrow(()-> { throw new SuggestionNotFoundException(id); });
+                .orElseThrow(()-> new SuggestionNotFoundException(id));
         return SuggestionContentResponse.from(suggestion);
     }
 
@@ -45,7 +45,7 @@ public class SuggestionServiceImpl implements SuggestionService {
     @Override
     public void deleteSuggestion(int id) {
         suggestionRepository.findById(id)
-                .orElseThrow(()-> { throw new SuggestionNotFoundException(id); });
+                .orElseThrow(()-> new SuggestionNotFoundException(id));
         suggestionRepository.deleteById(id);
     }
 }

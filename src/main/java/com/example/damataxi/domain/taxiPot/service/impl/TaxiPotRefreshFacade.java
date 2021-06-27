@@ -22,16 +22,16 @@ public class TaxiPotRefreshFacade {
 
     public User refreshUser(User user) {
         return userRepository.findById(user.getGcn())
-                .orElseThrow(()-> { throw new UserNotFoundException(user.getUsername()); });
+                .orElseThrow(()-> new UserNotFoundException(user.getUsername()));
     }
 
     public TaxiPot refreshTaxiPot(TaxiPot taxiPot) {
         return taxiPotRepository.findById(taxiPot.getId())
-                .orElseThrow(()-> { throw new TaxiPotNotFoundException(taxiPot.getId()); });
+                .orElseThrow(()-> new TaxiPotNotFoundException(taxiPot.getId()));
     }
 
     public Reservation refreshReservation(Reservation reservation) {
         return reservationRepository.findById(reservation.getId())
-                .orElseThrow(()-> { throw new ApplyNotFoundException(reservation.getUser().getUsername()); });
+                .orElseThrow(()-> new ApplyNotFoundException(reservation.getUser().getUsername()));
     }
 }

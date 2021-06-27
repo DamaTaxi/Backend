@@ -4,12 +4,11 @@ import com.example.damataxi.DummyDataCreatService;
 import com.example.damataxi.IntegrationTest;
 import com.example.damataxi.domain.auth.domain.User;
 import com.example.damataxi.domain.auth.domain.UserRepository;
-import com.example.damataxi.domain.taxiPot.domain.Reservation;
-import com.example.damataxi.domain.taxiPot.domain.ReservationRepository;
-import com.example.damataxi.domain.taxiPot.domain.TaxiPot;
-import com.example.damataxi.domain.taxiPot.domain.TaxiPotRepository;
+import com.example.damataxi.domain.taxiPot.domain.*;
 import com.example.damataxi.domain.taxiPot.service.impl.TaxiPotCheckProvider;
 import com.example.damataxi.global.error.exception.AlreadyApplyException;
+import com.example.damataxi.global.error.exception.ImpossibleChangeException;
+import com.example.damataxi.global.error.exception.InvalidInputValueException;
 import com.example.damataxi.global.error.exception.NotCreatorException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -85,5 +84,32 @@ public class TaxiPotCheckProviderTest extends IntegrationTest {
 
         // when, then
         taxiPotCheckProvider.checkChangePossible(taxiPot.getId());
+    }
+
+    @Test
+    public void checkChangePossible_ImpossibleChangeException_테스트() {
+        // given
+        User user1 = dummyDataCreatService.makeUser(1234);
+        TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(user1);
+        dummyDataCreatService.makeReservation(taxiPot, user1);
+        User user2 = dummyDataCreatService.makeUser(2345);
+        dummyDataCreatService.makeReservation(taxiPot, user2);
+
+        // when, then
+        assertThrows(ImpossibleChangeException.class, ()->taxiPotCheckProvider.checkChangePossible(taxiPot.getId()));
+    }
+
+    @Test
+    public void checkCorrectTarget_테스트() {
+        //when, then
+        taxiPotCheckProvider.checkCorrectTarget(TaxiPotTarget.FRESHMAN, TaxiPotTarget.ALL);
+        taxiPotCheckProvider.checkCorrectTarget(TaxiPotTarget.FRESHMAN, TaxiPotTarget.FRESHMAN);
+    }
+
+    @Test
+    public void checkCorrectTarget_InvalidInputValueException_테스트() {
+        //when, then
+        assertThrows(InvalidInputValueException.class,
+                ()->taxiPotCheckProvider.checkCorrectTarget(TaxiPotTarget.FRESHMAN, TaxiPotTarget.SENIOR));
     }
 }

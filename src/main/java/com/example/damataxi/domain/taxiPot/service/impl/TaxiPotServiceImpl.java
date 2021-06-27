@@ -10,6 +10,7 @@ import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotListContentRespon
 import com.example.damataxi.domain.taxiPot.service.TaxiPotService;
 import com.example.damataxi.global.error.exception.ApplyNotFoundException;
 import com.example.damataxi.global.querydsl.QueryDslRepository;
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,8 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class TaxiPotServiceImpl implements TaxiPotService {
+public class
+TaxiPotServiceImpl implements TaxiPotService {
 
     private final TaxiPotCheckProvider taxiPotCheckProvider;
     private final TaxiPotRefreshFacade taxiPotRefreshFacade;
@@ -66,16 +68,16 @@ public class TaxiPotServiceImpl implements TaxiPotService {
     }
 
     private TaxiPotTarget getTarget(int gcn){
-        if(String.valueOf(gcn).startsWith("1")){
-            return TaxiPotTarget.FRESHMAN;
+        switch (gcn/1000) {
+            case 1:
+                return TaxiPotTarget.FRESHMAN;
+            case 2:
+                return TaxiPotTarget.SOPHOMORE;
+            case 3:
+                return TaxiPotTarget.SENIOR;
+            default:
+                return TaxiPotTarget.ALL;
         }
-        else if(String.valueOf(gcn).startsWith("2")){
-            return TaxiPotTarget.SOPHOMORE;
-        }
-        else if(String.valueOf(gcn).startsWith("3")){
-            return TaxiPotTarget.SENIOR;
-        }
-        return TaxiPotTarget.ALL;
     }
 
     @Override
@@ -87,12 +89,15 @@ public class TaxiPotServiceImpl implements TaxiPotService {
     @Override
     @Transactional
     public void makeTaxiPot(User user,TaxiPotContentRequest request) {
+        TaxiPotTarget taxiPotTarget = TaxiPotTarget.valueOf(request.getTarget());
+
         taxiPotCheckProvider.checkAlreadyApply(user);
+        taxiPotCheckProvider.checkCorrectTarget(getTarget(user.getGcn()), taxiPotTarget);
 
         TaxiPot taxiPot = TaxiPot.builder()
                 .creator(user)
                 .price(request.getPrice())
-                .target(TaxiPotTarget.valueOf(request.getTarget()))
+                .target(taxiPotTarget)
                 .createdAt(LocalDateTime.now())
                 .meetingAt(request.getMeetingAt())
                 .place(request.getPlace())
@@ -124,14 +129,17 @@ public class TaxiPotServiceImpl implements TaxiPotService {
     @Override
     @Transactional
     public void changeTaxiPotContent(User user, TaxiPotContentRequest request, int id) {
+        TaxiPotTarget taxiPotTarget = TaxiPotTarget.valueOf(request.getTarget());
+
         taxiPotCheckProvider.checkIsCreator(user, id);
         taxiPotCheckProvider.checkChangePossible(id);
+        taxiPotCheckProvider.checkCorrectTarget(getTarget(user.getGcn()), taxiPotTarget);
 
         TaxiPot taxiPot = TaxiPot.builder()
                 .id(id)
                 .creator(user)
                 .price(request.getPrice())
-                .target(TaxiPotTarget.valueOf(request.getTarget()))
+                .target(taxiPotTarget)
                 .createdAt(LocalDateTime.now())
                 .meetingAt(request.getMeetingAt())
                 .place(request.getPlace())
@@ -144,7 +152,7 @@ public class TaxiPotServiceImpl implements TaxiPotService {
         TaxiPot newTaxiPot = taxiPotRefreshFacade.refreshTaxiPot(taxiPot);
 
         Reservation reservation = reservationRepository.findById(new ReservationId(id, user.getGcn()))
-                .orElseThrow(()-> { throw new ApplyNotFoundException(user.getUsername()); });
+                .orElseThrow(()-> new ApplyNotFoundException(user.getUsername()));
 
         reservation.setTaxiPot(newTaxiPot);
         reservationRepository.save(reservation);
@@ -177,6 +185,7 @@ public class TaxiPotServiceImpl implements TaxiPotService {
         taxiPotCheckProvider.checkAlreadyApply(user);
         TaxiPot taxiPot = taxiPotCheckProvider.getTaxiPot(id);
         taxiPotCheckProvider.checkTaxiPotFinishedReservation(taxiPot);
+        taxiPotCheckProvider.checkCorrectTarget(getTarget(user.getGcn()), taxiPot.getTarget());
 
         Reservation reservation = Reservation.builder()
                 .id(new ReservationId(taxiPot.getId(), user.getGcn()))
@@ -197,7 +206,7 @@ public class TaxiPotServiceImpl implements TaxiPotService {
     @Transactional
     public void cancelApplyTaxiPot(User user, int id) {
         TaxiPot taxiPot = taxiPotCheckProvider.getTaxiPot(id);
-        Reservation reservation = taxiPotCheckProvider.getReservation(user, id);
+        taxiPotCheckProvider.getReservation(user, id);
 
         reservationRepository.deleteById(new ReservationId(id, user.getGcn()));
         taxiPot.setReservations(reservationRepository.findByIdPotId(id));
