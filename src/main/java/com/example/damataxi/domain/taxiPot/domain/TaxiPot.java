@@ -19,7 +19,7 @@ public class TaxiPot {
     private Integer id;
 
     @OneToOne
-    @JoinColumn(name = "creator")
+    @JoinColumn(name = "creator_email")
     private User creator;
 
     @Column(name = "price", nullable = false)
