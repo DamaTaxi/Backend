@@ -1,65 +1,71 @@
 package com.example.damataxi.global.security;
 
-public final class ApiPath {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-    public static final String[] SWAGGER_PATH = { // all
+@Getter
+@AllArgsConstructor
+public enum ApiPath {
+
+    SWAGGER_PATH(new String[]{
             "/swagger-ui/*",
             "/swagger-ui/**",
             "/v2/api-docs",
-            "/swagger-resources/**"
-    };
+            "/swagger-resources/**"}),
 
-    public static final String[] LOGIN_PATH = { // all
+    LOGIN_PATH(new String[]{
             "/login",
             "/login/admin",
             "/token-refresh"
-    };
+    }),
 
-    public static final String[] MYPAGE_PATH = { // user
+    MYPAGE_PATH(new String[]{
             "/mypage"
-    };
+    }),
 
-    public static final String[] TAXI_POT_GET_PATH = { // all // GET
+    TAXI_POT_GET_PATH(new String[]{
             "/taxi-pot*",
             "/taxi-pot/*"
-    };
+    }),
 
-    public static final String[] TAXI_POT_POST_PATH = { // user // POST
+    TAXI_POT_POST_PATH(new String[]{
             "/taxi-pot",
             "/taxi-pot/sub"
-    };
+    }),
 
-    public static final String[] TAXI_POT_PATCH_PATH = { // user // PATCH
+    TAXI_POT_PATCH_PATH(new String[]{
             "/taxi-pot/*"
-    };
+    }),
 
-    public static final String[] TAXI_POT_DELETE_PATH = { // user // DELETE
+    TAXI_POT_DELETE_PATH(new String[]{
             "/taxi-pot/*"
-    };
+    }),
 
-    public static final String[] ERROR_REPORT_POST_PATH = { // all // POST
+    ERROR_REPORT_POST_PATH(new String[]{
             "/error-report"
-    };
+    }),
 
-    public static final String[] ERROR_REPORT_GET_PATH = { // admin // GET
+    ERROR_REPORT_GET_PATH(new String[]{
             "/error-report",
             "/error-report/*"
-    };
+    }),
 
-    public static final String[] ERROR_REPORT_DELETE_PATH = { // admin // DELETE
+    ERROR_REPORT_DELETE_PATH(new String[]{
             "/error-report"
-    };
+    }),
 
-    public static final String[] SUGGESION_POST_PATH = { // all // POST
+    SUGGESTION_POST_PATH(new String[]{
             "/suggestion"
-    };
+    }),
 
-    public static final String[] SUGGESION_GET_PATH = { // admin // GET
+    SUGGESTION_GET_PATH(new String[]{
             "/suggestion",
             "/suggestion/*"
-    };
+    }),
 
-    public static final String[] SUGGESION_DELETE_PATH = { // admin // DELETE
+    SUGGESTION_DELETE_PATH(new String[]{
             "/suggestion"
-    };
+    });
+
+    private final String[] apiPath;
 }
