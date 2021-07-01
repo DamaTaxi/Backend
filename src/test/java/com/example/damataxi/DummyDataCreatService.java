@@ -30,14 +30,24 @@ public class DummyDataCreatService{
     @Autowired
     private SuggestionRepository suggestionRepository;
 
-    public User makeUser(int gcn){
+    public User makeUser(String gcn){
         User user = User.builder()
+                .email("xxxx@gmail.com")
                 .gcn(gcn)
                 .username("testUser")
-                .email("xxxxxxxx@gmail.com")
                 .build();
         userRepository.save(user);
-        return userRepository.findById(user.getGcn()).get();
+        return userRepository.findById(user.getEmail()).get();
+    }
+
+    public User makeUser(String gcn, String email){
+        User user = User.builder()
+                .email(email)
+                .gcn(gcn)
+                .username("testUser")
+                .build();
+        userRepository.save(user);
+        return userRepository.findById(user.getEmail()).get();
     }
 
     public TaxiPot makeTaxiPot(User user){

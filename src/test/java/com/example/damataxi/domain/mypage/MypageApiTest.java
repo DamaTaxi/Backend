@@ -26,9 +26,9 @@ public class MypageApiTest extends ApiTest {
     @BeforeEach
     public void setUser(){
         User user = User.builder()
-                .gcn(1234)
+                .email("xxxx@gmail.com")
+                .gcn("1234")
                 .username("user")
-                .email("xxxxxxxx@gmail.com")
                 .build();
         userRepository.save(user);
     }
@@ -41,7 +41,7 @@ public class MypageApiTest extends ApiTest {
     @Test
     public void 정보_설정_테스트() throws Exception {
         // given
-        String token = makeAccessToken(String.valueOf(1234));
+        String token = makeAccessToken("xxxx@gmail.com");
         MypageRequest request = MypageRequest.builder()
                 .tel("01001010101")
                 .latitude(12.2312)
@@ -54,10 +54,10 @@ public class MypageApiTest extends ApiTest {
         // then
         resultActions.andExpect(status().isOk())
                 .andDo(print());
-        User user = userRepository.findById(1234).orElseThrow(()-> { throw  new UserNotFoundException("1234"); });
-        Assertions.assertEquals(user.getGcn(), 1234);
+        User user = userRepository.findById("xxxx@gmail.com").orElseThrow(UserNotFoundException::new);
+        Assertions.assertEquals(user.getGcn(), "1234");
         Assertions.assertEquals(user.getUsername(), "user");
-        Assertions.assertEquals(user.getEmail(), "xxxxxxxx@gmail.com");
+        Assertions.assertEquals(user.getEmail(), "xxxx@gmail.com");
         Assertions.assertEquals(user.getTel(), "01001010101");
         Assertions.assertEquals(user.getLatitude(), 12.2312);
         Assertions.assertEquals(user.getLongitude(), 23.4343);
@@ -70,12 +70,12 @@ public class MypageApiTest extends ApiTest {
     @Test
     public void 정보_받아오기_테스트() throws Exception {
         // given
-        User user = userRepository.findById(1234).orElseThrow(() -> { throw new UserNotFoundException("1234"); });
+        User user = userRepository.findById("xxxx@gmail.com").orElseThrow(UserNotFoundException::new);
         user.setTel("01001010101");
         user.setLatitude(12.2312);
         user.setLongitude(23.4343);
         userRepository.save(user);
-        String token = makeAccessToken(String.valueOf(1234));
+        String token = makeAccessToken("xxxx@gmail.com");
 
         // when
         ResultActions resultActions = requestGetUser(token);
@@ -83,7 +83,7 @@ public class MypageApiTest extends ApiTest {
         // then
         resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("tel").value("01001010101"))
-                .andExpect(jsonPath("email").value("xxxxxxxx@gmail.com"))
+                .andExpect(jsonPath("email").value("xxxx@gmail.com"))
                 .andExpect(jsonPath("latitude").value(12.2312))
                 .andExpect(jsonPath("longitude").value(23.4343))
                 .andExpect(jsonPath("potId").isEmpty())
