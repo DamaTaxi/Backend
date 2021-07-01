@@ -39,7 +39,7 @@ public class SuggestionReportApiTest extends ApiTest {
         dummyDataCreatService.makeSuggestion();
 
         // when
-        ResultActions resultActions = requestGetSuggestionList(token);
+        ResultActions resultActions = requestGetSuggestionList(2, 0, token);
 
         // then
         MvcResult result = resultActions.andExpect(status().isOk())
@@ -54,8 +54,8 @@ public class SuggestionReportApiTest extends ApiTest {
         Assertions.assertEquals(response.get(1).getTitle(), "testTitle");
     }
 
-    private ResultActions requestGetSuggestionList(String token) throws Exception {
-        return requestMvc(get("/suggestion").header("AUTHORIZATION", "Bearer " + token));
+    private ResultActions requestGetSuggestionList(int size, int page, String token) throws Exception {
+        return requestMvc(get("/suggestion?size=" + size + "&page=" + page).header("AUTHORIZATION", "Bearer " + token));
     }
 
     @Test

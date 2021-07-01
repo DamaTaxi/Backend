@@ -21,8 +21,8 @@ public class ErrorReportController {
 
     @ApiOperation(value = "오류 신고 리스트 받아오기", notes = "모든 오류 신고 리스트를 받아옵니다 (어드민)")
     @GetMapping
-    public List<ErrorReportListContentResponse> getErrorReportList() {
-        return errorReportService.getErrorReportList();
+    public List<ErrorReportListContentResponse> getErrorReportList(@RequestParam("size") int size, @RequestParam("page") int page) {
+        return errorReportService.getErrorReportList(size, page);
     }
 
     @ApiOperation(value = "오류 신고 내용 받아오기", notes = "오류 신고 아이디를 받고 오류 신고 내용을 반환합니다 (어드민)")

@@ -67,17 +67,17 @@ TaxiPotServiceImpl implements TaxiPotService {
                 .stream().map(TaxiPotListContentResponse::from).collect(Collectors.toList());
     }
 
-    private TaxiPotTarget getTarget(int gcn){
-        switch (gcn/1000) {
-            case 1:
-                return TaxiPotTarget.FRESHMAN;
-            case 2:
-                return TaxiPotTarget.SOPHOMORE;
-            case 3:
-                return TaxiPotTarget.SENIOR;
-            default:
-                return TaxiPotTarget.ALL;
+    private TaxiPotTarget getTarget(String gcn){
+
+        if (gcn.startsWith("1")) {
+            return TaxiPotTarget.FRESHMAN;
+        } else if (gcn.startsWith("2")) {
+            return TaxiPotTarget.SOPHOMORE;
+        } else if (gcn.startsWith("3")) {
+            return TaxiPotTarget.SENIOR;
         }
+        return TaxiPotTarget.ALL;
+
     }
 
     @Override
@@ -151,7 +151,7 @@ TaxiPotServiceImpl implements TaxiPotService {
         taxiPotRepository.save(taxiPot);
         TaxiPot newTaxiPot = taxiPotRefreshFacade.refreshTaxiPot(taxiPot);
 
-        Reservation reservation = reservationRepository.findById(new ReservationId(id, user.getGcn()))
+        Reservation reservation = reservationRepository.findById(new ReservationId(id, user.getEmail()))
                 .orElseThrow(()-> new ApplyNotFoundException(user.getUsername()));
 
         reservation.setTaxiPot(newTaxiPot);
@@ -172,7 +172,7 @@ TaxiPotServiceImpl implements TaxiPotService {
         taxiPotCheckProvider.checkIsCreator(user, id);
         taxiPotCheckProvider.checkChangePossible(id);
 
-        reservationRepository.deleteById(new ReservationId(id, user.getGcn()));
+        reservationRepository.deleteById(new ReservationId(id, user.getEmail()));
         taxiPotRepository.deleteById(id);
 
         user.setReservation(null);
@@ -208,7 +208,7 @@ TaxiPotServiceImpl implements TaxiPotService {
         TaxiPot taxiPot = taxiPotCheckProvider.getTaxiPot(id);
         taxiPotCheckProvider.getReservation(user, id);
 
-        reservationRepository.deleteById(new ReservationId(id, user.getGcn()));
+        reservationRepository.deleteById(new ReservationId(id, user.getEmail()));
         taxiPot.setReservations(reservationRepository.findByIdPotId(id));
         taxiPotRepository.save(taxiPot);
 

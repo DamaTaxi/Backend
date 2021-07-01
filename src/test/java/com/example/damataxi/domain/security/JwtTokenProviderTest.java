@@ -33,14 +33,14 @@ public class JwtTokenProviderTest extends IntegrationTest {
                 .setExpiration(new Date(System.currentTimeMillis() + 7200000L))
                 .signWith(SignatureAlgorithm.HS512, encodingSecretKey())
                 .setIssuedAt(new Date())
-                .setSubject("test")
+                .setSubject("xxxx@gmail.com")
                 .claim("type", "access")
                 .compact();
         refreshToken = Jwts.builder()
                 .setExpiration(new Date(System.currentTimeMillis() + 172800000L))
                 .signWith(SignatureAlgorithm.HS512, encodingSecretKey())
                 .setIssuedAt(new Date())
-                .setSubject("test")
+                .setSubject("xxxx@gmail.com")
                 .claim("type", "refresh")
                 .compact();
     }
@@ -48,11 +48,11 @@ public class JwtTokenProviderTest extends IntegrationTest {
     @Test
     public void generateAccessToken_테스트() {
         // when
-        String userIdToken= jwtTokenProvider.generateAccessToken(1234);
+        String userIdToken= jwtTokenProvider.generateAccessToken("xxxx@gmail.com");
         String adminIdToken = jwtTokenProvider.generateAccessToken("admin");
 
         // then
-        Assertions.assertEquals(getBody(userIdToken).getSubject(),String.valueOf(1234));
+        Assertions.assertEquals(getBody(userIdToken).getSubject(),"xxxx@gmail.com");
         Assertions.assertEquals(getBody(adminIdToken).getSubject(),"admin");
         Assertions.assertEquals(getBody(userIdToken).get("type", String.class), "access");
     }
@@ -60,11 +60,11 @@ public class JwtTokenProviderTest extends IntegrationTest {
     @Test
     public void generateRefreshToken_테스트() {
         // when
-        String userIdToken= jwtTokenProvider.generateRefreshToken(1234);
+        String userIdToken= jwtTokenProvider.generateRefreshToken("xxxx@gmail.com");
         String adminIdToken = jwtTokenProvider.generateRefreshToken("admin");
 
         // then
-        Assertions.assertEquals(getBody(userIdToken).getSubject(),String.valueOf(1234));
+        Assertions.assertEquals(getBody(userIdToken).getSubject(),"xxxx@gmail.com");
         Assertions.assertEquals(getBody(adminIdToken).getSubject(),"admin");
         Assertions.assertEquals(getBody(userIdToken).get("type", String.class), "refresh");
     }
@@ -97,8 +97,8 @@ public class JwtTokenProviderTest extends IntegrationTest {
         String refreshId = jwtTokenProvider.getId(accessToken);
 
         // then
-        Assertions.assertEquals(accessId,"test");
-        Assertions.assertEquals(refreshId, "test");
+        Assertions.assertEquals(accessId,"xxxx@gmail.com");
+        Assertions.assertEquals(refreshId, "xxxx@gmail.com");
     }
 
     @Test

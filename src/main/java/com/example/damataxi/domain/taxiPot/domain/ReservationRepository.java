@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface ReservationRepository extends JpaRepository<Reservation, ReservationId> {
     List<Reservation> findByIdPotId(int id);
-    Optional<Reservation> findByIdUserGcn(int id);
+    Optional<Reservation> findByIdUserEmail(String email);
 }

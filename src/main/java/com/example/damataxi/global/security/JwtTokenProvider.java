@@ -24,20 +24,12 @@ public class JwtTokenProvider {
     @Value("${auth.jwt.secret}")
     private String secretKey;
 
-    public String generateAccessToken(int gcn) {
-        return makingToken(gcn, "access", 7200L);
+    public String generateAccessToken(String value) {
+        return makingToken(value, "access", 7200L);
     }
 
-    public String generateRefreshToken(int gcn) {
-        return makingToken(gcn, "refresh", 172800L);
-    }
-
-    public String generateAccessToken(String username) {
-        return makingToken(username, "access", 7200L);
-    }
-
-    public String generateRefreshToken(String username) {
-        return makingToken(username, "refresh", 172800L);
+    public String generateRefreshToken(String value) {
+        return makingToken(value, "refresh", 172800L);
     }
 
     public boolean validateAccessToken(String token){
@@ -83,22 +75,12 @@ public class JwtTokenProvider {
         }
     }
 
-    private String makingToken(int gcn, String type, Long time){
+    private String makingToken(String value, String type, Long time){
         return Jwts.builder()
                 .setExpiration(new Date(System.currentTimeMillis() + (time * 1000L)))
                 .signWith(SignatureAlgorithm.HS512, encodingSecretKey())
                 .setIssuedAt(new Date())
-                .setSubject(String.valueOf(gcn))
-                .claim("type", type)
-                .compact();
-    }
-
-    private String makingToken(String username, String type, Long time){
-        return Jwts.builder()
-                .setExpiration(new Date(System.currentTimeMillis() + (time * 1000L)))
-                .signWith(SignatureAlgorithm.HS512, encodingSecretKey())
-                .setIssuedAt(new Date())
-                .setSubject(username)
+                .setSubject(value)
                 .claim("type", type)
                 .compact();
     }

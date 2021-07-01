@@ -40,7 +40,7 @@ public class ErrorReportApiTest extends ApiTest {
         dummyDataCreatService.makeErrorReport();
 
         // when
-        ResultActions resultActions = requestGetErrorReportList(token);
+        ResultActions resultActions = requestGetErrorReportList(2, 0, token);
 
         // then
         MvcResult result = resultActions.andExpect(status().isOk())
@@ -55,8 +55,8 @@ public class ErrorReportApiTest extends ApiTest {
         Assertions.assertEquals(response.get(1).getTitle(), "testTitle");
     }
 
-    private ResultActions requestGetErrorReportList(String token) throws Exception {
-        return requestMvc(get("/error-report").header("AUTHORIZATION", "Bearer " + token));
+    private ResultActions requestGetErrorReportList(int size, int page, String token) throws Exception {
+        return requestMvc(get("/error-report?size=" + size + "&page=" + page).header("AUTHORIZATION", "Bearer " + token));
     }
 
     @Test

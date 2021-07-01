@@ -7,7 +7,7 @@ import com.example.damataxi.domain.suggestion.dto.response.SuggestionListContent
 import java.util.List;
 
 public interface SuggestionService {
-    List<SuggestionListContentResponse> getSuggestionList();
+    List<SuggestionListContentResponse> getSuggestionList(int size, int page);
     SuggestionContentResponse getSuggestionContent(int id);
     void makeSuggestion(SuggestionContentRequest request);
     void deleteSuggestion(int id);

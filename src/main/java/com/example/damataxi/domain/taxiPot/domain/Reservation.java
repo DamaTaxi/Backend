@@ -16,8 +16,8 @@ public class Reservation {
     private ReservationId id;
 
     @OneToOne
-    @MapsId("userGcn")
-    @JoinColumn(name = "user_gcn")
+    @MapsId("userEmail")
+    @JoinColumn(name = "user_email")
     private User user;
 
     @Setter

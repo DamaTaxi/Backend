@@ -21,7 +21,7 @@ public class TaxiPotRefreshFacade {
     private final ReservationRepository reservationRepository;
 
     public User refreshUser(User user) {
-        return userRepository.findById(user.getGcn())
+        return userRepository.findById(user.getEmail())
                 .orElseThrow(()-> new UserNotFoundException(user.getUsername()));
     }
 

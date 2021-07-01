@@ -21,8 +21,8 @@ public class SuggestionController {
 
     @ApiOperation(value = "기능 건의 리스트 받아오기", notes = "모든 기능 건의 리스트를 받아옵니다 (어드민)")
     @GetMapping
-    public List<SuggestionListContentResponse> getSuggestionList() {
-        return suggestionService.getSuggestionList();
+    public List<SuggestionListContentResponse> getSuggestionList(@RequestParam("size") int size, @RequestParam("page") int page) {
+        return suggestionService.getSuggestionList(size, page);
     }
 
     @ApiOperation(value = "기능 건의 내용 받아오기", notes = "기능 건의 아이디를 받고 기능 건의 내용을 반환합니다 (어드민)")
