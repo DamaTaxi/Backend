@@ -7,7 +7,7 @@ import com.example.damataxi.domain.errorReport.dto.response.ErrorReportListConte
 import java.util.List;
 
 public interface ErrorReportService {
-    List<ErrorReportListContentResponse> getErrorReportList();
+    List<ErrorReportListContentResponse> getErrorReportList(int size, int page);
     ErrorReportContentResponse getErrorReportContent(int id);
     void makeErrorReport(ErrorReportContentRequest request);
     void deleteErrorReport(int id);

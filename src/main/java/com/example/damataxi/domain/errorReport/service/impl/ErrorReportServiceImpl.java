@@ -8,6 +8,7 @@ import com.example.damataxi.domain.errorReport.dto.response.ErrorReportListConte
 import com.example.damataxi.domain.errorReport.service.ErrorReportService;
 import com.example.damataxi.global.error.exception.ErrorReportNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,8 +21,8 @@ public class ErrorReportServiceImpl implements ErrorReportService {
     private final ErrorReportRepository errorReportRepository;
 
     @Override
-    public List<ErrorReportListContentResponse> getErrorReportList() {
-        return errorReportRepository.findAll()
+    public List<ErrorReportListContentResponse> getErrorReportList(int size, int page) {
+        return errorReportRepository.findAll(PageRequest.of(page, size))
                 .stream().map(ErrorReportListContentResponse::from)
                 .collect(Collectors.toList());
     }
