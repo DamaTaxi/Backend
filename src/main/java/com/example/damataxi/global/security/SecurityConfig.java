@@ -27,22 +27,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .formLogin().disable()
                 .authorizeRequests()
 
-                .antMatchers(ApiPath.SWAGGER_PATH).permitAll()
-                .antMatchers(ApiPath.LOGIN_PATH).permitAll()
-                .antMatchers(ApiPath.MYPAGE_PATH).hasAuthority("USER")
+                .antMatchers(ApiPath.SWAGGER_PATH.getApiPath()).permitAll()
+                .antMatchers(ApiPath.LOGIN_PATH.getApiPath()).permitAll()
+                .antMatchers(ApiPath.MYPAGE_PATH.getApiPath()).hasAuthority("USER")
 
-                .antMatchers(HttpMethod.GET, ApiPath.TAXI_POT_GET_PATH).permitAll()
-                .antMatchers(HttpMethod.POST, ApiPath.TAXI_POT_POST_PATH).hasAuthority("USER")
-                .antMatchers(HttpMethod.PATCH, ApiPath.TAXI_POT_PATCH_PATH).hasAuthority("USER")
-                .antMatchers(HttpMethod.DELETE, ApiPath.TAXI_POT_DELETE_PATH).hasAuthority("USER")
+                .antMatchers(HttpMethod.GET, ApiPath.TAXI_POT_GET_PATH.getApiPath()).permitAll()
+                .antMatchers(HttpMethod.POST, ApiPath.TAXI_POT_POST_PATH.getApiPath()).hasAuthority("USER")
+                .antMatchers(HttpMethod.PATCH, ApiPath.TAXI_POT_PATCH_PATH.getApiPath()).hasAuthority("USER")
+                .antMatchers(HttpMethod.DELETE, ApiPath.TAXI_POT_DELETE_PATH.getApiPath()).hasAuthority("USER")
 
-                .antMatchers(HttpMethod.POST, ApiPath.ERROR_REPORT_POST_PATH).permitAll()
-                .antMatchers(HttpMethod.GET, ApiPath.ERROR_REPORT_GET_PATH).hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.DELETE, ApiPath.ERROR_REPORT_DELETE_PATH).hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST, ApiPath.ERROR_REPORT_POST_PATH.getApiPath()).permitAll()
+                .antMatchers(HttpMethod.GET, ApiPath.ERROR_REPORT_GET_PATH.getApiPath()).hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.DELETE, ApiPath.ERROR_REPORT_DELETE_PATH.getApiPath()).hasAuthority("ADMIN")
 
-                .antMatchers(HttpMethod.POST, ApiPath.SUGGESION_POST_PATH).permitAll()
-                .antMatchers(HttpMethod.GET, ApiPath.SUGGESION_GET_PATH).hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.DELETE, ApiPath.SUGGESION_DELETE_PATH).hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST, ApiPath.SUGGESTION_POST_PATH.getApiPath()).permitAll()
+                .antMatchers(HttpMethod.GET, ApiPath.SUGGESTION_GET_PATH.getApiPath()).hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.DELETE, ApiPath.SUGGESTION_DELETE_PATH.getApiPath()).hasAuthority("ADMIN")
 
                 .anyRequest().authenticated()
                 .and().apply(new JwtConfigure(jwtTokenProvider));
