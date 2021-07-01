@@ -67,17 +67,17 @@ TaxiPotServiceImpl implements TaxiPotService {
                 .stream().map(TaxiPotListContentResponse::from).collect(Collectors.toList());
     }
 
-    private TaxiPotTarget getTarget(int gcn){
-        switch (gcn/1000) {
-            case 1:
-                return TaxiPotTarget.FRESHMAN;
-            case 2:
-                return TaxiPotTarget.SOPHOMORE;
-            case 3:
-                return TaxiPotTarget.SENIOR;
-            default:
-                return TaxiPotTarget.ALL;
+    private TaxiPotTarget getTarget(String gcn){
+
+        if (gcn.startsWith("1")) {
+            return TaxiPotTarget.FRESHMAN;
+        } else if (gcn.startsWith("2")) {
+            return TaxiPotTarget.SOPHOMORE;
+        } else if (gcn.startsWith("3")) {
+            return TaxiPotTarget.SENIOR;
         }
+        return TaxiPotTarget.ALL;
+
     }
 
     @Override
