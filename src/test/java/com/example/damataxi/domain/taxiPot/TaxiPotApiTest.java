@@ -51,11 +51,11 @@ public class TaxiPotApiTest extends ApiTest {
     @Test
     public void 택시팟_현황_테스트() throws Exception {
         // given
-        User user1 = dummyDataCreatService.makeUser(1234);
-        User user2 = dummyDataCreatService.makeUser(2345);
-        User user3 = dummyDataCreatService.makeUser(3456);
-        User user4 = dummyDataCreatService.makeUser(4567);
-        User user5 = dummyDataCreatService.makeUser(5678);
+        User user1 = dummyDataCreatService.makeUser("1234","aaaa@gmail.com");
+        User user2 = dummyDataCreatService.makeUser("2345","bbbb@gmail.com");
+        User user3 = dummyDataCreatService.makeUser("3456","cccc@gmail.com");
+        User user4 = dummyDataCreatService.makeUser("1567","dddd@gmail.com");
+        User user5 = dummyDataCreatService.makeUser("2678","eeee@gmail.com");
         TaxiPot taxiPot1 = dummyDataCreatService.makeTaxiPot(user1);
         TaxiPot taxiPot2 = dummyDataCreatService.makeTaxiPot(user2);
         dummyDataCreatService.makeReservation(taxiPot1, user1);
@@ -66,12 +66,11 @@ public class TaxiPotApiTest extends ApiTest {
         // when
         ResultActions resultActions = requestGetTaxiPotInfo();
         // then
-         resultActions.andExpect(status().isOk())
-                 .andExpect(jsonPath("all").value(2))
-                 .andExpect(jsonPath("reserve").value(1))
+        resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("all").value(2))
+                .andExpect(jsonPath("reserve").value(1))
                 .andDo(print())
                 .andReturn();
-
     }
 
     private ResultActions requestGetTaxiPotInfo() throws Exception {
@@ -81,19 +80,19 @@ public class TaxiPotApiTest extends ApiTest {
     @Test
     public void 택시팟_리스트_받아오기_토큰_없음_테스트() throws Exception {
         // given
-        User creator1 = dummyDataCreatService.makeUser(1234);
+        User creator1 = dummyDataCreatService.makeUser("1234", "aaaa@gmail.com");
         TaxiPot taxiPot1 =dummyDataCreatService.makeTaxiPot(creator1);
         dummyDataCreatService.makeReservation(taxiPot1, creator1);
 
-        User creator2 = dummyDataCreatService.makeUser(2345);
+        User creator2 = dummyDataCreatService.makeUser("2345", "bbbb@gmail.com");
         TaxiPot taxiPot2 =dummyDataCreatService.makeTaxiPot(creator2);
         dummyDataCreatService.makeReservation(taxiPot2, creator2);
 
-        User creator3 = dummyDataCreatService.makeUser(3456);
+        User creator3 = dummyDataCreatService.makeUser("3456", "cccc@gmail.com");
         TaxiPot taxiPot3 =dummyDataCreatService.makeTaxiPot(creator3);
         dummyDataCreatService.makeReservation(taxiPot3, creator3);
 
-        User creator4 = dummyDataCreatService.makeUser(3210);
+        User creator4 = dummyDataCreatService.makeUser("3210", "dddd@gmail.com");
         TaxiPot taxiPot4 =dummyDataCreatService.makeTaxiPot(creator4);
         dummyDataCreatService.makeReservation(taxiPot4, creator4);
 
@@ -109,7 +108,6 @@ public class TaxiPotApiTest extends ApiTest {
                 result.getResponse().getContentAsString(), new TypeReference<List<TaxiPotListContentTestResponse>>() {});
 
         Assertions.assertEquals(response.size(), 3);
-
     }
 
     private ResultActions requestGetTaxiPotList(int size, int page) throws Exception {
@@ -119,20 +117,20 @@ public class TaxiPotApiTest extends ApiTest {
     @Test
     public void 택시팟_리스트_받아오기_토큰있음_target확인_테스트() throws Exception {
         // given
-        User creator1 = dummyDataCreatService.makeUser(1234);
+        User creator1 = dummyDataCreatService.makeUser("1234", "aaaa@gmail.com");
         TaxiPot taxiPot1 =dummyDataCreatService.makeTaxiPot(creator1);
         dummyDataCreatService.makeReservation(taxiPot1, creator1);
 
-        User creator3 = dummyDataCreatService.makeUser(2222);
+        User creator3 = dummyDataCreatService.makeUser("2222", "bbbb@gmail.com");
         TaxiPot taxiPot3 = dummyDataCreatService.makeTaxiPot(creator3, TaxiPotTarget.SOPHOMORE);
         dummyDataCreatService.makeReservation(taxiPot3, creator3);
 
-        User creator4 = dummyDataCreatService.makeUser(1111);
+        User creator4 = dummyDataCreatService.makeUser("1111", "cccc@gmail.com");
         TaxiPot taxiPot4 = dummyDataCreatService.makeTaxiPot(creator4, TaxiPotTarget.FRESHMAN);
         dummyDataCreatService.makeReservation(taxiPot4, creator4);
 
-        User user = dummyDataCreatService.makeUser(1234);
-        String token = makeAccessToken(String.valueOf(user.getGcn()));
+        User user = dummyDataCreatService.makeUser("1234", "dddd@gmail.com");
+        String token = makeAccessToken(user.getEmail());
         // when
         ResultActions resultActions = requestGetTaxiPotList(3, 0, token);
 
@@ -150,19 +148,19 @@ public class TaxiPotApiTest extends ApiTest {
     @Test
     public void 택시팟_리스트_받아오기_토큰있음_거리확인_테스트() throws Exception {
         // given
-        User creator1 = dummyDataCreatService.makeUser(1111);
+        User creator1 = dummyDataCreatService.makeUser("1111", "aaaa@gmail.com");
         TaxiPot taxiPot1 = dummyDataCreatService.makeTaxiPot(creator1, 1.0000, 1.0000);
         dummyDataCreatService.makeReservation(taxiPot1, creator1);
 
-        User creator2 = dummyDataCreatService.makeUser(2222);
+        User creator2 = dummyDataCreatService.makeUser("2222", "bbbb@gmail.com");
         TaxiPot taxiPot2 = dummyDataCreatService.makeTaxiPot(creator2, 2.0000, 2.0000);
         dummyDataCreatService.makeReservation(taxiPot2, creator2);
 
-        User user = dummyDataCreatService.makeUser(3333);
+        User user = dummyDataCreatService.makeUser("3333", "cccc@gmail.com");
         user.setLatitude(3.0000);
         user.setLongitude(3.0000);
         userRepository.save(user);
-        String token = makeAccessToken(String.valueOf(user.getGcn()));
+        String token = makeAccessToken(user.getEmail());
 
         // when
         ResultActions resultActions = requestGetTaxiPotList(3, 0, token);
@@ -180,7 +178,6 @@ public class TaxiPotApiTest extends ApiTest {
         Assertions.assertEquals(response.get(0).getLongitude(), 2.0000);
         Assertions.assertEquals(response.get(1).getLatitude(), 1.0000);
         Assertions.assertEquals(response.get(1).getLongitude(), 1.0000);
-
     }
 
     private ResultActions requestGetTaxiPotList(int size, int page, String token) throws Exception {
@@ -190,7 +187,7 @@ public class TaxiPotApiTest extends ApiTest {
     @Test
     public void 택시팟_내용_받아오기_테스트() throws Exception {
         // given
-        User user = dummyDataCreatService.makeUser(1234);
+        User user = dummyDataCreatService.makeUser("1234");
         TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(user);
         Reservation reservation = dummyDataCreatService.makeReservation(taxiPot, user);
         // when
@@ -217,8 +214,8 @@ public class TaxiPotApiTest extends ApiTest {
     @Test
     public void 택시팟_만들기_테스트() throws Exception {
         // given
-        User user = dummyDataCreatService.makeUser(1234);
-        String token = makeAccessToken(String.valueOf(1234));
+        User user = dummyDataCreatService.makeUser("1234");
+        String token = makeAccessToken(user.getEmail());
         TaxiPotContentRequest request = makeTaxiPotContentRequest("ALL");
 
         // when
@@ -227,11 +224,11 @@ public class TaxiPotApiTest extends ApiTest {
         // then
         resultActions.andExpect(status().isCreated())
                 .andDo(print());
-        Reservation reservation = reservationRepository.findByIdUserGcn(1234)
-                .orElseThrow(()-> { throw new UserNotFoundException(1234); });
+        Reservation reservation = reservationRepository.findByIdUserEmail(user.getEmail())
+                .orElseThrow(()-> new UserNotFoundException(user.getEmail()));
         TaxiPot taxiPot = reservation.getTaxiPot();
 
-        Assertions.assertEquals(taxiPot.getCreator().getGcn(), 1234);
+        Assertions.assertEquals(taxiPot.getCreator().getGcn(), "1234");
         Assertions.assertEquals(taxiPot.getTarget(), TaxiPotTarget.ALL);
         Assertions.assertEquals(taxiPot.getPlace(), request.getPlace());
         Assertions.assertEquals(taxiPot.getDestinationLatitude(), request.getLatitude());
@@ -244,10 +241,10 @@ public class TaxiPotApiTest extends ApiTest {
     @Test
     public void 택시팟_만들기_AlreadyApplyException_테스트() throws Exception {
         // given
-        User user = dummyDataCreatService.makeUser(1234);
+        User user = dummyDataCreatService.makeUser("1234");
         TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(user);
         dummyDataCreatService.makeReservation(taxiPot, user);
-        String token = makeAccessToken(String.valueOf(1234));
+        String token = makeAccessToken(user.getEmail());
 
         TaxiPotContentRequest request = makeTaxiPotContentRequest("ALL");
 
@@ -262,8 +259,8 @@ public class TaxiPotApiTest extends ApiTest {
     @Test
     public void 택시팟_만들기_InvalidInputValueException_테스트() throws Exception {
         // given
-        User user = dummyDataCreatService.makeUser(1234);
-        String token = makeAccessToken(String.valueOf(user.getGcn()));
+        User user = dummyDataCreatService.makeUser("1234");
+        String token = makeAccessToken(user.getEmail());
         TaxiPotContentRequest request = makeTaxiPotContentRequest("SENIOR");
 
         // when
@@ -293,8 +290,8 @@ public class TaxiPotApiTest extends ApiTest {
     @Test
     public void 택시팟_수정_테스트() throws Exception {
         // given
-        User user = dummyDataCreatService.makeUser(1234);
-        String token = makeAccessToken(String.valueOf(user.getGcn()));
+        User user = dummyDataCreatService.makeUser("1234");
+        String token = makeAccessToken(user.getEmail());
         TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(user);
         dummyDataCreatService.makeReservation(taxiPot, user);
         TaxiPotContentRequest request = makeTaxiPotContentRequest("ALL");
@@ -308,7 +305,7 @@ public class TaxiPotApiTest extends ApiTest {
         TaxiPot patchedTaxiPot = taxiPotRepository.findById(taxiPot.getId())
                 .orElseThrow(()-> { throw new TaxiPotNotFoundException(taxiPot.getId()); });
 
-        Assertions.assertEquals(patchedTaxiPot.getCreator().getGcn(), 1234);
+        Assertions.assertEquals(patchedTaxiPot.getCreator().getGcn(), "1234");
         Assertions.assertEquals(patchedTaxiPot.getTarget(), TaxiPotTarget.ALL);
         Assertions.assertEquals(patchedTaxiPot.getPlace(), request.getPlace());
         Assertions.assertEquals(patchedTaxiPot.getDestinationLatitude(), request.getLatitude());
@@ -321,10 +318,10 @@ public class TaxiPotApiTest extends ApiTest {
     @Test
     public void 택시팟_수정_NotCreatorException_테스트() throws Exception {
         // given
-        User user = dummyDataCreatService.makeUser(1234);
-        String token = makeAccessToken(String.valueOf(user.getGcn()));
+        User user = dummyDataCreatService.makeUser("1234", "aaaa@gmail.com");
+        String token = makeAccessToken(user.getEmail());
 
-        User fakeUser = dummyDataCreatService.makeUser(2345);
+        User fakeUser = dummyDataCreatService.makeUser("2345", "bbbb@gmail.com");
         TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(fakeUser);
         dummyDataCreatService.makeReservation(taxiPot, fakeUser);
         TaxiPotContentRequest request = makeTaxiPotContentRequest("ALL");
@@ -339,12 +336,12 @@ public class TaxiPotApiTest extends ApiTest {
     @Test
     public void 택시팟_수정_ImpossibleChangeException_테스트() throws Exception {
         // given
-        User user = dummyDataCreatService.makeUser(1234);
-        String token = makeAccessToken(String.valueOf(user.getGcn()));
+        User user = dummyDataCreatService.makeUser("1234", "aaaa@gamil.com");
+        String token = makeAccessToken(user.getEmail());
         TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(user);
         dummyDataCreatService.makeReservation(taxiPot, user);
 
-        User reservedUser = dummyDataCreatService.makeUser(2345);
+        User reservedUser = dummyDataCreatService.makeUser("2345", "bbbb@gmail.com");
         dummyDataCreatService.makeReservation(taxiPot, reservedUser);
         TaxiPotContentRequest request = makeTaxiPotContentRequest("ALL");
 
@@ -358,8 +355,8 @@ public class TaxiPotApiTest extends ApiTest {
     @Test
     public void 택시팟_수정_InvalidInputValueException_테스트() throws Exception {
         // given
-        User user = dummyDataCreatService.makeUser(1234);
-        String token = makeAccessToken(String.valueOf(user.getGcn()));
+        User user = dummyDataCreatService.makeUser("1234");
+        String token = makeAccessToken(user.getEmail());
         TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(user);
         dummyDataCreatService.makeReservation(taxiPot, user);
 
@@ -379,8 +376,8 @@ public class TaxiPotApiTest extends ApiTest {
     @Test
     public void 택시팟_삭제_테스트() throws Exception {
         // given
-        User user = dummyDataCreatService.makeUser(1234);
-        String token = makeAccessToken(String.valueOf(user.getGcn()));
+        User user = dummyDataCreatService.makeUser("1234");
+        String token = makeAccessToken(user.getEmail());
         TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(user);
         Reservation reservation = dummyDataCreatService.makeReservation(taxiPot, user);
 
@@ -391,7 +388,7 @@ public class TaxiPotApiTest extends ApiTest {
         resultActions.andExpect(status().isOk())
                 .andDo(print());
 
-        User changedUser = userRepository.findById(user.getGcn())
+        User changedUser = userRepository.findById(user.getEmail())
                 .orElseThrow(()-> { throw new UserNotFoundException(user.getUsername()); });
 
         Assertions.assertNull(changedUser.getReservation());
@@ -402,9 +399,9 @@ public class TaxiPotApiTest extends ApiTest {
     @Test
     public void 택시팟_삭제_NotCreatorException_테스트() throws Exception {
         // given
-        User user = dummyDataCreatService.makeUser(1234);
-        String token = makeAccessToken(String.valueOf(user.getGcn()));
-        User fakeUser = dummyDataCreatService.makeUser(2345);
+        User user = dummyDataCreatService.makeUser("1234", "aaaa@gamil.com");
+        String token = makeAccessToken(user.getEmail());
+        User fakeUser = dummyDataCreatService.makeUser("2345", "bbbb@gmail.com");
         TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(fakeUser);
         dummyDataCreatService.makeReservation(taxiPot, fakeUser);
 
@@ -419,11 +416,11 @@ public class TaxiPotApiTest extends ApiTest {
     @Test
     public void 택시팟_삭제_ImpossibleChangeException_테스트() throws Exception {
         // given
-        User user = dummyDataCreatService.makeUser(1234);
-        String token = makeAccessToken(String.valueOf(user.getGcn()));
+        User user = dummyDataCreatService.makeUser("1234", "aaaa@gamil.com");
+        String token = makeAccessToken(user.getEmail());
         TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(user);
         dummyDataCreatService.makeReservation(taxiPot, user);
-        User reservedUser = dummyDataCreatService.makeUser(2345);
+        User reservedUser = dummyDataCreatService.makeUser("2345", "bbbb@gmail.com");
         dummyDataCreatService.makeReservation(taxiPot, reservedUser);
 
         // when
@@ -440,10 +437,9 @@ public class TaxiPotApiTest extends ApiTest {
 
     @Test
     public void 택시팟_신청_테스트() throws Exception {
-        // given
-        User user = dummyDataCreatService.makeUser(1234);
-        String token = makeAccessToken(String.valueOf(user.getGcn()));
-        User creator = dummyDataCreatService.makeUser(2345);
+        User user = dummyDataCreatService.makeUser("1234", "aaaa@gmail.com");
+        String token = makeAccessToken(user.getEmail());
+        User creator = dummyDataCreatService.makeUser("2345", "bbbb@gmail.com");
         TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(creator);
         dummyDataCreatService.makeReservation(taxiPot, creator);
         // when
@@ -451,17 +447,17 @@ public class TaxiPotApiTest extends ApiTest {
         // then
         resultActions.andExpect(status().isOk())
                 .andDo(print());
-        User reservedUser = userRepository.findById(user.getGcn())
+        User reservedUser = userRepository.findById(user.getEmail())
                 .orElseThrow(()-> { throw new UserNotFoundException(user.getUsername()); });
         Assertions.assertNotNull(reservedUser.getReservation());
-        Assertions.assertTrue(reservationRepository.findByIdUserGcn(user.getGcn()).isPresent());
+        Assertions.assertTrue(reservationRepository.findByIdUserEmail(user.getEmail()).isPresent());
     }
 
     @Test
     public void 택시팟_신청_AlreadyApplyException_테스트() throws Exception {
         // given
-        User creator = dummyDataCreatService.makeUser(2345);
-        String token = makeAccessToken(String.valueOf(creator.getGcn()));
+        User creator = dummyDataCreatService.makeUser("2345");
+        String token = makeAccessToken(creator.getEmail());
         TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(creator);
         dummyDataCreatService.makeReservation(taxiPot, creator);
         // when
@@ -474,16 +470,16 @@ public class TaxiPotApiTest extends ApiTest {
     @Test
     public void 택시팟_신청_TaxiPotFinishedReservationException_테스트() throws Exception {
         // given
-        User user = dummyDataCreatService.makeUser(1234);
-        String token = makeAccessToken(String.valueOf(user.getGcn()));
+        User user = dummyDataCreatService.makeUser("1234", "aaaa@gmail.com");
+        String token = makeAccessToken(user.getEmail());
 
-        User creator = dummyDataCreatService.makeUser(2345);
+        User creator = dummyDataCreatService.makeUser("2345", "bbbb@gmail.com");
         TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(creator);
         dummyDataCreatService.makeReservation(taxiPot, creator);
 
-        User user1 = dummyDataCreatService.makeUser(1111);
-        User user2 = dummyDataCreatService.makeUser(2222);
-        User user3 = dummyDataCreatService.makeUser(3333);
+        User user1 = dummyDataCreatService.makeUser("1111", "cccc@gmail.com");
+        User user2 = dummyDataCreatService.makeUser("2222", "dddd@gmail.com");
+        User user3 = dummyDataCreatService.makeUser("3333", "eeee@gmail.com");
         dummyDataCreatService.makeReservation(taxiPot, user1);
         dummyDataCreatService.makeReservation(taxiPot, user2);
         dummyDataCreatService.makeReservation(taxiPot, user3);
@@ -497,8 +493,8 @@ public class TaxiPotApiTest extends ApiTest {
     @Test
     public void 택시팟_신청_TaxiPotNotFoundException_테스트() throws Exception {
         // given
-        User user = dummyDataCreatService.makeUser(2345);
-        String token = makeAccessToken(String.valueOf(user.getGcn()));
+        User user = dummyDataCreatService.makeUser("2345");
+        String token = makeAccessToken(user.getEmail());
         // when
         ResultActions resultActions = requestApplyTaxiPot(1, token);
         // then
@@ -509,10 +505,10 @@ public class TaxiPotApiTest extends ApiTest {
     @Test
     public void 택시팟_신청_InvalidInputValueException_테스트() throws Exception {
         // given
-        User user = dummyDataCreatService.makeUser(3456);
-        String token = makeAccessToken(String.valueOf(user.getGcn()));
+        User user = dummyDataCreatService.makeUser("3456", "aaaa@gmail.com");
+        String token = makeAccessToken(user.getEmail());
 
-        User creator = dummyDataCreatService.makeUser(1234);
+        User creator = dummyDataCreatService.makeUser("1234", "bbbb@gmail.com");
         TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(user, TaxiPotTarget.FRESHMAN);
         dummyDataCreatService.makeReservation(taxiPot, creator);
         // when
@@ -529,36 +525,31 @@ public class TaxiPotApiTest extends ApiTest {
     @Test
     public void 택시팟_신청_취소_테스트() throws Exception {
         // given
-        User creator = dummyDataCreatService.makeUser(1234);
+        User creator = dummyDataCreatService.makeUser("1234", "aaaa@gmail.com");
         TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(creator);
         dummyDataCreatService.makeReservation(taxiPot, creator);
 
-        User user = dummyDataCreatService.makeUser(2345);
+        User user = dummyDataCreatService.makeUser("2345", "bbbb@gmail.com");
         dummyDataCreatService.makeReservation(taxiPot, user);
-        String token = makeAccessToken(String.valueOf(user.getGcn()));
+        String token = makeAccessToken(user.getEmail());
         // when
         ResultActions resultActions = requestCancleApplyTaxiPot(taxiPot.getId(), token);
         //then
         resultActions.andExpect(status().isOk())
                 .andDo(print());
 
-        User refreshUser = userRepository.findById(user.getGcn())
+        User refreshUser = userRepository.findById(user.getEmail())
                 .orElseThrow(()-> { throw new UserNotFoundException(user.getUsername()); });
 
         Assertions.assertNull(refreshUser.getReservation());
-        Assertions.assertFalse(reservationRepository.findByIdUserGcn(user.getGcn()).isPresent());
+        Assertions.assertFalse(reservationRepository.findByIdUserEmail(user.getEmail()).isPresent());
     }
 
     @Test
     public void 택시팟_신청_취소_TaxiPotNotFoundException_테스트() throws Exception {
-        // given
-        User creator = dummyDataCreatService.makeUser(1234);
-        TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(creator);
-        dummyDataCreatService.makeReservation(taxiPot, creator);
-
-        User user = dummyDataCreatService.makeUser(2345);
-        dummyDataCreatService.makeReservation(taxiPot, user);
-        String token = makeAccessToken(String.valueOf(user.getGcn()));
+        // given;
+        User user = dummyDataCreatService.makeUser("2345", "bbbb@gmail.com");
+        String token = makeAccessToken(user.getEmail());
         // when
         ResultActions resultActions = requestCancleApplyTaxiPot(1, token);
         //then
@@ -569,14 +560,14 @@ public class TaxiPotApiTest extends ApiTest {
     @Test
     public void 택시팟_신청_취소_ApplyNotFoundException_테스트() throws Exception {
         // given
-        User creator = dummyDataCreatService.makeUser(1234);
+        User creator = dummyDataCreatService.makeUser("1234", "aaaa@gamil.com");
         TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(creator);
         dummyDataCreatService.makeReservation(taxiPot, creator);
 
-        User user = dummyDataCreatService.makeUser(2345);
-        String token = makeAccessToken(String.valueOf(user.getGcn()));
+        User user = dummyDataCreatService.makeUser("2345", "bbbb@gamil.com");
+        String token = makeAccessToken(user.getEmail());
         // when
-        ResultActions resultActions = requestCancleApplyTaxiPot(1, token);
+        ResultActions resultActions = requestCancleApplyTaxiPot(taxiPot.getId(), token);
         //then
         resultActions.andExpect(status().is4xxClientError())
                 .andDo(print());
