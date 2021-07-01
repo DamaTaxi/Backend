@@ -16,6 +16,6 @@ public class ReservationId implements Serializable {
     @Column(name = "pot_id", nullable = false)
     private int potId;
 
-    @Column(name = "user_gcn", nullable = false)
-    private int userGcn;
+    @Column(name = "user_email", nullable = false)
+    private String userEmail;
 }

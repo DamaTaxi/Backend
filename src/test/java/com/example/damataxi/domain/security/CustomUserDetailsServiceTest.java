@@ -30,14 +30,14 @@ public class CustomUserDetailsServiceTest extends ServiceTest {
     public void loadUserByValue_user_테스트() {
         //given
         User user = User.builder()
-                .gcn(1234)
+                .gcn("1234")
                 .username("testUser")
                 .email("xxxx@gmail.com")
                 .build();
-        given(userRepository.findById(1234)).willReturn(Optional.of(user));
+        given(userRepository.findById("xxxx@gmail.com")).willReturn(Optional.of(user));
 
         //when
-        CustomUserDetails response = (CustomUserDetails) customUserDetailsService.loadUserByValue(String.valueOf(1234));
+        CustomUserDetails response = (CustomUserDetails) customUserDetailsService.loadUserByValue("xxxx@gmail.com");
 
         //then
         Assertions.assertEquals(response.getUsername(), "testUser");

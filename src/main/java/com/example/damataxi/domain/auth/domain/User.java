@@ -15,14 +15,14 @@ import javax.persistence.*;
 public class User {
 
     @Id
+    @Column(name = "email", length = 45, nullable = false)
+    private String email;
+
     @Column(name = "gcn")
-    private int gcn;
+    private String gcn;
 
     @Column(name = "username", length = 10, nullable = false)
     private String username;
-
-    @Column(name = "email", length = 45, nullable = false)
-    private String email;
 
     @Setter
     @Column(name = "tel", length = 11, nullable = true)

@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DsmOauthResponse {
     private String name;
-    private int gcn;
+    private String gcn;
     private String email;
 }

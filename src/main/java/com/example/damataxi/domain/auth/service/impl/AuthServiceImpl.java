@@ -43,8 +43,8 @@ public class AuthServiceImpl implements AuthService {
             userRepository.save(user);
         }
 
-        String accessToken = jwtTokenProvider.generateAccessToken(response.getGcn());
-        String refreshToken = jwtTokenProvider.generateRefreshToken(response.getGcn());
+        String accessToken = jwtTokenProvider.generateAccessToken(response.getEmail());
+        String refreshToken = jwtTokenProvider.generateRefreshToken(response.getEmail());
         return new UserTokenResponse(accessToken, refreshToken, firstLogin);
     }
 

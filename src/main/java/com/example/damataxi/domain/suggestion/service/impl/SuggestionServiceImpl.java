@@ -8,6 +8,7 @@ import com.example.damataxi.domain.suggestion.dto.response.SuggestionListContent
 import com.example.damataxi.domain.suggestion.service.SuggestionService;
 import com.example.damataxi.global.error.exception.SuggestionNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,8 +21,8 @@ public class SuggestionServiceImpl implements SuggestionService {
     private final SuggestionRepository suggestionRepository;
 
     @Override
-    public List<SuggestionListContentResponse> getSuggestionList() {
-        return suggestionRepository.findAll()
+    public List<SuggestionListContentResponse> getSuggestionList(int size, int page) {
+        return suggestionRepository.findAll(PageRequest.of(page, size))
                 .stream().map(SuggestionListContentResponse::from)
                 .collect(Collectors.toList());
     }
