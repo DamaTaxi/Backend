@@ -43,9 +43,9 @@ public class AuthServiceTest extends ServiceTest {
     public void userLogin_테스트() {
         // given
         String token = "testToken";
-        given(accountProvider.searchAccount(token)).willReturn(new DsmOauthResponse("가나다",1234,"xxxx@gmail.com"));
-        given(jwtTokenProvider.generateAccessToken(1234)).willReturn("accessToken");
-        given(jwtTokenProvider.generateRefreshToken(1234)).willReturn("refreshToken");
+        given(accountProvider.searchAccount(token)).willReturn(new DsmOauthResponse("가나다","1234","xxxx@gmail.com"));
+        given(jwtTokenProvider.generateAccessToken("xxxx@gmail.com")).willReturn("accessToken");
+        given(jwtTokenProvider.generateRefreshToken("xxxx@gmail.com")).willReturn("refreshToken");
 
         // when
         UserTokenResponse response = authService.userLogin(token);
@@ -73,6 +73,7 @@ public class AuthServiceTest extends ServiceTest {
         // then
         Assertions.assertEquals(response.getAccessToken(), "accessToken");
         Assertions.assertEquals(response.getRefreshToken(), "refreshToken");
+
     }
 
     @Test
@@ -96,8 +97,10 @@ public class AuthServiceTest extends ServiceTest {
         given(jwtTokenProvider.getId("refreshToken")).willReturn("id");
         given(jwtTokenProvider.generateAccessToken("id")).willReturn("accessToken");
         given(jwtTokenProvider.generateRefreshToken("id")).willReturn("refreshToken");
+
         //when
         TokenResponse response = authService.tokenRefresh(request);
+
         //then
         Assertions.assertEquals(response.getAccessToken(), "accessToken");
         Assertions.assertEquals(response.getRefreshToken(), "refreshToken");
@@ -108,6 +111,7 @@ public class AuthServiceTest extends ServiceTest {
         //given
         TokenRefreshRequest request = new TokenRefreshRequest("refreshToken");
         given(jwtTokenProvider.validateRefreshToken("refreshToken")).willReturn(false);
+
         //when, then
         assertThrows(InvalidTokenException.class, ()-> authService.tokenRefresh(request));
     }
