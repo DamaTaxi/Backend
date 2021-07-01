@@ -151,7 +151,7 @@ TaxiPotServiceImpl implements TaxiPotService {
         taxiPotRepository.save(taxiPot);
         TaxiPot newTaxiPot = taxiPotRefreshFacade.refreshTaxiPot(taxiPot);
 
-        Reservation reservation = reservationRepository.findById(new ReservationId(id, user.getGcn()))
+        Reservation reservation = reservationRepository.findById(new ReservationId(id, user.getEmail()))
                 .orElseThrow(()-> new ApplyNotFoundException(user.getUsername()));
 
         reservation.setTaxiPot(newTaxiPot);
@@ -172,7 +172,7 @@ TaxiPotServiceImpl implements TaxiPotService {
         taxiPotCheckProvider.checkIsCreator(user, id);
         taxiPotCheckProvider.checkChangePossible(id);
 
-        reservationRepository.deleteById(new ReservationId(id, user.getGcn()));
+        reservationRepository.deleteById(new ReservationId(id, user.getEmail()));
         taxiPotRepository.deleteById(id);
 
         user.setReservation(null);
@@ -208,7 +208,7 @@ TaxiPotServiceImpl implements TaxiPotService {
         TaxiPot taxiPot = taxiPotCheckProvider.getTaxiPot(id);
         taxiPotCheckProvider.getReservation(user, id);
 
-        reservationRepository.deleteById(new ReservationId(id, user.getGcn()));
+        reservationRepository.deleteById(new ReservationId(id, user.getEmail()));
         taxiPot.setReservations(reservationRepository.findByIdPotId(id));
         taxiPotRepository.save(taxiPot);
 

@@ -1,9 +1,6 @@
 package com.example.damataxi.global.security;
 
-import lombok.Getter;
-
-@Getter
-public class ApiPath {
+public final class ApiPath {
 
     public static final String[] SWAGGER_PATH = { // all
             "/swagger-ui/*",
