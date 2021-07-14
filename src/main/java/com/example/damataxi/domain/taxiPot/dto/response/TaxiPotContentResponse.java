@@ -1,11 +1,14 @@
 package com.example.damataxi.domain.taxiPot.dto.response;
 
+import com.example.damataxi.domain.auth.domain.User;
 import com.example.damataxi.domain.taxiPot.domain.TaxiPot;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -48,9 +51,22 @@ public class TaxiPotContentResponse {
     @ApiModelProperty(value = "택시 팟 상세 정보", example = "몰래 노래방 가실래요..? 그런 사람들만 신청해주세요")
     private String content;
 
+    @ApiModelProperty(value = "택시 팟 신청한 유저 정보", example = "2101 권민정 010-2809-3338")
+    private List<String> users;
+
     public static TaxiPotContentResponse from(TaxiPot taxiPot) {
+
+        List<String> users = taxiPot.getReservations().stream().map(
+                (reservation)-> {
+                    User user = reservation.getUser();
+                    return user.getGcn() + " " + user.getUsername() + " " + user.getTel();
+                }
+        ).collect(Collectors.toList());
+
+        User creator = taxiPot.getCreator();
+
         return TaxiPotContentResponse.builder()
-                .creator(taxiPot.getCreator().getUsername())
+                .creator(creator.getGcn() + " " + creator.getUsername())
                 .target(taxiPot.getTarget().name())
                 .price(taxiPot.getPrice())
                 .reserve(taxiPot.getReservations().size())
@@ -61,6 +77,7 @@ public class TaxiPotContentResponse {
                 .meetingAt(taxiPot.getMeetingAt())
                 .createdAt(taxiPot.getCreatedAt())
                 .content(taxiPot.getContent())
+                .users(users)
                 .build();
     }
 }
