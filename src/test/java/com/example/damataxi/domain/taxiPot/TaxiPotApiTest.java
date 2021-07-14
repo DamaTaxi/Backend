@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -189,12 +190,16 @@ public class TaxiPotApiTest extends ApiTest {
         // given
         User user = dummyDataCreatService.makeUser("1234");
         TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(user);
-        Reservation reservation = dummyDataCreatService.makeReservation(taxiPot, user);
+        dummyDataCreatService.makeReservation(taxiPot, user);
+        List<String> users = new ArrayList<>();
+        users.add(user.getGcn() + " " + user.getUsername() + " " + user.getTel());
+
         // when
         ResultActions resultActions = requestGetTaxiPotContent(taxiPot.getId());
+
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(jsonPath("creator").value(taxiPot.getCreator().getUsername()))
+                .andExpect(jsonPath("creator").value(user.getGcn() + " " + user.getUsername()))
                 .andExpect(jsonPath("target").value(taxiPot.getTarget().name()))
                 .andExpect(jsonPath("price").value(taxiPot.getPrice()))
                 .andExpect(jsonPath("reserve").value(taxiPot.getReservations().size()))
@@ -203,6 +208,7 @@ public class TaxiPotApiTest extends ApiTest {
                 .andExpect(jsonPath("longitude").value(taxiPot.getDestinationLongitude()))
                 .andExpect(jsonPath("place").value(taxiPot.getPlace()))
                 .andExpect(jsonPath("content").value(taxiPot.getContent()))
+                .andExpect(jsonPath("users").isArray())
                 .andDo(print())
                 .andReturn();
     }
