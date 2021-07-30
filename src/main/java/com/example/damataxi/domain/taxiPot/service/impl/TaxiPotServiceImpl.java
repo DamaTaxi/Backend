@@ -7,6 +7,7 @@ import com.example.damataxi.domain.taxiPot.dto.request.TaxiPotContentRequest;
 import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotContentResponse;
 import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotInfoResponse;
 import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotListContentResponse;
+import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotSlideContentResponse;
 import com.example.damataxi.domain.taxiPot.service.TaxiPotService;
 import com.example.damataxi.global.error.exception.ApplyNotFoundException;
 import com.example.damataxi.global.querydsl.QueryDslRepository;
@@ -50,6 +51,21 @@ TaxiPotServiceImpl implements TaxiPotService {
             }
         }
         return count;
+    }
+
+    @Override
+    public List<TaxiPotSlideContentResponse> getTaxiPotSlideList(int size, int page) {
+        return taxiPotRepository.findAll(PageRequest.of(page, size))
+                .stream().map(TaxiPotSlideContentResponse::from).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TaxiPotSlideContentResponse> getTaxiPotSlideList(User user, int size, int page) {
+        TaxiPotTarget target = getTarget(user.getGcn());
+        List<TaxiPot> responses = queryDslRepository
+                .getUsersTaxiPot(user.getLatitude(), user.getLongitude(), target, size, size*page);
+        return responses
+                .stream().map(TaxiPotSlideContentResponse::from).collect(Collectors.toList());
     }
 
     @Override

@@ -24,6 +24,7 @@ public enum ApiPath {
     }),
 
     TAXI_POT_GET_PATH(new String[]{
+            "/taxi-pot/slide*",
             "/taxi-pot*",
             "/taxi-pot/*"
     }),
