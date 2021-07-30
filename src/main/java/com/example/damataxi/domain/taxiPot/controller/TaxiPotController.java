@@ -4,6 +4,7 @@ import com.example.damataxi.domain.taxiPot.dto.request.TaxiPotContentRequest;
 import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotContentResponse;
 import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotInfoResponse;
 import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotListContentResponse;
+import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotSlideContentResponse;
 import com.example.damataxi.domain.taxiPot.service.TaxiPotService;
 import com.example.damataxi.global.security.AuthenticationFacade;
 import io.swagger.annotations.ApiOperation;
@@ -25,6 +26,16 @@ public class TaxiPotController {
     @GetMapping("/info")
     public TaxiPotInfoResponse getTaxiPotInfo() {
         return taxiPotService.getTaxiPotInfo();
+    }
+
+    @ApiOperation(value = "택시 팟 슬라이드 리스트 받아오기", notes = "모든 택시 팟 리스트를 받아옵니다 (ALL, 유저)")
+    @GetMapping("/slide")
+    public List<TaxiPotSlideContentResponse> getTaxiPotSlide(@RequestParam("size") int size, @RequestParam("page") int page) {
+        try {
+            return taxiPotService.getTaxiPotSlideList(authenticationFacade.getUser(), size, page);
+        } catch (Exception e) {
+            return taxiPotService.getTaxiPotSlideList(size, page);
+        }
     }
 
     @ApiOperation(value = "택시 팟 리스트 받아오기", notes = "모든 택시 팟 리스트를 받아옵니다 (ALL, 유저)")

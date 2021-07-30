@@ -7,7 +7,7 @@ import com.example.damataxi.domain.auth.domain.UserRepository;
 import com.example.damataxi.domain.taxiPot.domain.*;
 import com.example.damataxi.domain.taxiPot.dto.TaxiPotListContentTestResponse;
 import com.example.damataxi.domain.taxiPot.dto.request.TaxiPotContentRequest;
-import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotListContentResponse;
+import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotSlideContentResponse;
 import com.example.damataxi.global.error.exception.TaxiPotNotFoundException;
 import com.example.damataxi.global.error.exception.UserNotFoundException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -76,6 +76,78 @@ public class TaxiPotApiTest extends ApiTest {
 
     private ResultActions requestGetTaxiPotInfo() throws Exception {
         return requestMvc(get("/taxi-pot/info"));
+    }
+
+    @Test
+    public void 택시팟_슬라이드_받아오기_토큰_없음_테스트() throws Exception {
+        // given
+        User creator1 = dummyDataCreatService.makeUser("1234", "aaaa@gmail.com");
+        TaxiPot taxiPot1 =dummyDataCreatService.makeTaxiPot(creator1);
+        dummyDataCreatService.makeReservation(taxiPot1, creator1);
+
+        User creator2 = dummyDataCreatService.makeUser("2345", "bbbb@gmail.com");
+        TaxiPot taxiPot2 =dummyDataCreatService.makeTaxiPot(creator2);
+        dummyDataCreatService.makeReservation(taxiPot2, creator2);
+
+        User creator3 = dummyDataCreatService.makeUser("3456", "cccc@gmail.com");
+        TaxiPot taxiPot3 =dummyDataCreatService.makeTaxiPot(creator3);
+        dummyDataCreatService.makeReservation(taxiPot3, creator3);
+
+        User creator4 = dummyDataCreatService.makeUser("3210", "dddd@gmail.com");
+        TaxiPot taxiPot4 =dummyDataCreatService.makeTaxiPot(creator4);
+        dummyDataCreatService.makeReservation(taxiPot4, creator4);
+
+        // when
+        ResultActions resultActions = requestGetTaxiPotSlide(3, 0);
+
+        // then
+        MvcResult result = resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+
+        List<TaxiPotSlideContentResponse> response = objectMapper.readValue(
+                result.getResponse().getContentAsString(), new TypeReference<List<TaxiPotSlideContentResponse>>() {});
+
+        Assertions.assertEquals(response.size(), 3);
+    }
+
+    private ResultActions requestGetTaxiPotSlide(int size, int page) throws Exception {
+        return requestMvc(get("/taxi-pot/slide?size=" + size + "&page=" + page));
+    }
+
+    @Test
+    public void 택시팟_슬라이드_받아오기_토큰있음_target확인_테스트() throws Exception {
+        // given
+        User creator1 = dummyDataCreatService.makeUser("1234", "aaaa@gmail.com");
+        TaxiPot taxiPot1 =dummyDataCreatService.makeTaxiPot(creator1);
+        dummyDataCreatService.makeReservation(taxiPot1, creator1);
+
+        User creator3 = dummyDataCreatService.makeUser("2222", "bbbb@gmail.com");
+        TaxiPot taxiPot3 = dummyDataCreatService.makeTaxiPot(creator3, TaxiPotTarget.SOPHOMORE);
+        dummyDataCreatService.makeReservation(taxiPot3, creator3);
+
+        User creator4 = dummyDataCreatService.makeUser("1111", "cccc@gmail.com");
+        TaxiPot taxiPot4 = dummyDataCreatService.makeTaxiPot(creator4, TaxiPotTarget.FRESHMAN);
+        dummyDataCreatService.makeReservation(taxiPot4, creator4);
+
+        User user = dummyDataCreatService.makeUser("1234", "dddd@gmail.com");
+        String token = makeAccessToken(user.getEmail());
+        // when
+        ResultActions resultActions = requestGetTaxiPotSlide(3, 0, token);
+
+        // then
+        MvcResult result = resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+
+        List<TaxiPotSlideContentResponse> response = objectMapper.readValue(
+                result.getResponse().getContentAsString(), new TypeReference<List<TaxiPotSlideContentResponse>>() {});
+
+        Assertions.assertEquals(response.size(), 2);
+    }
+
+    private ResultActions requestGetTaxiPotSlide(int size, int page, String token) throws Exception {
+        return requestMvc(get("/taxi-pot/slide?size=" + size + "&page=" + page).header("AUTHORIZATION", "Bearer " + token));
     }
 
     @Test
