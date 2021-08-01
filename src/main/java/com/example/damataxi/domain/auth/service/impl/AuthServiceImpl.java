@@ -33,7 +33,7 @@ public class AuthServiceImpl implements AuthService {
         DsmOauthResponse response = dsmOauthAccountProvider.searchAccount(oauthAccessToken);
 
         boolean firstLogin = false;
-        if(userRepository.findById(response.getGcn()).isEmpty()) {
+        if(userRepository.findById(response.getEmail()).isEmpty()) {
             firstLogin = true;
             User user = User.builder()
                     .gcn(response.getGcn())
