@@ -15,7 +15,7 @@ public class DsmOauthAccountProviderImpl implements com.example.damataxi.domain.
     @Override
     public DsmOauthResponse searchAccount(String oAuthToken) {
         try {
-            return accountProviderConnection.authenticateFromDsmOauth(oAuthToken)
+            return accountProviderConnection.authenticateFromDsmOauth("Bearer " + oAuthToken)
                     .execute()
                     .body();
         } catch (Exception e) {
