@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder(access = AccessLevel.PRIVATE)
 public class TaxiPotContentResponse {
+    @ApiModelProperty(value = "택시 팟 도착지 이름", example = "가나다라마바사노래방")
+    private String title;
 
     @ApiModelProperty(value = "택시 팟 생성자", example = "김재현")
     private String creator;
@@ -66,6 +68,7 @@ public class TaxiPotContentResponse {
         User creator = taxiPot.getCreator();
 
         return TaxiPotContentResponse.builder()
+                .title(taxiPot.getTitle())
                 .creator(creator.getGcn() + " " + creator.getUsername())
                 .target(taxiPot.getTarget().name())
                 .price(taxiPot.getPrice())

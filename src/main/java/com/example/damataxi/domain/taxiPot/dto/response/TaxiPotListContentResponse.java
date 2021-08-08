@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder(access = AccessLevel.PRIVATE)
 public class TaxiPotListContentResponse {
+    @ApiModelProperty(value = "택시 팟 아이디", example = "1")
     private int id;
 
     @ApiModelProperty(value = "택시 팟 생성자", example = "김재현")
@@ -35,6 +36,9 @@ public class TaxiPotListContentResponse {
     @ApiModelProperty(value = "택시 팟 도착지 경도", example = "34.5678")
     private double longitude;
 
+    @ApiModelProperty(value = "택시 팟 도착지 이름", example = "가나다라마바사노래방")
+    private String title;
+
     @ApiModelProperty(value = "택시 팟 약속 장소", example = "사감실")
     private String place;
 
@@ -56,6 +60,7 @@ public class TaxiPotListContentResponse {
                 .all(taxiPot.getAmount())
                 .latitude(taxiPot.getDestinationLatitude())
                 .longitude(taxiPot.getDestinationLongitude())
+                .title(taxiPot.getTitle())
                 .place(taxiPot.getPlace())
                 .meetingAt(taxiPot.getMeetingAt())
                 .createdAt(taxiPot.getCreatedAt())

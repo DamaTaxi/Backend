@@ -60,6 +60,7 @@ public class DummyDataCreatService{
                 .place("대마고")
                 .destinationLatitude(12.1234)
                 .destinationLongitude(34.3456)
+                .title("가나다라마바사노래방")
                 .amount(4)
                 .build();
         taxiPotRepository.save(taxiPot);
@@ -76,6 +77,7 @@ public class DummyDataCreatService{
                 .place("대마고")
                 .destinationLatitude(latitude)
                 .destinationLongitude(longtitude)
+                .title("가나다라마바사노래방")
                 .amount(4)
                 .build();
         taxiPotRepository.save(taxiPot);
@@ -92,6 +94,7 @@ public class DummyDataCreatService{
                 .place("대마고")
                 .destinationLatitude(12.1234)
                 .destinationLongitude(34.3456)
+                .title("가나다라마바사노래방")
                 .amount(4)
                 .build();
         taxiPotRepository.save(taxiPot);

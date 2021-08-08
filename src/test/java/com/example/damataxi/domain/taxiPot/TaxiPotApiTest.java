@@ -278,6 +278,7 @@ public class TaxiPotApiTest extends ApiTest {
                 .andExpect(jsonPath("all").value(taxiPot.getAmount()))
                 .andExpect(jsonPath("latitude").value(taxiPot.getDestinationLatitude()))
                 .andExpect(jsonPath("longitude").value(taxiPot.getDestinationLongitude()))
+                .andExpect(jsonPath("title").value(taxiPot.getTitle()))
                 .andExpect(jsonPath("place").value(taxiPot.getPlace()))
                 .andExpect(jsonPath("content").value(taxiPot.getContent()))
                 .andExpect(jsonPath("users").isArray())
@@ -311,6 +312,7 @@ public class TaxiPotApiTest extends ApiTest {
         Assertions.assertEquals(taxiPot.getPlace(), request.getPlace());
         Assertions.assertEquals(taxiPot.getDestinationLatitude(), request.getLatitude());
         Assertions.assertEquals(taxiPot.getDestinationLongitude(), request.getLongitude());
+        Assertions.assertEquals(taxiPot.getTitle(), request.getTitle());
         Assertions.assertEquals(taxiPot.getAmount(), request.getAmount());
         Assertions.assertEquals(taxiPot.getPrice(), request.getPrice());
         Assertions.assertNull(taxiPot.getContent());
@@ -358,6 +360,7 @@ public class TaxiPotApiTest extends ApiTest {
                 .longitude(23.4567)
                 .amount(3)
                 .price(1000)
+                .title("가나다라마바사노래방")
                 .build();
     }
 
@@ -388,6 +391,7 @@ public class TaxiPotApiTest extends ApiTest {
         Assertions.assertEquals(patchedTaxiPot.getPlace(), request.getPlace());
         Assertions.assertEquals(patchedTaxiPot.getDestinationLatitude(), request.getLatitude());
         Assertions.assertEquals(patchedTaxiPot.getDestinationLongitude(), request.getLongitude());
+        Assertions.assertEquals(patchedTaxiPot.getTitle(), request.getTitle());
         Assertions.assertEquals(patchedTaxiPot.getAmount(), request.getAmount());
         Assertions.assertEquals(patchedTaxiPot.getPrice(), request.getPrice());
         Assertions.assertNull(patchedTaxiPot.getContent());

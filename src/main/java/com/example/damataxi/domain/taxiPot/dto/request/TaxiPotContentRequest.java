@@ -34,6 +34,9 @@ public class TaxiPotContentRequest {
     @ApiModelProperty(value = "택시 팟 도착지 경도", example = "34.5678")
     private double longitude;
 
+    @ApiModelProperty(value = "택시 팟 도착지 이름", example = "가나다라마바사노래방")
+    private String title;
+
     @ApiModelProperty(value = "택시 팟 사람 수", example = "4")
     private int amount;
 
