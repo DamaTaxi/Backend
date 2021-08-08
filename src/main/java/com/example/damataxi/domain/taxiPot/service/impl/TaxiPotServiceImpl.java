@@ -121,6 +121,7 @@ TaxiPotServiceImpl implements TaxiPotService {
                 .destinationLatitude(request.getLatitude())
                 .destinationLongitude(request.getLongitude())
                 .amount(request.getAmount())
+                .title(request.getTitle())
                 .build();
         taxiPotRepository.save(taxiPot);
 
@@ -162,6 +163,7 @@ TaxiPotServiceImpl implements TaxiPotService {
                 .content(request.getContent())
                 .destinationLatitude(request.getLatitude())
                 .destinationLongitude(request.getLongitude())
+                .title(request.getTitle())
                 .amount(request.getAmount())
                 .build();
         taxiPotRepository.save(taxiPot);

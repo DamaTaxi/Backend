@@ -12,6 +12,7 @@ public class TaxiPotListContentTestResponse {
     private String place;
     private String meetingAt;
     private String createdAt;
+    private String title;
 
     public String getTarget() {
         return target;
