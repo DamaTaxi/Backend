@@ -7,6 +7,7 @@ import com.example.damataxi.domain.errorReport.domain.ErrorReport;
 import com.example.damataxi.domain.errorReport.domain.ErrorReportRepository;
 import com.example.damataxi.domain.errorReport.dto.request.ErrorReportContentRequest;
 import com.example.damataxi.domain.errorReport.dto.response.ErrorReportListContentResponse;
+import com.example.damataxi.domain.errorReport.dto.response.ErrorReportPage;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
@@ -47,12 +48,14 @@ public class ErrorReportApiTest extends ApiTest {
                 .andDo(print())
                 .andReturn();
 
-        List<ErrorReportListContentResponse> response = objectMapper.readValue(
-                result.getResponse().getContentAsString(), new TypeReference<List<ErrorReportListContentResponse>>() {});
+        ErrorReportPage response = objectMapper.readValue(
+                result.getResponse().getContentAsString(), new TypeReference<ErrorReportPage>() {});
 
-        Assertions.assertEquals(response.size(), 2);
-        Assertions.assertEquals(response.get(0).getTitle(), "testTitle");
-        Assertions.assertEquals(response.get(1).getTitle(), "testTitle");
+        Assertions.assertEquals(response.getTotalElements(), 2);
+        Assertions.assertEquals(response.getTotalPages(), 1);
+        Assertions.assertEquals(response.getContent().size(), 2);
+        Assertions.assertEquals(response.getContent().get(0).getTitle(), "testTitle");
+        Assertions.assertEquals(response.getContent().get(1).getTitle(), "testTitle");
     }
 
     private ResultActions requestGetErrorReportList(int size, int page, String token) throws Exception {

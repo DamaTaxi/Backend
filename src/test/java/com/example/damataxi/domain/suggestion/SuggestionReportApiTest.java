@@ -7,6 +7,7 @@ import com.example.damataxi.domain.suggestion.domain.Suggestion;
 import com.example.damataxi.domain.suggestion.domain.SuggestionRepository;
 import com.example.damataxi.domain.suggestion.dto.request.SuggestionContentRequest;
 import com.example.damataxi.domain.suggestion.dto.response.SuggestionListContentResponse;
+import com.example.damataxi.domain.suggestion.dto.response.SuggestionPage;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
@@ -46,12 +47,14 @@ public class SuggestionReportApiTest extends ApiTest {
                 .andDo(print())
                 .andReturn();
 
-        List<SuggestionListContentResponse> response = objectMapper.readValue(
-                result.getResponse().getContentAsString(), new TypeReference<List<SuggestionListContentResponse>>() {});
+        SuggestionPage response = objectMapper.readValue(
+                result.getResponse().getContentAsString(), new TypeReference<SuggestionPage>() {});
 
-        Assertions.assertEquals(response.size(), 2);
-        Assertions.assertEquals(response.get(0).getTitle(), "testTitle");
-        Assertions.assertEquals(response.get(1).getTitle(), "testTitle");
+        Assertions.assertEquals(response.getTotalElements(), 2);
+        Assertions.assertEquals(response.getTotalPages(), 1);
+        Assertions.assertEquals(response.getContent().size(), 2);
+        Assertions.assertEquals(response.getContent().get(0).getTitle(), "testTitle");
+        Assertions.assertEquals(response.getContent().get(1).getTitle(), "testTitle");
     }
 
     private ResultActions requestGetSuggestionList(int size, int page, String token) throws Exception {

@@ -5,9 +5,11 @@ import com.example.damataxi.domain.errorReport.domain.ErrorReportRepository;
 import com.example.damataxi.domain.errorReport.dto.request.ErrorReportContentRequest;
 import com.example.damataxi.domain.errorReport.dto.response.ErrorReportContentResponse;
 import com.example.damataxi.domain.errorReport.dto.response.ErrorReportListContentResponse;
+import com.example.damataxi.domain.errorReport.dto.response.ErrorReportPage;
 import com.example.damataxi.domain.errorReport.service.ErrorReportService;
 import com.example.damataxi.global.error.exception.ErrorReportNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -21,10 +23,12 @@ public class ErrorReportServiceImpl implements ErrorReportService {
     private final ErrorReportRepository errorReportRepository;
 
     @Override
-    public List<ErrorReportListContentResponse> getErrorReportList(int size, int page) {
-        return errorReportRepository.findAll(PageRequest.of(page, size))
+    public ErrorReportPage getErrorReportList(int size, int page) {
+        Page<ErrorReport> errorReports = errorReportRepository.findAll(PageRequest.of(page, size));
+        List<ErrorReportListContentResponse> content = errorReports
                 .stream().map(ErrorReportListContentResponse::from)
                 .collect(Collectors.toList());
+        return new ErrorReportPage(errorReports.getTotalElements(), errorReports.getTotalPages(), content);
     }
 
     @Override

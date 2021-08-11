@@ -3,6 +3,7 @@ package com.example.damataxi.domain.errorReport.controller;
 import com.example.damataxi.domain.errorReport.dto.request.ErrorReportContentRequest;
 import com.example.damataxi.domain.errorReport.dto.response.ErrorReportContentResponse;
 import com.example.damataxi.domain.errorReport.dto.response.ErrorReportListContentResponse;
+import com.example.damataxi.domain.errorReport.dto.response.ErrorReportPage;
 import com.example.damataxi.domain.errorReport.service.ErrorReportService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class ErrorReportController {
 
     @ApiOperation(value = "오류 신고 리스트 받아오기", notes = "모든 오류 신고 리스트를 받아옵니다 (어드민)")
     @GetMapping
-    public List<ErrorReportListContentResponse> getErrorReportList(@RequestParam("size") int size, @RequestParam("page") int page) {
+    public ErrorReportPage getErrorReportList(@RequestParam("size") int size, @RequestParam("page") int page) {
         return errorReportService.getErrorReportList(size, page);
     }
 

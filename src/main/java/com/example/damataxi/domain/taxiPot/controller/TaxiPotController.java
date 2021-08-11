@@ -1,10 +1,7 @@
 package com.example.damataxi.domain.taxiPot.controller;
 
 import com.example.damataxi.domain.taxiPot.dto.request.TaxiPotContentRequest;
-import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotContentResponse;
-import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotInfoResponse;
-import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotListContentResponse;
-import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotSlideContentResponse;
+import com.example.damataxi.domain.taxiPot.dto.response.*;
 import com.example.damataxi.domain.taxiPot.service.TaxiPotService;
 import com.example.damataxi.global.security.AuthenticationFacade;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +27,7 @@ public class TaxiPotController {
 
     @ApiOperation(value = "택시 팟 슬라이드 리스트 받아오기", notes = "모든 택시 팟 리스트를 받아옵니다 (ALL, 유저)")
     @GetMapping("/slide")
-    public List<TaxiPotSlideContentResponse> getTaxiPotSlide(@RequestParam("size") int size, @RequestParam("page") int page) {
+    public TaxiPotSlidePage getTaxiPotSlide(@RequestParam("size") int size, @RequestParam("page") int page) {
         try {
             return taxiPotService.getTaxiPotSlideList(authenticationFacade.getUser(), size, page);
         } catch (Exception e) {
@@ -40,7 +37,7 @@ public class TaxiPotController {
 
     @ApiOperation(value = "택시 팟 리스트 받아오기", notes = "모든 택시 팟 리스트를 받아옵니다 (ALL, 유저)")
     @GetMapping
-    public List<TaxiPotListContentResponse> getTaxiPotList(@RequestParam("size") int size, @RequestParam("page") int page) {
+    public TaxiPotPage getTaxiPotList(@RequestParam("size") int size, @RequestParam("page") int page) {
         try {
             return taxiPotService.getTaxiPotList(authenticationFacade.getUser(), size, page);
         } catch (Exception e) {

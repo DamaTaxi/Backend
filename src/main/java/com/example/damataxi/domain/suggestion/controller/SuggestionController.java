@@ -3,6 +3,7 @@ package com.example.damataxi.domain.suggestion.controller;
 import com.example.damataxi.domain.suggestion.dto.request.SuggestionContentRequest;
 import com.example.damataxi.domain.suggestion.dto.response.SuggestionContentResponse;
 import com.example.damataxi.domain.suggestion.dto.response.SuggestionListContentResponse;
+import com.example.damataxi.domain.suggestion.dto.response.SuggestionPage;
 import com.example.damataxi.domain.suggestion.service.SuggestionService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class SuggestionController {
 
     @ApiOperation(value = "기능 건의 리스트 받아오기", notes = "모든 기능 건의 리스트를 받아옵니다 (어드민)")
     @GetMapping
-    public List<SuggestionListContentResponse> getSuggestionList(@RequestParam("size") int size, @RequestParam("page") int page) {
+    public SuggestionPage getSuggestionList(@RequestParam("size") int size, @RequestParam("page") int page) {
         return suggestionService.getSuggestionList(size, page);
     }
 

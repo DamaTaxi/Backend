@@ -4,21 +4,17 @@ import com.example.damataxi.domain.auth.domain.User;
 import com.example.damataxi.domain.auth.domain.UserRepository;
 import com.example.damataxi.domain.taxiPot.domain.*;
 import com.example.damataxi.domain.taxiPot.dto.request.TaxiPotContentRequest;
-import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotContentResponse;
-import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotInfoResponse;
-import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotListContentResponse;
-import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotSlideContentResponse;
+import com.example.damataxi.domain.taxiPot.dto.response.*;
 import com.example.damataxi.domain.taxiPot.service.TaxiPotService;
 import com.example.damataxi.global.error.exception.ApplyNotFoundException;
 import com.example.damataxi.global.querydsl.QueryDslRepository;
-import com.fasterxml.jackson.databind.ser.std.StdKeySerializers;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,33 +50,47 @@ TaxiPotServiceImpl implements TaxiPotService {
     }
 
     @Override
-    public List<TaxiPotSlideContentResponse> getTaxiPotSlideList(int size, int page) {
-        return taxiPotRepository.findAll(PageRequest.of(page, size))
+    public TaxiPotSlidePage getTaxiPotSlideList(int size, int page) {
+        Page<TaxiPot> taxiPots = taxiPotRepository.findAll(PageRequest.of(page, size));
+        List<TaxiPotSlideContentResponse> content = taxiPots
                 .stream().map(TaxiPotSlideContentResponse::from).collect(Collectors.toList());
+        return new TaxiPotSlidePage(taxiPots.getTotalElements(), taxiPots.getTotalPages(), content);
     }
 
     @Override
-    public List<TaxiPotSlideContentResponse> getTaxiPotSlideList(User user, int size, int page) {
+    public TaxiPotSlidePage getTaxiPotSlideList(User user, int size, int page) {
         TaxiPotTarget target = getTarget(user.getGcn());
-        List<TaxiPot> responses = queryDslRepository
+        List<TaxiPot> taxiPots = queryDslRepository
                 .getUsersTaxiPot(user.getLatitude(), user.getLongitude(), target, size, size*page);
-        return responses
+
+        long totalElements = taxiPotRepository.countByTarget(TaxiPotTarget.ALL)
+                + taxiPotRepository.countByTarget(target);
+        int totalPages = (totalElements%size!=0) ? ((int)(totalElements/size)+1) : (int)(totalElements/size);
+        List<TaxiPotSlideContentResponse> content = taxiPots
                 .stream().map(TaxiPotSlideContentResponse::from).collect(Collectors.toList());
+        return new TaxiPotSlidePage(totalElements, totalPages, content);
     }
 
     @Override
-    public List<TaxiPotListContentResponse> getTaxiPotList(int size, int page) {
-        return taxiPotRepository.findAll(PageRequest.of(page, size))
+    public TaxiPotPage getTaxiPotList(int size, int page) {
+        Page<TaxiPot> taxiPots = taxiPotRepository.findAll(PageRequest.of(page, size));
+        List<TaxiPotListContentResponse> content = taxiPots
                 .stream().map(TaxiPotListContentResponse::from).collect(Collectors.toList());
+        return new TaxiPotPage(taxiPots.getTotalElements(), taxiPots.getTotalPages(), content);
     }
     @Override
-    public List<TaxiPotListContentResponse> getTaxiPotList(User user, int size, int page) {
+    public TaxiPotPage getTaxiPotList(User user, int size, int page) {
 
         TaxiPotTarget target = getTarget(user.getGcn());
-        List<TaxiPot> responses = queryDslRepository
+        List<TaxiPot> taxiPots = queryDslRepository
                 .getUsersTaxiPot(user.getLatitude(), user.getLongitude(), target, size, size*page);
-        return responses
+
+        long totalElements = taxiPotRepository.countByTarget(TaxiPotTarget.ALL)
+                + taxiPotRepository.countByTarget(target);
+        int totalPages = (totalElements%size!=0) ? ((int)(totalElements/size)+1) : (int)(totalElements/size);
+        List<TaxiPotListContentResponse> content = taxiPots
                 .stream().map(TaxiPotListContentResponse::from).collect(Collectors.toList());
+        return new TaxiPotPage(totalElements, totalPages, content);
     }
 
     private TaxiPotTarget getTarget(String gcn){

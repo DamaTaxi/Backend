@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface TaxiPotRepository extends JpaRepository<TaxiPot, Integer> {
     Page<TaxiPot> findAll(Pageable pageable);
+    long countByTarget(TaxiPotTarget target);
 }

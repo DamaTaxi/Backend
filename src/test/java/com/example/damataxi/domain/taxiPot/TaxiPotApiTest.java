@@ -6,8 +6,11 @@ import com.example.damataxi.domain.auth.domain.User;
 import com.example.damataxi.domain.auth.domain.UserRepository;
 import com.example.damataxi.domain.taxiPot.domain.*;
 import com.example.damataxi.domain.taxiPot.dto.TaxiPotListContentTestResponse;
+import com.example.damataxi.domain.taxiPot.dto.TaxiPotPageTestResponse;
 import com.example.damataxi.domain.taxiPot.dto.request.TaxiPotContentRequest;
+import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotPage;
 import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotSlideContentResponse;
+import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotSlidePage;
 import com.example.damataxi.global.error.exception.TaxiPotNotFoundException;
 import com.example.damataxi.global.error.exception.UserNotFoundException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -105,10 +108,12 @@ public class TaxiPotApiTest extends ApiTest {
                 .andDo(print())
                 .andReturn();
 
-        List<TaxiPotSlideContentResponse> response = objectMapper.readValue(
-                result.getResponse().getContentAsString(), new TypeReference<List<TaxiPotSlideContentResponse>>() {});
+        TaxiPotSlidePage response = objectMapper.readValue(
+                result.getResponse().getContentAsString(), new TypeReference<TaxiPotSlidePage>() {});
 
-        Assertions.assertEquals(response.size(), 3);
+        Assertions.assertEquals(response.getContent().size(), 3);
+        Assertions.assertEquals(response.getTotalElements(), 4);
+        Assertions.assertEquals(response.getTotalPages(), 2);
     }
 
     private ResultActions requestGetTaxiPotSlide(int size, int page) throws Exception {
@@ -140,10 +145,12 @@ public class TaxiPotApiTest extends ApiTest {
                 .andDo(print())
                 .andReturn();
 
-        List<TaxiPotSlideContentResponse> response = objectMapper.readValue(
-                result.getResponse().getContentAsString(), new TypeReference<List<TaxiPotSlideContentResponse>>() {});
+        TaxiPotSlidePage response = objectMapper.readValue(
+                result.getResponse().getContentAsString(), new TypeReference<TaxiPotSlidePage>() {});
 
-        Assertions.assertEquals(response.size(), 2);
+        Assertions.assertEquals(response.getContent().size(), 2);
+        Assertions.assertEquals(response.getTotalElements(), 2);
+        Assertions.assertEquals(response.getTotalPages(), 1);
     }
 
     private ResultActions requestGetTaxiPotSlide(int size, int page, String token) throws Exception {
@@ -177,10 +184,12 @@ public class TaxiPotApiTest extends ApiTest {
                 .andDo(print())
                 .andReturn();
 
-        List<TaxiPotListContentTestResponse> response = objectMapper.readValue(
-                result.getResponse().getContentAsString(), new TypeReference<List<TaxiPotListContentTestResponse>>() {});
+        TaxiPotPageTestResponse response = objectMapper.readValue(
+                result.getResponse().getContentAsString(), new TypeReference<TaxiPotPageTestResponse>() {});
 
-        Assertions.assertEquals(response.size(), 3);
+        Assertions.assertEquals(response.getContent().size(), 3);
+        Assertions.assertEquals(response.getTotalElements(), 4);
+        Assertions.assertEquals(response.getTotalPages(), 2);
     }
 
     private ResultActions requestGetTaxiPotList(int size, int page) throws Exception {
@@ -212,10 +221,12 @@ public class TaxiPotApiTest extends ApiTest {
                 .andDo(print())
                 .andReturn();
 
-        List<TaxiPotListContentTestResponse> response = objectMapper.readValue(
-                result.getResponse().getContentAsString(), new TypeReference<List<TaxiPotListContentTestResponse>>() {});
+        TaxiPotPageTestResponse response = objectMapper.readValue(
+                result.getResponse().getContentAsString(), new TypeReference<TaxiPotPageTestResponse>() {});
 
-        Assertions.assertEquals(response.size(), 2);
+        Assertions.assertEquals(response.getContent().size(), 2);
+        Assertions.assertEquals(response.getTotalElements(), 2);
+        Assertions.assertEquals(response.getTotalPages(), 1);
     }
 
     @Test
@@ -243,14 +254,14 @@ public class TaxiPotApiTest extends ApiTest {
                 .andDo(print())
                 .andReturn();
 
-        List<TaxiPotListContentTestResponse> response = objectMapper.readValue(
-                result.getResponse().getContentAsString(), new TypeReference<List<TaxiPotListContentTestResponse>>() {});
+        TaxiPotPageTestResponse response = objectMapper.readValue(
+                result.getResponse().getContentAsString(), new TypeReference<TaxiPotPageTestResponse>() {});
 
-        Assertions.assertEquals(response.size(), 2);
-        Assertions.assertEquals(response.get(0).getLatitude(), 2.0000);
-        Assertions.assertEquals(response.get(0).getLongitude(), 2.0000);
-        Assertions.assertEquals(response.get(1).getLatitude(), 1.0000);
-        Assertions.assertEquals(response.get(1).getLongitude(), 1.0000);
+        Assertions.assertEquals(response.getContent().size(), 2);
+        Assertions.assertEquals(response.getContent().get(0).getLatitude(), 2.0000);
+        Assertions.assertEquals(response.getContent().get(0).getLongitude(), 2.0000);
+        Assertions.assertEquals(response.getContent().get(1).getLatitude(), 1.0000);
+        Assertions.assertEquals(response.getContent().get(1).getLongitude(), 1.0000);
     }
 
     private ResultActions requestGetTaxiPotList(int size, int page, String token) throws Exception {
