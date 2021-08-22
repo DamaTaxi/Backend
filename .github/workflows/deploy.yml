@@ -38,4 +38,4 @@ jobs:
       run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://damataxi/damataxi/$GITHUB_SHA.zip
 
     - name: Code Deploy
-      run: aws deploy create-deployment --application-name github-action-ec2 --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name s3-codedeployer --s3-location bucket=damataxi,bundleType=zip,key=damataxi/$GITHUB_SHA.zip
+      run: aws deploy create-deployment --application-name damataxi --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name s3-codedeployer --s3-location bucket=damataxi,bundleType=zip,key=damataxi/$GITHUB_SHA.zip
