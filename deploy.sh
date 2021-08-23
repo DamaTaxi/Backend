@@ -7,6 +7,14 @@ JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
 
 CURRENT_PID=$(pgrep -f $APP_NAME)
 
+export JWT_SECRET=${{JWT_SECRET}}
+
+export MYSQL_PASSWORD=${{MYSQL_PASSWORD}}
+
+export MYSQL_URL=${{MYSQL_URL}}
+
+export MYSQL_USERNAME=${{MYSQL_USERNAME}}
+
 if [ -z $CURRENT_PID ]
 then
   echo "> 종료할것 없음."
