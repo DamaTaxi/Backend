@@ -1,4 +1,4 @@
-REPOSITORY=/opt/damataxi
+REPOSITORY=/home/damataxi
 cd $REPOSITORY
 
 APP_NAME=action_codedeploy
