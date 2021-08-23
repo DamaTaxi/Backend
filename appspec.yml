@@ -3,9 +3,9 @@ os: linux
 
 files:
   - source: /
-    destination: /opt/damataxi
+    destination: /home/damataxi
 permissions:
-  - object: /opt/damataxi/
+  - object: /home/damataxi/
     owner: ubuntu
     group: ubuntu
     mode: 755
