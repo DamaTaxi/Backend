@@ -11,10 +11,6 @@ permissions:
     mode: 755
 hooks:
   AfterInstall:
-    - location: deploy.sh
-      timeout: 60
-      runas: root
-  ApplicationStart:
-    - location: deploy.sh
+    - location: /home/damataxi/deploy.sh
       timeout: 60
       runas: root
