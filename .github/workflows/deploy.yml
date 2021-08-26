@@ -5,10 +5,10 @@ on:
     branches: [ master ]
     
 env:
-  JWT_SECRET: ${{ JWT_SECRET }} 
-  MYSQL_PASSWORD : ${{ MYSQL_PASSWORD }}
-  MYSQL_URL : ${{ MYSQL_URL }}
-  MYSQL_USERNAME : ${{ MYSQL_USERNAME }}
+  JWT_SECRET: ${{ secrets.JWT_SECRET }} 
+  MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+  MYSQL_URL: ${{ secrets.MYSQL_URL }}
+  MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
     
 jobs:
   build:
