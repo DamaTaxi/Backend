@@ -10,10 +10,6 @@ permissions:
     group: ubuntu
     mode: 755
 hooks:
-  BeforeInstall:
-    - location: /home/ubuntu/codedeploy.sh
-      timeout: 60
-      runas: root
   AfterInstall:
     - location: deploy.sh
       timeout: 60
