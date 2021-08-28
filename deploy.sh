@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source ~/.bash_profile
+sh /home/ubuntu/codedeploy.sh
 
 REPOSITORY=/home/damataxi
 cd $REPOSITORY
