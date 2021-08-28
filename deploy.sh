@@ -1,3 +1,5 @@
+source ~/.bash_profile
+
 REPOSITORY=/home/damataxi
 cd $REPOSITORY
 
