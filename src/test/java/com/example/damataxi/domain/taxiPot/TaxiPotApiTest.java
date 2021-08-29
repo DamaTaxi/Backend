@@ -293,8 +293,20 @@ public class TaxiPotApiTest extends ApiTest {
                 .andExpect(jsonPath("place").value(taxiPot.getPlace()))
                 .andExpect(jsonPath("content").value(taxiPot.getContent()))
                 .andExpect(jsonPath("users").isArray())
-                .andDo(print())
-                .andReturn();
+                .andDo(print());
+    }
+
+    @Test
+    public void 택시팟_내용_받아오기_TaxiPotNotFoundException_테스트() throws Exception {
+        // given
+        dummyDataCreatService.makeUser("1234");
+
+        // when
+        ResultActions resultActions = requestGetTaxiPotContent(1);
+
+        // then
+        resultActions.andExpect(status().is4xxClientError())
+                .andDo(print());
     }
 
     private ResultActions requestGetTaxiPotContent(int id) throws Exception {

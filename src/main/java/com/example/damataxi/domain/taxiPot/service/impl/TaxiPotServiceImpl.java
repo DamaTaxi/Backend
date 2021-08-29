@@ -7,6 +7,7 @@ import com.example.damataxi.domain.taxiPot.dto.request.TaxiPotContentRequest;
 import com.example.damataxi.domain.taxiPot.dto.response.*;
 import com.example.damataxi.domain.taxiPot.service.TaxiPotService;
 import com.example.damataxi.global.error.exception.ApplyNotFoundException;
+import com.example.damataxi.global.error.exception.TaxiPotNotFoundException;
 import com.example.damataxi.global.querydsl.QueryDslRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -108,7 +109,8 @@ TaxiPotServiceImpl implements TaxiPotService {
 
     @Override
     public TaxiPotContentResponse getTaxiPotContent(int id) {
-        TaxiPot taxiPot = taxiPotRepository.getById(id);
+        TaxiPot taxiPot = taxiPotRepository.findById(id)
+                .orElseThrow(()-> new TaxiPotNotFoundException(id));
         return TaxiPotContentResponse.from(taxiPot);
     }
 
