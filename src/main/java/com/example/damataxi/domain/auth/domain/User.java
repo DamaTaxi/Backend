@@ -1,7 +1,6 @@
 package com.example.damataxi.domain.auth.domain;
 
 import com.example.damataxi.domain.taxiPot.domain.Reservation;
-import com.example.damataxi.domain.taxiPot.domain.TaxiPot;
 import lombok.*;
 
 import javax.persistence.*;

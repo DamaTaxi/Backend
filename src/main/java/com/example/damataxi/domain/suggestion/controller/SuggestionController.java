@@ -2,7 +2,6 @@ package com.example.damataxi.domain.suggestion.controller;
 
 import com.example.damataxi.domain.suggestion.dto.request.SuggestionContentRequest;
 import com.example.damataxi.domain.suggestion.dto.response.SuggestionContentResponse;
-import com.example.damataxi.domain.suggestion.dto.response.SuggestionListContentResponse;
 import com.example.damataxi.domain.suggestion.dto.response.SuggestionPage;
 import com.example.damataxi.domain.suggestion.service.SuggestionService;
 import io.swagger.annotations.ApiOperation;
@@ -11,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

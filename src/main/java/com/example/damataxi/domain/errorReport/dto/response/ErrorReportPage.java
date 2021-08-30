@@ -1,6 +1,5 @@
 package com.example.damataxi.domain.errorReport.dto.response;
 
-import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotListContentResponse;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

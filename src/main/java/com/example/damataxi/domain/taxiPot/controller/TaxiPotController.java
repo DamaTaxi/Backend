@@ -1,15 +1,16 @@
 package com.example.damataxi.domain.taxiPot.controller;
 
 import com.example.damataxi.domain.taxiPot.dto.request.TaxiPotContentRequest;
-import com.example.damataxi.domain.taxiPot.dto.response.*;
+import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotContentResponse;
+import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotInfoResponse;
+import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotPage;
+import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotSlidePage;
 import com.example.damataxi.domain.taxiPot.service.TaxiPotService;
 import com.example.damataxi.global.security.AuthenticationFacade;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

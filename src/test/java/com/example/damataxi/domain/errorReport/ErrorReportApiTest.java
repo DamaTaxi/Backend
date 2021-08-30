@@ -6,7 +6,6 @@ import com.example.damataxi.domain.auth.domain.Admin;
 import com.example.damataxi.domain.errorReport.domain.ErrorReport;
 import com.example.damataxi.domain.errorReport.domain.ErrorReportRepository;
 import com.example.damataxi.domain.errorReport.dto.request.ErrorReportContentRequest;
-import com.example.damataxi.domain.errorReport.dto.response.ErrorReportListContentResponse;
 import com.example.damataxi.domain.errorReport.dto.response.ErrorReportPage;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

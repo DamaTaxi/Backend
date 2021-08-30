@@ -2,7 +2,6 @@ package com.example.damataxi.domain.errorReport.controller;
 
 import com.example.damataxi.domain.errorReport.dto.request.ErrorReportContentRequest;
 import com.example.damataxi.domain.errorReport.dto.response.ErrorReportContentResponse;
-import com.example.damataxi.domain.errorReport.dto.response.ErrorReportListContentResponse;
 import com.example.damataxi.domain.errorReport.dto.response.ErrorReportPage;
 import com.example.damataxi.domain.errorReport.service.ErrorReportService;
 import io.swagger.annotations.ApiOperation;
@@ -11,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

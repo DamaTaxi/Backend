@@ -6,7 +6,6 @@ import com.example.damataxi.domain.auth.domain.Admin;
 import com.example.damataxi.domain.suggestion.domain.Suggestion;
 import com.example.damataxi.domain.suggestion.domain.SuggestionRepository;
 import com.example.damataxi.domain.suggestion.dto.request.SuggestionContentRequest;
-import com.example.damataxi.domain.suggestion.dto.response.SuggestionListContentResponse;
 import com.example.damataxi.domain.suggestion.dto.response.SuggestionPage;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

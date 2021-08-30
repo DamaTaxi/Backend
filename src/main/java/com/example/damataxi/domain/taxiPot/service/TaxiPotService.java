@@ -2,10 +2,10 @@ package com.example.damataxi.domain.taxiPot.service;
 
 import com.example.damataxi.domain.auth.domain.User;
 import com.example.damataxi.domain.taxiPot.dto.request.TaxiPotContentRequest;
-import com.example.damataxi.domain.taxiPot.dto.response.*;
-import org.springframework.security.core.Authentication;
-
-import java.util.List;
+import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotContentResponse;
+import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotInfoResponse;
+import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotPage;
+import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotSlidePage;
 
 public interface TaxiPotService {
     TaxiPotInfoResponse getTaxiPotInfo();

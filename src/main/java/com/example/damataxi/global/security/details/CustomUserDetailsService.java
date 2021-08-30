@@ -4,7 +4,6 @@ import com.example.damataxi.domain.auth.domain.Admin;
 import com.example.damataxi.domain.auth.domain.AdminRepository;
 import com.example.damataxi.domain.auth.domain.User;
 import com.example.damataxi.domain.auth.domain.UserRepository;
-import com.example.damataxi.global.error.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
