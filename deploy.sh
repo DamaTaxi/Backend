@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-source /home/ubuntu/codedeploy.sh
 
 REPOSITORY=/home/damataxi
 cd $REPOSITORY
@@ -18,6 +17,8 @@ else
   kill -15 $CURRENT_PID
   sleep 5
 fi
+
+source /home/ubuntu/codedeploy.sh
 
 echo "> $JAR_PATH 배포"
 nohup java -jar $JAR_PATH > $REPOSITORY/nohup.out 2>&1 &
