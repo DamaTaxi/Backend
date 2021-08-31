@@ -12,3 +12,5 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     generate-ddl: false
     show-sql: true
+server:
+  port: 80
