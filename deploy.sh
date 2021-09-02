@@ -8,7 +8,7 @@ JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep '.jar' | tail -n 1)
 JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
 
 CURRENT_PID=$(pgrep -f $APP_NAME)
-JAR_PID=$(pgrep -f $JAR_NAME)
+JAR_PID=$(pgrep -f $JAR_PATH)
 
 if [ -z $CURRENT_PID ]
 then
