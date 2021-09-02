@@ -8,6 +8,7 @@ JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep '.jar' | tail -n 1)
 JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
 
 CURRENT_PID=$(pgrep -f $APP_NAME)
+JAR_PID=$(pgrep -f $JAR_NAME)
 
 if [ -z $CURRENT_PID ]
 then
@@ -15,6 +16,8 @@ then
 else
   echo "> kill -15 $CURRENT_PID"
   sudo kill -15 $CURRENT_PID
+  echo "> kill -15 $JAR_PID"
+  sudo kill -15 $JAR_PID
   sleep 5
 fi
 
