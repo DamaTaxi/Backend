@@ -8,7 +8,7 @@ JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep '.jar' | tail -n 1)
 JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
 
 CURRENT_PID=$(pgrep -f $APP_NAME)
-JAR_PID=$(pgrep -f $JAR_PATH)
+JAR_PID=$(pgrep -f DamaTaxi-0.0.1-SNAPSHOT.jar)
 
 if [ -z $CURRENT_PID ]
 then
