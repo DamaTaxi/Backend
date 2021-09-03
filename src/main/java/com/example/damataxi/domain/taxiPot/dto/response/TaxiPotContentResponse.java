@@ -19,7 +19,7 @@ public class TaxiPotContentResponse {
     private String title;
 
     @ApiModelProperty(value = "택시 팟 생성자", example = "김재현")
-    private String creator;
+    private UserContentResponse creator;
 
     @ApiModelProperty(value = "택시 팟 대상자", example = "ALL")
     private String target;
@@ -54,14 +54,14 @@ public class TaxiPotContentResponse {
     private String content;
 
     @ApiModelProperty(value = "택시 팟 신청한 유저 정보", example = "2101 권민정 010-2809-3338")
-    private List<String> users;
+    private List<UserContentResponse> users;
 
     public static TaxiPotContentResponse from(TaxiPot taxiPot) {
 
-        List<String> users = taxiPot.getReservations().stream().map(
+        List<UserContentResponse> users = taxiPot.getReservations().stream().map(
                 (reservation)-> {
                     User user = reservation.getUser();
-                    return user.getGcn() + " " + user.getUsername() + " " + user.getTel();
+                    return new UserContentResponse(user.getGcn(), user.getUsername(), user.getTel());
                 }
         ).collect(Collectors.toList());
 
@@ -69,7 +69,7 @@ public class TaxiPotContentResponse {
 
         return TaxiPotContentResponse.builder()
                 .title(taxiPot.getTitle())
-                .creator(creator.getGcn() + " " + creator.getUsername())
+                .creator(new UserContentResponse(creator.getGcn(), creator.getUsername(), creator.getTel()))
                 .target(taxiPot.getTarget().name())
                 .price(taxiPot.getPrice())
                 .reserve(taxiPot.getReservations().size())

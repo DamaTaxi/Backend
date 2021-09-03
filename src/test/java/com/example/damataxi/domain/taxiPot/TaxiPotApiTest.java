@@ -5,6 +5,7 @@ import com.example.damataxi.DummyDataCreatService;
 import com.example.damataxi.domain.auth.domain.User;
 import com.example.damataxi.domain.auth.domain.UserRepository;
 import com.example.damataxi.domain.taxiPot.domain.*;
+import com.example.damataxi.domain.taxiPot.dto.TaxiPotContentTestResponse;
 import com.example.damataxi.domain.taxiPot.dto.TaxiPotPageTestResponse;
 import com.example.damataxi.domain.taxiPot.dto.request.TaxiPotContentRequest;
 import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotSlidePage;
@@ -20,8 +21,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -132,8 +131,11 @@ public class TaxiPotApiTest extends ApiTest {
         TaxiPot taxiPot4 = dummyDataCreatService.makeTaxiPot(creator4, TaxiPotTarget.FRESHMAN);
         dummyDataCreatService.makeReservation(taxiPot4, creator4);
 
-        User user = dummyDataCreatService.makeUser("1234", "dddd@gmail.com");
+        User user = dummyDataCreatService.makeUser("1235", "dddd@gmail.com");
         String token = makeAccessToken(user.getEmail());
+        TaxiPot taxiPot5 = dummyDataCreatService.makeTaxiPot(user, TaxiPotTarget.ALL);
+        dummyDataCreatService.makeReservation(taxiPot5, user);
+
         // when
         ResultActions resultActions = requestGetTaxiPotSlide(3, 0, token);
 
@@ -268,29 +270,41 @@ public class TaxiPotApiTest extends ApiTest {
     @Test
     public void 택시팟_내용_받아오기_테스트() throws Exception {
         // given
+        setupUtf8();
         User user = dummyDataCreatService.makeUser("1234");
         TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(user);
         dummyDataCreatService.makeReservation(taxiPot, user);
-        List<String> users = new ArrayList<>();
-        users.add(user.getGcn() + " " + user.getUsername() + " " + user.getTel());
 
         // when
         ResultActions resultActions = requestGetTaxiPotContent(taxiPot.getId());
 
         // then
-        resultActions.andExpect(status().isOk())
-                .andExpect(jsonPath("creator").value(user.getGcn() + " " + user.getUsername()))
-                .andExpect(jsonPath("target").value(taxiPot.getTarget().name()))
-                .andExpect(jsonPath("price").value(taxiPot.getPrice()))
-                .andExpect(jsonPath("reserve").value(taxiPot.getReservations().size()))
-                .andExpect(jsonPath("all").value(taxiPot.getAmount()))
-                .andExpect(jsonPath("latitude").value(taxiPot.getDestinationLatitude()))
-                .andExpect(jsonPath("longitude").value(taxiPot.getDestinationLongitude()))
-                .andExpect(jsonPath("title").value(taxiPot.getTitle()))
-                .andExpect(jsonPath("place").value(taxiPot.getPlace()))
-                .andExpect(jsonPath("content").value(taxiPot.getContent()))
-                .andExpect(jsonPath("users").isArray())
-                .andDo(print());
+        MvcResult result = resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+
+        TaxiPotContentTestResponse response = objectMapper.readValue(
+                result.getResponse().getContentAsString(), new TypeReference<TaxiPotContentTestResponse>() {});
+
+        Assertions.assertEquals(taxiPot.getTitle(), response.getTitle());
+
+        Assertions.assertEquals(user.getGcn(), response.getCreator().getGcn());
+        Assertions.assertEquals(user.getUsername(), response.getCreator().getName());
+        Assertions.assertEquals(user.getTel(), response.getCreator().getNumber());
+
+        Assertions.assertEquals(taxiPot.getPrice(), response.getPrice());
+        Assertions.assertEquals(taxiPot.getReservations().size(), response.getReserve());
+        Assertions.assertEquals(taxiPot.getAmount(), response.getAll());
+        Assertions.assertEquals(taxiPot.getDestinationLatitude(), response.getLatitude());
+        Assertions.assertEquals(taxiPot.getDestinationLongitude(), response.getLongitude());
+        Assertions.assertEquals(taxiPot.getTitle(), response.getTitle());
+        Assertions.assertEquals(taxiPot.getPlace(), response.getPlace());
+        Assertions.assertEquals(taxiPot.getContent(), response.getContent());
+
+        Assertions.assertEquals(user.getGcn(), response.getUsers().get(0).getGcn());
+        Assertions.assertEquals(user.getUsername(), response.getUsers().get(0).getName());
+        Assertions.assertEquals(user.getTel(), response.getUsers().get(0).getNumber());
+
     }
 
     @Test

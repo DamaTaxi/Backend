@@ -1,9 +1,11 @@
 package com.example.damataxi.domain.mypage;
 
 import com.example.damataxi.ApiTest;
+import com.example.damataxi.DummyDataCreatService;
 import com.example.damataxi.domain.auth.domain.User;
 import com.example.damataxi.domain.auth.domain.UserRepository;
 import com.example.damataxi.domain.mypage.dto.request.MypageRequest;
+import com.example.damataxi.domain.taxiPot.domain.TaxiPot;
 import com.example.damataxi.global.error.exception.UserNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -22,6 +24,10 @@ public class MypageApiTest extends ApiTest {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private DummyDataCreatService dummyDataCreatService;
+
+    private User user;
 
     @BeforeEach
     public void setUser(){
@@ -30,7 +36,7 @@ public class MypageApiTest extends ApiTest {
                 .gcn("1234")
                 .username("user")
                 .build();
-        userRepository.save(user);
+        this.user = userRepository.save(user);
     }
 
     @AfterEach
@@ -93,5 +99,40 @@ public class MypageApiTest extends ApiTest {
 
     private ResultActions requestGetUser(String token) throws Exception {
         return requestMvc(get("/mypage").header("AUTHORIZATION", "Bearer " + token));
+    }
+
+    @Test
+    public void 신청한_택시팟_받아오기() throws Exception {
+        // given
+        TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(user);
+        dummyDataCreatService.makeReservation(taxiPot, user);
+
+        String token = makeAccessToken(user.getEmail());
+
+        // when
+        ResultActions resultActions = requestGetUserTaxiPot(token);
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andDo(print());
+
+    }
+
+    @Test
+    public void 신청한_택시팟_받아오기_TaxiPotNotFoundException() throws Exception {
+        // given
+        String token = makeAccessToken(user.getEmail());
+
+        // when
+        ResultActions resultActions = requestGetUserTaxiPot(token);
+
+        // then
+        resultActions.andExpect(status().is4xxClientError())
+                .andDo(print());
+
+    }
+
+    private ResultActions requestGetUserTaxiPot(String token) throws Exception {
+        return requestMvc(get("/mypage/taxi-pot").header("AUTHORIZATION", "Bearer " + token));
     }
 }

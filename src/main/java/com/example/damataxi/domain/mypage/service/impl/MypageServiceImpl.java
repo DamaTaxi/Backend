@@ -5,6 +5,9 @@ import com.example.damataxi.domain.auth.domain.UserRepository;
 import com.example.damataxi.domain.mypage.dto.request.MypageRequest;
 import com.example.damataxi.domain.mypage.dto.response.MypageResponse;
 import com.example.damataxi.domain.mypage.service.MypageService;
+import com.example.damataxi.domain.taxiPot.domain.Reservation;
+import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotContentResponse;
+import com.example.damataxi.global.error.exception.TaxiPotNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +28,15 @@ public class MypageServiceImpl implements MypageService {
     @Override
     public MypageResponse getSetting(User user) {
         return MypageResponse.from(user);
+    }
+
+    @Override
+    public TaxiPotContentResponse getApplyTaxiPot(User user) {
+        Reservation reservation = user.getReservation();
+        if(reservation!=null){
+            return TaxiPotContentResponse.from(user.getReservation().getTaxiPot());
+        }
+        throw new TaxiPotNotFoundException();
     }
 
 }
