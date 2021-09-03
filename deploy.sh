@@ -16,9 +16,7 @@ then
 else
   echo "종료"
   kill -9 $CURRENT_PID
-  kill -15 $CURRENT_PID
   kill -9 $JAR_PID
-  kill -15 $JAR_PID
   sleep 5
 fi
 
