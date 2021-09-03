@@ -1,12 +1,16 @@
 package com.example.damataxi.domain.taxiPot.dto;
 
+import com.example.damataxi.domain.taxiPot.dto.response.UserContentResponse;
 import lombok.Getter;
 
-@Getter
-public class TaxiPotListContentTestResponse {
+import java.time.LocalDateTime;
+import java.util.List;
 
-    private int id;
-    private String creator;
+@Getter
+public class TaxiPotContentTestResponse {
+
+    private String title;
+    private UserContentResponse creator;
     private String target;
     private int price;
     private int reserve;
@@ -16,6 +20,7 @@ public class TaxiPotListContentTestResponse {
     private String place;
     private String meetingAt;
     private String createdAt;
-    private String title;
+    private String content;
+    private List<UserContentResponse> users;
 
 }
