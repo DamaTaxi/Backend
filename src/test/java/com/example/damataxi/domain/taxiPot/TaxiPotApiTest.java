@@ -132,8 +132,11 @@ public class TaxiPotApiTest extends ApiTest {
         TaxiPot taxiPot4 = dummyDataCreatService.makeTaxiPot(creator4, TaxiPotTarget.FRESHMAN);
         dummyDataCreatService.makeReservation(taxiPot4, creator4);
 
-        User user = dummyDataCreatService.makeUser("1234", "dddd@gmail.com");
+        User user = dummyDataCreatService.makeUser("1235", "dddd@gmail.com");
         String token = makeAccessToken(user.getEmail());
+        TaxiPot taxiPot5 = dummyDataCreatService.makeTaxiPot(user, TaxiPotTarget.ALL);
+        dummyDataCreatService.makeReservation(taxiPot5, user);
+
         // when
         ResultActions resultActions = requestGetTaxiPotSlide(3, 0, token);
 

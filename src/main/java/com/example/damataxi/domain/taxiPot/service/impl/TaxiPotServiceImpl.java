@@ -62,10 +62,10 @@ TaxiPotServiceImpl implements TaxiPotService {
     public TaxiPotSlidePage getTaxiPotSlideList(User user, int size, int page) {
         TaxiPotTarget target = getTarget(user.getGcn());
         List<TaxiPot> taxiPots = queryDslRepository
-                .getUsersTaxiPot(user.getLatitude(), user.getLongitude(), target, size, size*page);
+                .getUsersTaxiPot(user.getLatitude(), user.getLongitude(), target, size, size*page, user);
 
-        long totalElements = taxiPotRepository.countByTarget(TaxiPotTarget.ALL)
-                + taxiPotRepository.countByTarget(target);
+        long totalElements = queryDslRepository
+                .getUserTaxiPotAmount(user.getLatitude(), user.getLongitude(), target, size, size*page, user);
         int totalPages = (totalElements%size!=0) ? ((int)(totalElements/size)+1) : (int)(totalElements/size);
         List<TaxiPotSlideContentResponse> content = taxiPots
                 .stream().map(TaxiPotSlideContentResponse::from).collect(Collectors.toList());
@@ -84,10 +84,10 @@ TaxiPotServiceImpl implements TaxiPotService {
 
         TaxiPotTarget target = getTarget(user.getGcn());
         List<TaxiPot> taxiPots = queryDslRepository
-                .getUsersTaxiPot(user.getLatitude(), user.getLongitude(), target, size, size*page);
+                .getUsersTaxiPot(user.getLatitude(), user.getLongitude(), target, size, size*page, user);
 
-        long totalElements = taxiPotRepository.countByTarget(TaxiPotTarget.ALL)
-                + taxiPotRepository.countByTarget(target);
+        long totalElements = queryDslRepository
+                .getUserTaxiPotAmount(user.getLatitude(), user.getLongitude(), target, size, size*page, user);
         int totalPages = (totalElements%size!=0) ? ((int)(totalElements/size)+1) : (int)(totalElements/size);
         List<TaxiPotListContentResponse> content = taxiPots
                 .stream().map(TaxiPotListContentResponse::from).collect(Collectors.toList());

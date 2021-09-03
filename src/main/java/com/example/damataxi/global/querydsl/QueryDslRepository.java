@@ -1,5 +1,8 @@
 package com.example.damataxi.global.querydsl;
 
+import com.example.damataxi.domain.auth.domain.QUser;
+import com.example.damataxi.domain.auth.domain.User;
+import com.example.damataxi.domain.taxiPot.domain.QReservation;
 import com.example.damataxi.domain.taxiPot.domain.QTaxiPot;
 import com.example.damataxi.domain.taxiPot.domain.TaxiPot;
 import com.example.damataxi.domain.taxiPot.domain.TaxiPotTarget;
@@ -15,13 +18,30 @@ public class QueryDslRepository {
 
     private final JPAQueryFactory query;
 
-    public List<TaxiPot> getUsersTaxiPot(double latitude, double longitude, TaxiPotTarget target, int limit, int offset) {
-        QTaxiPot taxiPot = QTaxiPot.taxiPot;
-        return query.select(taxiPot)
-                .from(taxiPot)
-                .where(taxiPot.target.eq(TaxiPotTarget.ALL).or(taxiPot.target.eq(target)))
-                .orderBy((taxiPot.destinationLatitude.subtract(latitude)).multiply(taxiPot.destinationLongitude.subtract(longitude)).asc())
+    public List<TaxiPot> getUsersTaxiPot(double latitude, double longitude, TaxiPotTarget target, int limit, int offset, User user) {
+        QTaxiPot qtaxiPot = QTaxiPot.taxiPot;
+        QReservation qreservation = QReservation.reservation;
+        QUser quser = QUser.user;
+        return query.select(qtaxiPot)
+                .from(qtaxiPot)
+                .join(qtaxiPot.reservations, qreservation)
+                .join(qreservation.user, quser).on(quser.ne(user))
+                .where((qtaxiPot.target.eq(TaxiPotTarget.ALL).or(qtaxiPot.target.eq(target))))
+                .orderBy((qtaxiPot.destinationLatitude.subtract(latitude)).multiply(qtaxiPot.destinationLongitude.subtract(longitude)).asc())
                 .offset(offset).limit(limit)
                 .fetch();
+    }
+
+    public long getUserTaxiPotAmount(double latitude, double longitude, TaxiPotTarget target, int limit, int offset, User user) {
+        QTaxiPot qtaxiPot = QTaxiPot.taxiPot;
+        QReservation qreservation = QReservation.reservation;
+        QUser quser = QUser.user;
+        return query
+                .from(qtaxiPot)
+                .join(qtaxiPot.reservations, qreservation)
+                .join(qreservation.user, quser).on(quser.ne(user))
+                .where((qtaxiPot.target.eq(TaxiPotTarget.ALL).or(qtaxiPot.target.eq(target))))
+                .orderBy((qtaxiPot.destinationLatitude.subtract(latitude)).multiply(qtaxiPot.destinationLongitude.subtract(longitude)).asc())
+                .fetchCount();
     }
 }
