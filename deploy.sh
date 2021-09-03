@@ -15,8 +15,8 @@ then
   echo "> 종료할것 없음."
 else
   echo "종료"
-  kill -9 $CURRENT_PID
-  kill -9 $JAR_PID
+  sudo kill -9 $CURRENT_PID
+  sudo kill -9 $JAR_PID
   sleep 5
 fi
 
