@@ -2,6 +2,7 @@ package com.example.damataxi.domain.auth;
 
 import com.example.damataxi.ServiceTest;
 import com.example.damataxi.domain.auth.domain.Admin;
+import com.example.damataxi.domain.auth.domain.AdminRepository;
 import com.example.damataxi.domain.auth.domain.UserRepository;
 import com.example.damataxi.domain.auth.dto.request.AdminLoginRequest;
 import com.example.damataxi.domain.auth.dto.request.TokenRefreshRequest;
@@ -21,15 +22,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 
 public class AuthServiceTest extends ServiceTest {
 
     @Mock
-    private CustomUserDetailsService userDetailsService;
-    @Mock
     private PasswordEncoder passwordEncoder;
+    @Mock
+    private AdminRepository adminRepository;
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -60,8 +63,8 @@ public class AuthServiceTest extends ServiceTest {
     public void adminLogin_테스트() {
         // given
         AdminLoginRequest request = new AdminLoginRequest("adminId","adminPassword");
-        given(userDetailsService.loadUserByValue("adminId"))
-                .willReturn(new AdminDetails(new Admin("adminId","adminPassword")));
+        Admin admin = new Admin("adminId", "adminPassword");
+        given(adminRepository.findById("adminId")).willReturn(Optional.of(admin));
         given(passwordEncoder.matches("adminPassword","adminPassword"))
                 .willReturn(true);
         given(jwtTokenProvider.generateAccessToken("adminId")).willReturn("accessToken");
@@ -80,8 +83,8 @@ public class AuthServiceTest extends ServiceTest {
     public void adminLogin_UserNotFoundException_테스트() {
         // given
         AdminLoginRequest request = new AdminLoginRequest("adminId","inputAdminPassword");
-        given(userDetailsService.loadUserByValue("adminId"))
-                .willReturn(new AdminDetails(new Admin("adminId","originAdminPassword")));
+        Admin admin = new Admin("adminId", "originAdminPassword");
+        given(adminRepository.findById("adminId")).willReturn(Optional.of(admin));
         given(passwordEncoder.matches("inputAdminPassword","originAdminPassword"))
                 .willReturn(false);
 

@@ -1,5 +1,7 @@
 package com.example.damataxi.domain.auth.service.impl;
 
+import com.example.damataxi.domain.auth.domain.Admin;
+import com.example.damataxi.domain.auth.domain.AdminRepository;
 import com.example.damataxi.domain.auth.domain.User;
 import com.example.damataxi.domain.auth.domain.UserRepository;
 import com.example.damataxi.domain.auth.dto.request.AdminLoginRequest;
@@ -24,7 +26,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final DsmOauthAccountProvider dsmOauthAccountProvider;
     private final JwtTokenProvider jwtTokenProvider;
-    private final CustomUserDetailsService userDetailsService;
+    private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
@@ -51,9 +53,10 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public TokenResponse adminLogin(AdminLoginRequest adminLoginRequest) {
         String id = adminLoginRequest.getId();
-        UserDetails adminDetails = userDetailsService.loadUserByValue(id);
+        Admin admin = adminRepository.findById(adminLoginRequest.getId())
+                .orElseThrow(UserNotFoundException::new);
 
-        if(!passwordEncoder.matches(adminLoginRequest.getPassword(),adminDetails.getPassword())) {
+        if(!passwordEncoder.matches(adminLoginRequest.getPassword(),admin.getPassword())) {
             throw new UserNotFoundException(id);
         }
 
