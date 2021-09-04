@@ -20,6 +20,8 @@ else
   sleep 5
 fi
 
+sudo kill $(sudo lsof -t -i:80)
+
 source /home/ubuntu/codedeploy.sh
 
 echo "> $JAR_PATH 배포"
