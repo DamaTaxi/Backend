@@ -3,6 +3,7 @@ package com.example.damataxi.domain.mypage.service.impl;
 import com.example.damataxi.domain.auth.domain.User;
 import com.example.damataxi.domain.auth.domain.UserRepository;
 import com.example.damataxi.domain.mypage.dto.request.MypageRequest;
+import com.example.damataxi.domain.mypage.dto.response.MyTaxiPotContentResponse;
 import com.example.damataxi.domain.mypage.dto.response.MypageResponse;
 import com.example.damataxi.domain.mypage.service.MypageService;
 import com.example.damataxi.domain.taxiPot.domain.Reservation;
@@ -31,10 +32,10 @@ public class MypageServiceImpl implements MypageService {
     }
 
     @Override
-    public TaxiPotContentResponse getApplyTaxiPot(User user) {
+    public MyTaxiPotContentResponse getApplyTaxiPot(User user) {
         Reservation reservation = user.getReservation();
         if(reservation!=null){
-            return TaxiPotContentResponse.from(user.getReservation().getTaxiPot());
+            return MyTaxiPotContentResponse.from(user.getReservation().getTaxiPot(), user.getEmail());
         }
         throw new TaxiPotNotFoundException();
     }

@@ -1,15 +1,16 @@
-package com.example.damataxi.domain.taxiPot.dto;
+package com.example.damataxi.domain.mypage.dto;
 
+import com.example.damataxi.domain.mypage.dto.response.CreatorContentResponse;
 import com.example.damataxi.domain.taxiPot.dto.response.UserContentResponse;
 import lombok.Getter;
 
 import java.util.List;
 
 @Getter
-public class TaxiPotContentTestResponse {
+public class MyTaxiPotContentTestResponse {
 
     private String title;
-    private UserContentResponse creator;
+    private CreatorContentResponse creator;
     private String target;
     private int price;
     private int reserve;

@@ -4,14 +4,19 @@ import com.example.damataxi.ApiTest;
 import com.example.damataxi.DummyDataCreatService;
 import com.example.damataxi.domain.auth.domain.User;
 import com.example.damataxi.domain.auth.domain.UserRepository;
+import com.example.damataxi.domain.mypage.dto.MyTaxiPotContentTestResponse;
 import com.example.damataxi.domain.mypage.dto.request.MypageRequest;
 import com.example.damataxi.domain.taxiPot.domain.TaxiPot;
+import com.example.damataxi.domain.taxiPot.dto.TaxiPotContentTestResponse;
 import com.example.damataxi.global.error.exception.UserNotFoundException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -26,6 +31,9 @@ public class MypageApiTest extends ApiTest {
     private UserRepository userRepository;
     @Autowired
     private DummyDataCreatService dummyDataCreatService;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     private User user;
 
@@ -102,7 +110,7 @@ public class MypageApiTest extends ApiTest {
     }
 
     @Test
-    public void 신청한_택시팟_받아오기() throws Exception {
+    public void 신청한_택시팟_받아오기_자신이_생성() throws Exception {
         // given
         TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(user);
         dummyDataCreatService.makeReservation(taxiPot, user);
@@ -113,8 +121,44 @@ public class MypageApiTest extends ApiTest {
         ResultActions resultActions = requestGetUserTaxiPot(token);
 
         // then
-        resultActions.andExpect(status().isOk())
-                .andDo(print());
+        MvcResult result = resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+
+        MyTaxiPotContentTestResponse response = objectMapper.readValue(
+                result.getResponse().getContentAsString(), new TypeReference<MyTaxiPotContentTestResponse>() {});
+
+        Assertions.assertTrue(response.getCreator().isMe());
+
+    }
+
+    @Test
+    public void 신청한_택시팟_받아오기_남이_생성() throws Exception {
+        // given
+        TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(user);
+        dummyDataCreatService.makeReservation(taxiPot, user);
+        User user2 = User.builder()
+                .email("yyyy@gmail.com")
+                .gcn("2222")
+                .username("user2")
+                .build();
+        userRepository.save(user2);
+        dummyDataCreatService.makeReservation(taxiPot, user2);
+
+        String token = makeAccessToken(user2.getEmail());
+
+        // when
+        ResultActions resultActions = requestGetUserTaxiPot(token);
+
+        // then
+        MvcResult result = resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+
+        MyTaxiPotContentTestResponse response = objectMapper.readValue(
+                result.getResponse().getContentAsString(), new TypeReference<MyTaxiPotContentTestResponse>() {});
+
+        Assertions.assertFalse(response.getCreator().isMe());
 
     }
 
