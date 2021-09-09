@@ -16,6 +16,10 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder(access = AccessLevel.PRIVATE)
 public class MyTaxiPotContentResponse {
+
+    @ApiModelProperty(value = "택시 팟 아이디", example = "1")
+    private int id;
+
     @ApiModelProperty(value = "택시 팟 도착지 이름", example = "가나다라마바사노래방")
     private String title;
 
@@ -69,6 +73,7 @@ public class MyTaxiPotContentResponse {
         User creator = taxiPot.getCreator();
 
         return MyTaxiPotContentResponse.builder()
+                .id(taxiPot.getId())
                 .title(taxiPot.getTitle())
                 .creator(new CreatorContentResponse(creator.getGcn(), creator.getUsername(), creator.getTel(), creator.getEmail().equals(email)))
                 .target(taxiPot.getTarget().name())
