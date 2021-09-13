@@ -134,6 +134,7 @@ TaxiPotServiceImpl implements TaxiPotService {
                 .destinationLongitude(request.getLongitude())
                 .amount(request.getAmount())
                 .title(request.getTitle())
+                .address(request.getAddress())
                 .build();
         taxiPotRepository.save(taxiPot);
 
@@ -177,6 +178,7 @@ TaxiPotServiceImpl implements TaxiPotService {
                 .destinationLongitude(request.getLongitude())
                 .title(request.getTitle())
                 .amount(request.getAmount())
+                .address(request.getAddress())
                 .build();
         taxiPotRepository.save(taxiPot);
         TaxiPot newTaxiPot = taxiPotRefreshFacade.refreshTaxiPot(taxiPot);

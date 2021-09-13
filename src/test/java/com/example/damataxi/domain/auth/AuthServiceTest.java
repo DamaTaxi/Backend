@@ -14,8 +14,6 @@ import com.example.damataxi.domain.auth.service.impl.AuthServiceImpl;
 import com.example.damataxi.global.error.exception.InvalidTokenException;
 import com.example.damataxi.global.error.exception.UserNotFoundException;
 import com.example.damataxi.global.security.JwtTokenProvider;
-import com.example.damataxi.global.security.details.AdminDetails;
-import com.example.damataxi.global.security.details.CustomUserDetailsService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

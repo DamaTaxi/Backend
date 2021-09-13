@@ -9,6 +9,7 @@ import java.util.List;
 public class TaxiPotContentTestResponse {
 
     private String title;
+    private String address;
     private UserContentResponse creator;
     private String target;
     private int price;

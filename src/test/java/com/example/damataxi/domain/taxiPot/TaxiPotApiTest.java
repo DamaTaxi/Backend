@@ -287,6 +287,7 @@ public class TaxiPotApiTest extends ApiTest {
                 result.getResponse().getContentAsString(), new TypeReference<TaxiPotContentTestResponse>() {});
 
         Assertions.assertEquals(taxiPot.getTitle(), response.getTitle());
+        Assertions.assertEquals(taxiPot.getAddress(), response.getAddress());
 
         Assertions.assertEquals(user.getGcn(), response.getCreator().getGcn());
         Assertions.assertEquals(user.getUsername(), response.getCreator().getName());
@@ -395,6 +396,7 @@ public class TaxiPotApiTest extends ApiTest {
                 .amount(3)
                 .price(1000)
                 .title("가나다라마바사노래방")
+                .address("주소주소주소주소")
                 .build();
     }
 

@@ -18,6 +18,9 @@ public class TaxiPotContentResponse {
     @ApiModelProperty(value = "택시 팟 도착지 이름", example = "가나다라마바사노래방")
     private String title;
 
+    @ApiModelProperty(value = "택시 팟 도착지 주소", example = "주소주소주소주소")
+    private String address;
+
     @ApiModelProperty(value = "택시 팟 생성자", example = "김재현")
     private UserContentResponse creator;
 
@@ -69,6 +72,7 @@ public class TaxiPotContentResponse {
 
         return TaxiPotContentResponse.builder()
                 .title(taxiPot.getTitle())
+                .address(taxiPot.getAddress())
                 .creator(new UserContentResponse(creator.getGcn(), creator.getUsername(), creator.getTel()))
                 .target(taxiPot.getTarget().name())
                 .price(taxiPot.getPrice())

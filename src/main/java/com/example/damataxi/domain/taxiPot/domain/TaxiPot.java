@@ -54,6 +54,9 @@ public class TaxiPot {
     @Column(name = "title", length = 45, nullable = false)
     private String title;
 
+    @Column(name = "address", length = 45, nullable = false)
+    private String address;
+
     @Setter
     @OneToMany(mappedBy = "taxiPot")
     private List<Reservation> reservations;
