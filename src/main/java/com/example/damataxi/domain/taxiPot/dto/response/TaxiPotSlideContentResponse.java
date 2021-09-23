@@ -14,9 +14,6 @@ public class TaxiPotSlideContentResponse {
     @ApiModelProperty(value = "택시 팟 대상자", example = "ALL")
     private String target;
 
-    @ApiModelProperty(value = "택시 팟 가격", example = "12000")
-    private int price;
-
     @ApiModelProperty(value = "택시 팟 예약자 수", example = "3")
     private int reserve;
 
@@ -36,7 +33,6 @@ public class TaxiPotSlideContentResponse {
         return TaxiPotSlideContentResponse.builder()
                 .id(taxiPot.getId())
                 .target(taxiPot.getTarget().name())
-                .price(taxiPot.getPrice())
                 .reserve(taxiPot.getReservations().size())
                 .all(taxiPot.getAmount())
                 .latitude(taxiPot.getDestinationLatitude())

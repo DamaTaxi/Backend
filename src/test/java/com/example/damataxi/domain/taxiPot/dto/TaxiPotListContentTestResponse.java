@@ -8,7 +8,6 @@ public class TaxiPotListContentTestResponse {
     private int id;
     private String creator;
     private String target;
-    private int price;
     private int reserve;
     private int all;
     private double latitude;

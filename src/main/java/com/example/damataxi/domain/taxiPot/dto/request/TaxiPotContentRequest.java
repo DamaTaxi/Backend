@@ -40,9 +40,6 @@ public class TaxiPotContentRequest {
     @ApiModelProperty(value = "택시 팟 사람 수", example = "4")
     private int amount;
 
-    @ApiModelProperty(value = "택시 팟 가격", example = "12000")
-    private int price;
-
     @ApiModelProperty(value = "도착지 주소", example = "주소주소주소주소")
     private String address;
 }

@@ -293,7 +293,6 @@ public class TaxiPotApiTest extends ApiTest {
         Assertions.assertEquals(user.getUsername(), response.getCreator().getName());
         Assertions.assertEquals(user.getTel(), response.getCreator().getNumber());
 
-        Assertions.assertEquals(taxiPot.getPrice(), response.getPrice());
         Assertions.assertEquals(taxiPot.getReservations().size(), response.getReserve());
         Assertions.assertEquals(taxiPot.getAmount(), response.getAll());
         Assertions.assertEquals(taxiPot.getDestinationLatitude(), response.getLatitude());
@@ -349,7 +348,6 @@ public class TaxiPotApiTest extends ApiTest {
         Assertions.assertEquals(taxiPot.getDestinationLongitude(), request.getLongitude());
         Assertions.assertEquals(taxiPot.getTitle(), request.getTitle());
         Assertions.assertEquals(taxiPot.getAmount(), request.getAmount());
-        Assertions.assertEquals(taxiPot.getPrice(), request.getPrice());
         Assertions.assertNull(taxiPot.getContent());
     }
 
@@ -394,7 +392,6 @@ public class TaxiPotApiTest extends ApiTest {
                 .latitude(12.3456)
                 .longitude(23.4567)
                 .amount(3)
-                .price(1000)
                 .title("가나다라마바사노래방")
                 .address("주소주소주소주소")
                 .build();
@@ -429,7 +426,6 @@ public class TaxiPotApiTest extends ApiTest {
         Assertions.assertEquals(patchedTaxiPot.getDestinationLongitude(), request.getLongitude());
         Assertions.assertEquals(patchedTaxiPot.getTitle(), request.getTitle());
         Assertions.assertEquals(patchedTaxiPot.getAmount(), request.getAmount());
-        Assertions.assertEquals(patchedTaxiPot.getPrice(), request.getPrice());
         Assertions.assertNull(patchedTaxiPot.getContent());
     }
 

@@ -12,7 +12,6 @@ public class TaxiPotContentTestResponse {
     private String address;
     private UserContentResponse creator;
     private String target;
-    private int price;
     private int reserve;
     private int all;
     private double latitude;

@@ -22,9 +22,6 @@ public class TaxiPot {
     @JoinColumn(name = "creator_email")
     private User creator;
 
-    @Column(name = "price", nullable = false)
-    private int price;
-
     @Convert(converter = TaxiPotTargetConverter.class)
     @Enumerated(EnumType.STRING)
     @Column(name = "target", nullable = false)

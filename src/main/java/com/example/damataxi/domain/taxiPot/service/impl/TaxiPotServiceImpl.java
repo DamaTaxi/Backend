@@ -124,7 +124,6 @@ TaxiPotServiceImpl implements TaxiPotService {
 
         TaxiPot taxiPot = TaxiPot.builder()
                 .creator(user)
-                .price(request.getPrice())
                 .target(taxiPotTarget)
                 .createdAt(LocalDateTime.now())
                 .meetingAt(request.getMeetingAt())
@@ -168,7 +167,6 @@ TaxiPotServiceImpl implements TaxiPotService {
         TaxiPot taxiPot = TaxiPot.builder()
                 .id(id)
                 .creator(user)
-                .price(request.getPrice())
                 .target(taxiPotTarget)
                 .createdAt(LocalDateTime.now())
                 .meetingAt(request.getMeetingAt())

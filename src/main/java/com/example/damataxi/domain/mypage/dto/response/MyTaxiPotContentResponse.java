@@ -32,9 +32,6 @@ public class MyTaxiPotContentResponse {
     @ApiModelProperty(value = "택시 팟 대상자", example = "ALL")
     private String target;
 
-    @ApiModelProperty(value = "택시 팟 가격", example = "12000")
-    private int price;
-
     @ApiModelProperty(value = "택시 팟 예약자 수", example = "3")
     private int reserve;
 
@@ -81,7 +78,6 @@ public class MyTaxiPotContentResponse {
                 .address(taxiPot.getAddress())
                 .creator(new CreatorContentResponse(creator.getGcn(), creator.getUsername(), creator.getTel(), creator.getEmail().equals(email)))
                 .target(taxiPot.getTarget().name())
-                .price(taxiPot.getPrice())
                 .reserve(taxiPot.getReservations().size())
                 .all(taxiPot.getAmount())
                 .latitude(taxiPot.getDestinationLatitude())

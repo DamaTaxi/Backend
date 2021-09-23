@@ -53,7 +53,6 @@ public class DummyDataCreatService{
     public TaxiPot makeTaxiPot(User user){
         TaxiPot taxiPot = TaxiPot.builder()
                 .creator(user)
-                .price(1000)
                 .target(TaxiPotTarget.ALL)
                 .createdAt(LocalDateTime.now())
                 .meetingAt(LocalDateTime.now())
@@ -71,7 +70,6 @@ public class DummyDataCreatService{
     public TaxiPot makeTaxiPot(User user, double latitude, double longtitude){
         TaxiPot taxiPot = TaxiPot.builder()
                 .creator(user)
-                .price(1000)
                 .target(TaxiPotTarget.ALL)
                 .createdAt(LocalDateTime.now())
                 .meetingAt(LocalDateTime.now())
@@ -89,7 +87,6 @@ public class DummyDataCreatService{
     public TaxiPot makeTaxiPot(User user, TaxiPotTarget target){
         TaxiPot taxiPot = TaxiPot.builder()
                 .creator(user)
-                .price(1000)
                 .target(target)
                 .createdAt(LocalDateTime.now())
                 .meetingAt(LocalDateTime.now())
