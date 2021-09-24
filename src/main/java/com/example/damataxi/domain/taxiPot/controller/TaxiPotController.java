@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/taxi-pot")
+@CrossOrigin("*")
 public class TaxiPotController {
 
     private final TaxiPotService taxiPotService;
