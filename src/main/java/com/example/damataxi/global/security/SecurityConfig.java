@@ -56,7 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .allowedOrigins("*")
                 .allowedHeaders("*")
                 .maxAge(3600)
-                .allowedMethods("*");
+                .allowedMethods("*")
+                .allowCredentials(true);
     }
 
     @Bean
