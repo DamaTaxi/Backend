@@ -5,6 +5,7 @@ import com.example.damataxi.DummyDataCreatService;
 import com.example.damataxi.domain.auth.domain.User;
 import com.example.damataxi.domain.auth.domain.UserRepository;
 import com.example.damataxi.domain.taxiPot.domain.*;
+import com.example.damataxi.domain.taxiPot.dto.TaxiPotContentTestRequest;
 import com.example.damataxi.domain.taxiPot.dto.TaxiPotContentTestResponse;
 import com.example.damataxi.domain.taxiPot.dto.TaxiPotPageTestResponse;
 import com.example.damataxi.domain.taxiPot.dto.request.TaxiPotContentRequest;
@@ -329,7 +330,7 @@ public class TaxiPotApiTest extends ApiTest {
         // given
         User user = dummyDataCreatService.makeUser("1234");
         String token = makeAccessToken(user.getEmail());
-        TaxiPotContentRequest request = makeTaxiPotContentRequest("ALL");
+        TaxiPotContentTestRequest request = makeTaxiPotContentRequest("ALL");
 
         // when
         ResultActions resultActions = requestMakeTaxiPot(request, token);
@@ -359,7 +360,7 @@ public class TaxiPotApiTest extends ApiTest {
         dummyDataCreatService.makeReservation(taxiPot, user);
         String token = makeAccessToken(user.getEmail());
 
-        TaxiPotContentRequest request = makeTaxiPotContentRequest("ALL");
+        TaxiPotContentTestRequest request = makeTaxiPotContentRequest("ALL");
 
         // when
         ResultActions resultActions = requestMakeTaxiPot(request, token);
@@ -374,7 +375,7 @@ public class TaxiPotApiTest extends ApiTest {
         // given
         User user = dummyDataCreatService.makeUser("1234");
         String token = makeAccessToken(user.getEmail());
-        TaxiPotContentRequest request = makeTaxiPotContentRequest("SENIOR");
+        TaxiPotContentTestRequest request = makeTaxiPotContentRequest("SENIOR");
 
         // when
         ResultActions resultActions = requestMakeTaxiPot(request, token);
@@ -384,10 +385,10 @@ public class TaxiPotApiTest extends ApiTest {
                 .andDo(print());
     }
 
-    private TaxiPotContentRequest makeTaxiPotContentRequest(String target) {
-        return TaxiPotContentRequest.builder()
+    private TaxiPotContentTestRequest makeTaxiPotContentRequest(String target) {
+        return TaxiPotContentTestRequest.builder()
                 .target(target)
-                .meetingAt(LocalDateTime.now())
+                .meetingAt("2020-03-01-12:00")
                 .place("기숙사 322호")
                 .latitude(12.3456)
                 .longitude(23.4567)
@@ -397,7 +398,7 @@ public class TaxiPotApiTest extends ApiTest {
                 .build();
     }
 
-    private ResultActions requestMakeTaxiPot(TaxiPotContentRequest request, String token) throws Exception {
+    private ResultActions requestMakeTaxiPot(TaxiPotContentTestRequest request, String token) throws Exception {
         return requestMvc(post("/taxi-pot").header("AUTHORIZATION", "Bearer " + token), request);
     }
 
@@ -408,7 +409,7 @@ public class TaxiPotApiTest extends ApiTest {
         String token = makeAccessToken(user.getEmail());
         TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(user);
         dummyDataCreatService.makeReservation(taxiPot, user);
-        TaxiPotContentRequest request = makeTaxiPotContentRequest("ALL");
+        TaxiPotContentTestRequest request = makeTaxiPotContentRequest("ALL");
 
         // when
         ResultActions resultActions = requestPatchTaxiPot(request, taxiPot.getId(), token);
@@ -438,7 +439,7 @@ public class TaxiPotApiTest extends ApiTest {
         User fakeUser = dummyDataCreatService.makeUser("2345", "bbbb@gmail.com");
         TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(fakeUser);
         dummyDataCreatService.makeReservation(taxiPot, fakeUser);
-        TaxiPotContentRequest request = makeTaxiPotContentRequest("ALL");
+        TaxiPotContentTestRequest request = makeTaxiPotContentRequest("ALL");
 
         // when
         ResultActions resultActions = requestPatchTaxiPot(request, taxiPot.getId(), token);
@@ -457,7 +458,7 @@ public class TaxiPotApiTest extends ApiTest {
 
         User reservedUser = dummyDataCreatService.makeUser("2345", "bbbb@gmail.com");
         dummyDataCreatService.makeReservation(taxiPot, reservedUser);
-        TaxiPotContentRequest request = makeTaxiPotContentRequest("ALL");
+        TaxiPotContentTestRequest request = makeTaxiPotContentRequest("ALL");
 
         // when
         ResultActions resultActions = requestPatchTaxiPot(request, taxiPot.getId(), token);
@@ -474,7 +475,7 @@ public class TaxiPotApiTest extends ApiTest {
         TaxiPot taxiPot = dummyDataCreatService.makeTaxiPot(user);
         dummyDataCreatService.makeReservation(taxiPot, user);
 
-        TaxiPotContentRequest request = makeTaxiPotContentRequest("SENIOR");
+        TaxiPotContentTestRequest request = makeTaxiPotContentRequest("SENIOR");
 
         // when
         ResultActions resultActions = requestPatchTaxiPot(request, taxiPot.getId(), token);
@@ -483,7 +484,7 @@ public class TaxiPotApiTest extends ApiTest {
                 .andDo(print());
     }
 
-    private ResultActions requestPatchTaxiPot(TaxiPotContentRequest request, int id, String token) throws Exception {
+    private ResultActions requestPatchTaxiPot(TaxiPotContentTestRequest request, int id, String token) throws Exception {
         return requestMvc(patch("/taxi-pot/" + id).header("AUTHORIZATION", "Bearer " + token), request);
     }
 

@@ -1,11 +1,11 @@
 package com.example.damataxi.domain.taxiPot.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -19,7 +19,7 @@ public class TaxiPotContentRequest {
     private String target;
 
     @ApiModelProperty(value = "택시 팟 약속 날짜 및 시간", example = "2020-12-03-03:00")
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd-HH:mm")
     private LocalDateTime meetingAt;
 
     @ApiModelProperty(value = "택시 팟 약속 장소", example = "사감실")
