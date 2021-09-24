@@ -15,7 +15,7 @@ import java.util.List;
 @Table(name = "taxi_pot")
 public class TaxiPot {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @OneToOne
