@@ -16,6 +16,7 @@ import com.example.damataxi.global.error.exception.UserNotFoundException;
 import com.example.damataxi.global.security.JwtTokenProvider;
 import com.example.damataxi.global.security.details.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -76,6 +77,17 @@ public class AuthServiceImpl implements AuthService {
         } else {
             throw new InvalidTokenException();
         }
+    }
+
+    @Override
+    public TokenResponse getTestUserToken() {
+        User user = userRepository.findById("hellohello@gmail.com")
+                .orElseThrow(UserNotFoundException::new);
+        String email = user.getEmail();
+
+        String accessToken = jwtTokenProvider.generateAccessToken(email);
+        String refreshToken = jwtTokenProvider.generateRefreshToken(email);
+        return new TokenResponse(accessToken, refreshToken);
     }
 
 }

@@ -32,4 +32,11 @@ public class LoginController {
     public TokenResponse adminLogin(@Valid @RequestBody AdminLoginRequest request){
         return authService.adminLogin(request);
     }
+
+    @ApiOperation(value = "테스트 유저 로그인", notes = "테스트용 유저의 토큰을 받아서 반환합니다 (ALL)")
+    @PostMapping("/test")
+    public TokenResponse testUserLogin(){
+        return authService.getTestUserToken();
+    }
+
 }
