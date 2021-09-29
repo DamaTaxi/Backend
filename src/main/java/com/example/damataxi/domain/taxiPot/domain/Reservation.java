@@ -15,13 +15,13 @@ public class Reservation {
     @EmbeddedId
     private ReservationId id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @MapsId("userEmail")
     @JoinColumn(name = "user_email")
     private User user;
 
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @MapsId("potId")
     @JoinColumn(name = "pot_id")
     private TaxiPot taxiPot;

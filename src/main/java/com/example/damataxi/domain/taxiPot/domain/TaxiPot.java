@@ -16,7 +16,7 @@ import java.util.List;
 public class TaxiPot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
 
     @OneToOne
     @JoinColumn(name = "creator_email")
@@ -55,7 +55,7 @@ public class TaxiPot {
     private String address;
 
     @Setter
-    @OneToMany(mappedBy = "taxiPot")
+    @OneToMany(mappedBy = "taxiPot", fetch = FetchType.LAZY)
     private List<Reservation> reservations;
 
 }
