@@ -12,6 +12,8 @@ import com.example.damataxi.global.error.exception.TaxiPotNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 @RequiredArgsConstructor
 public class MypageServiceImpl implements MypageService {
@@ -32,6 +34,7 @@ public class MypageServiceImpl implements MypageService {
     }
 
     @Override
+    @Transactional
     public MyTaxiPotContentResponse getApplyTaxiPot(User user) {
         Reservation reservation = user.getReservation();
         if(reservation!=null){
