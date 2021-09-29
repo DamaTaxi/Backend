@@ -8,6 +8,7 @@ import com.example.damataxi.domain.mypage.dto.response.MypageResponse;
 import com.example.damataxi.domain.mypage.service.MypageService;
 import com.example.damataxi.domain.taxiPot.domain.Reservation;
 import com.example.damataxi.domain.taxiPot.domain.TaxiPot;
+import com.example.damataxi.domain.taxiPot.domain.TaxiPotRepository;
 import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotContentResponse;
 import com.example.damataxi.global.error.exception.TaxiPotNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import javax.transaction.Transactional;
 public class MypageServiceImpl implements MypageService {
 
     private final UserRepository userRepository;
+    private final TaxiPotRepository taxiPotRepository;
 
     @Override
     public void setSetting(MypageRequest request, User user) {
@@ -39,7 +41,7 @@ public class MypageServiceImpl implements MypageService {
     public MyTaxiPotContentResponse getApplyTaxiPot(User user) {
         Reservation reservation = user.getReservation();
         if(reservation!=null){
-            TaxiPot taxiPot = reservation.getTaxiPot();
+            TaxiPot taxiPot = taxiPotRepository.findById(reservation.getTaxiPot().getId()).get();
             return MyTaxiPotContentResponse.from(taxiPot, taxiPot.getReservations(), user.getEmail());
         }
         throw new TaxiPotNotFoundException();
