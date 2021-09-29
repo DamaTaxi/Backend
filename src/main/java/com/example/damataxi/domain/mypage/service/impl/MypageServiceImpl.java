@@ -7,6 +7,7 @@ import com.example.damataxi.domain.mypage.dto.response.MyTaxiPotContentResponse;
 import com.example.damataxi.domain.mypage.dto.response.MypageResponse;
 import com.example.damataxi.domain.mypage.service.MypageService;
 import com.example.damataxi.domain.taxiPot.domain.Reservation;
+import com.example.damataxi.domain.taxiPot.domain.TaxiPot;
 import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotContentResponse;
 import com.example.damataxi.global.error.exception.TaxiPotNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,8 @@ public class MypageServiceImpl implements MypageService {
     public MyTaxiPotContentResponse getApplyTaxiPot(User user) {
         Reservation reservation = user.getReservation();
         if(reservation!=null){
-            return MyTaxiPotContentResponse.from(reservation.getTaxiPot(), user.getEmail());
+            TaxiPot taxiPot = reservation.getTaxiPot();
+            return MyTaxiPotContentResponse.from(taxiPot, taxiPot.getReservations(), user.getEmail());
         }
         throw new TaxiPotNotFoundException();
     }

@@ -1,6 +1,7 @@
 package com.example.damataxi.domain.mypage.dto.response;
 
 import com.example.damataxi.domain.auth.domain.User;
+import com.example.damataxi.domain.taxiPot.domain.Reservation;
 import com.example.damataxi.domain.taxiPot.domain.TaxiPot;
 import com.example.damataxi.domain.taxiPot.dto.response.UserContentResponse;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -61,9 +62,9 @@ public class MyTaxiPotContentResponse {
     @ApiModelProperty(value = "택시 팟 신청한 유저 정보", example = "2101 권민정 010-2809-3338")
     private List<UserContentResponse> users;
 
-    public static MyTaxiPotContentResponse from(TaxiPot taxiPot, String email) {
+    public static MyTaxiPotContentResponse from(TaxiPot taxiPot, List<Reservation> reservations, String email) {
 
-        List<UserContentResponse> users = taxiPot.getReservations().stream().map(
+        List<UserContentResponse> users = reservations.stream().map(
                 (reservation)-> {
                     User user = reservation.getUser();
                     return new UserContentResponse(user.getGcn(), user.getUsername(), user.getTel());
