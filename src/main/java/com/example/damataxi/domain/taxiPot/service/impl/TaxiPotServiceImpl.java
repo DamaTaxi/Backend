@@ -59,6 +59,7 @@ TaxiPotServiceImpl implements TaxiPotService {
     }
 
     @Override
+    @Transactional
     public TaxiPotSlidePage getTaxiPotSlideList(User user, int size, int page) {
         TaxiPotTarget target = getTarget(user.getGcn());
         List<TaxiPot> taxiPots = queryDslRepository
