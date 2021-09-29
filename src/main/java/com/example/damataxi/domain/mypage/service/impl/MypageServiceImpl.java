@@ -35,7 +35,7 @@ public class MypageServiceImpl implements MypageService {
     public MyTaxiPotContentResponse getApplyTaxiPot(User user) {
         Reservation reservation = user.getReservation();
         if(reservation!=null){
-            return MyTaxiPotContentResponse.from(user.getReservation().getTaxiPot(), user.getEmail());
+            return MyTaxiPotContentResponse.from(reservation.getTaxiPot(), user.getEmail());
         }
         throw new TaxiPotNotFoundException();
     }

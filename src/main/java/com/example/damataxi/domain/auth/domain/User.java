@@ -36,6 +36,6 @@ public class User {
     private double longitude;
 
     @Setter
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private Reservation reservation;
 }
