@@ -51,26 +51,21 @@ TaxiPotServiceImpl implements TaxiPotService {
     }
 
     @Override
-    public TaxiPotSlidePage getTaxiPotSlideList(int size, int page) {
-        Page<TaxiPot> taxiPots = taxiPotRepository.findAll(PageRequest.of(page, size));
-        List<TaxiPotSlideContentResponse> content = taxiPots
+    public List<TaxiPotSlideContentResponse> getTaxiPotSlideList() {
+        List<TaxiPot> taxiPots = taxiPotRepository.findAll();
+        return taxiPots
                 .stream().map(TaxiPotSlideContentResponse::from).collect(Collectors.toList());
-        return new TaxiPotSlidePage(taxiPots.getTotalElements(), taxiPots.getTotalPages(), content);
     }
 
     @Override
     @Transactional
-    public TaxiPotSlidePage getTaxiPotSlideList(User user, int size, int page) {
+    public List<TaxiPotSlideContentResponse> getTaxiPotSlideList(User user) {
         TaxiPotTarget target = getTarget(user.getGcn());
         List<TaxiPot> taxiPots = queryDslRepository
-                .getUsersTaxiPot(user.getLatitude(), user.getLongitude(), target, size, size*page, user);
+                .getUsersTaxiPot(user.getLatitude(), user.getLongitude(), target, user);
 
-        long totalElements = queryDslRepository
-                .getUserTaxiPotAmount(user.getLatitude(), user.getLongitude(), target, size, size*page, user);
-        int totalPages = (totalElements%size!=0) ? ((int)(totalElements/size)+1) : (int)(totalElements/size);
-        List<TaxiPotSlideContentResponse> content = taxiPots
+        return taxiPots
                 .stream().map(TaxiPotSlideContentResponse::from).collect(Collectors.toList());
-        return new TaxiPotSlidePage(totalElements, totalPages, content);
     }
 
     @Override

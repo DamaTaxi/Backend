@@ -2,15 +2,14 @@ package com.example.damataxi.domain.taxiPot.service;
 
 import com.example.damataxi.domain.auth.domain.User;
 import com.example.damataxi.domain.taxiPot.dto.request.TaxiPotContentRequest;
-import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotContentResponse;
-import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotInfoResponse;
-import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotPage;
-import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotSlidePage;
+import com.example.damataxi.domain.taxiPot.dto.response.*;
+
+import java.util.List;
 
 public interface TaxiPotService {
     TaxiPotInfoResponse getTaxiPotInfo();
-    TaxiPotSlidePage getTaxiPotSlideList(int size, int page);
-    TaxiPotSlidePage getTaxiPotSlideList(User user, int size, int page);
+    List<TaxiPotSlideContentResponse> getTaxiPotSlideList();
+    List<TaxiPotSlideContentResponse> getTaxiPotSlideList(User user);
     TaxiPotPage getTaxiPotList(int size, int page);
     TaxiPotPage getTaxiPotList(User user, int size, int page);
     TaxiPotContentResponse getTaxiPotContent(int id);

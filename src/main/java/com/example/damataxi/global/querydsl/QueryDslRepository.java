@@ -32,6 +32,19 @@ public class QueryDslRepository {
                 .fetch();
     }
 
+    public List<TaxiPot> getUsersTaxiPot(double latitude, double longitude, TaxiPotTarget target, User user) {
+        QTaxiPot qtaxiPot = QTaxiPot.taxiPot;
+        QReservation qreservation = QReservation.reservation;
+        QUser quser = QUser.user;
+        return query.select(qtaxiPot)
+                .from(qtaxiPot)
+                .join(qtaxiPot.reservations, qreservation)
+                .join(qreservation.user, quser).on(quser.ne(user))
+                .where((qtaxiPot.target.eq(TaxiPotTarget.ALL).or(qtaxiPot.target.eq(target))))
+                .orderBy((qtaxiPot.destinationLatitude.subtract(latitude)).multiply(qtaxiPot.destinationLongitude.subtract(longitude)).asc())
+                .fetch();
+    }
+
     public long getUserTaxiPotAmount(double latitude, double longitude, TaxiPotTarget target, int limit, int offset, User user) {
         QTaxiPot qtaxiPot = QTaxiPot.taxiPot;
         QReservation qreservation = QReservation.reservation;

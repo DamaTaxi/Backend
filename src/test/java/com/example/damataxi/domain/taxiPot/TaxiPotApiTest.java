@@ -8,8 +8,7 @@ import com.example.damataxi.domain.taxiPot.domain.*;
 import com.example.damataxi.domain.taxiPot.dto.TaxiPotContentTestRequest;
 import com.example.damataxi.domain.taxiPot.dto.TaxiPotContentTestResponse;
 import com.example.damataxi.domain.taxiPot.dto.TaxiPotPageTestResponse;
-import com.example.damataxi.domain.taxiPot.dto.request.TaxiPotContentRequest;
-import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotSlidePage;
+import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotSlideContentResponse;
 import com.example.damataxi.global.error.exception.TaxiPotNotFoundException;
 import com.example.damataxi.global.error.exception.UserNotFoundException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -21,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -98,23 +97,21 @@ public class TaxiPotApiTest extends ApiTest {
         dummyDataCreatService.makeReservation(taxiPot4, creator4);
 
         // when
-        ResultActions resultActions = requestGetTaxiPotSlide(3, 0);
+        ResultActions resultActions = requestGetTaxiPotSlide();
 
         // then
         MvcResult result = resultActions.andExpect(status().isOk())
                 .andDo(print())
                 .andReturn();
 
-        TaxiPotSlidePage response = objectMapper.readValue(
-                result.getResponse().getContentAsString(), new TypeReference<TaxiPotSlidePage>() {});
+        List<TaxiPotSlideContentResponse> response = objectMapper.readValue(
+                result.getResponse().getContentAsString(), new TypeReference<List<TaxiPotSlideContentResponse>>() {});
 
-        Assertions.assertEquals(response.getContent().size(), 3);
-        Assertions.assertEquals(response.getTotalElements(), 4);
-        Assertions.assertEquals(response.getTotalPages(), 2);
+        Assertions.assertEquals(response.size(), 4);
     }
 
-    private ResultActions requestGetTaxiPotSlide(int size, int page) throws Exception {
-        return requestMvc(get("/taxi-pot/slide?size=" + size + "&page=" + page));
+    private ResultActions requestGetTaxiPotSlide() throws Exception {
+        return requestMvc(get("/taxi-pot/slide"));
     }
 
     @Test
@@ -138,23 +135,21 @@ public class TaxiPotApiTest extends ApiTest {
         dummyDataCreatService.makeReservation(taxiPot5, user);
 
         // when
-        ResultActions resultActions = requestGetTaxiPotSlide(3, 0, token);
+        ResultActions resultActions = requestGetTaxiPotSlide(token);
 
         // then
         MvcResult result = resultActions.andExpect(status().isOk())
                 .andDo(print())
                 .andReturn();
 
-        TaxiPotSlidePage response = objectMapper.readValue(
-                result.getResponse().getContentAsString(), new TypeReference<TaxiPotSlidePage>() {});
+        List<TaxiPotSlideContentResponse> response = objectMapper.readValue(
+                result.getResponse().getContentAsString(), new TypeReference<List<TaxiPotSlideContentResponse>>() {});
 
-        Assertions.assertEquals(response.getContent().size(), 2);
-        Assertions.assertEquals(response.getTotalElements(), 2);
-        Assertions.assertEquals(response.getTotalPages(), 1);
+        Assertions.assertEquals(response.size(), 2);
     }
 
-    private ResultActions requestGetTaxiPotSlide(int size, int page, String token) throws Exception {
-        return requestMvc(get("/taxi-pot/slide?size=" + size + "&page=" + page).header("AUTHORIZATION", "Bearer " + token));
+    private ResultActions requestGetTaxiPotSlide(String token) throws Exception {
+        return requestMvc(get("/taxi-pot/slide").header("AUTHORIZATION", "Bearer " + token));
     }
 
     @Test

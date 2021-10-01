@@ -1,16 +1,15 @@
 package com.example.damataxi.domain.taxiPot.controller;
 
 import com.example.damataxi.domain.taxiPot.dto.request.TaxiPotContentRequest;
-import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotContentResponse;
-import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotInfoResponse;
-import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotPage;
-import com.example.damataxi.domain.taxiPot.dto.response.TaxiPotSlidePage;
+import com.example.damataxi.domain.taxiPot.dto.response.*;
 import com.example.damataxi.domain.taxiPot.service.TaxiPotService;
 import com.example.damataxi.global.security.AuthenticationFacade;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,11 +27,11 @@ public class TaxiPotController {
 
     @ApiOperation(value = "택시 팟 슬라이드 리스트 받아오기", notes = "모든 택시 팟 리스트를 받아옵니다 (ALL, 유저)")
     @GetMapping("/slide")
-    public TaxiPotSlidePage getTaxiPotSlide(@RequestParam("size") int size, @RequestParam("page") int page) {
+    public List<TaxiPotSlideContentResponse> getTaxiPotSlide() {
         try {
-            return taxiPotService.getTaxiPotSlideList(authenticationFacade.getUser(), size, page);
+            return taxiPotService.getTaxiPotSlideList(authenticationFacade.getUser());
         } catch (Exception e) {
-            return taxiPotService.getTaxiPotSlideList(size, page);
+            return taxiPotService.getTaxiPotSlideList();
         }
     }
 
