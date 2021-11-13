@@ -10,6 +10,12 @@ import lombok.*;
 @Builder(access = AccessLevel.PRIVATE)
 public class MypageResponse {
 
+    @ApiModelProperty(value = "유저 학번", example = "1234")
+    private String gcn;
+
+    @ApiModelProperty(value = "유저 이름", example = "홍길동")
+    private String name;
+
     @ApiModelProperty(value = "유저 전화번호", example = "01012030149")
     private String tel;
 
@@ -31,6 +37,8 @@ public class MypageResponse {
             potId = user.getReservation().getId().getPotId();
         }
         return MypageResponse.builder()
+                .gcn(user.getGcn())
+                .name(user.getUsername())
                 .tel(user.getTel())
                 .email(user.getEmail())
                 .latitude(user.getLatitude())

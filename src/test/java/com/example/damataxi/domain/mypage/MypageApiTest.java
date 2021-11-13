@@ -96,6 +96,8 @@ public class MypageApiTest extends ApiTest {
 
         // then
         resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("gcn").value("1234"))
+                .andExpect(jsonPath("name").value("user"))
                 .andExpect(jsonPath("tel").value("01001010101"))
                 .andExpect(jsonPath("email").value("xxxx@gmail.com"))
                 .andExpect(jsonPath("latitude").value(12.2312))
