@@ -214,7 +214,7 @@ TaxiPotServiceImpl implements TaxiPotService {
         taxiPotCheckProvider.checkCorrectTarget(getTarget(user.getGcn()), taxiPot.getTarget());
 
         Reservation reservation = Reservation.builder()
-                .id(new ReservationId(taxiPot.getId(), user.getGcn()))
+                .id(new ReservationId(taxiPot.getId(), user.getEmail()))
                 .user(user)
                 .taxiPot(taxiPot)
                 .build();
