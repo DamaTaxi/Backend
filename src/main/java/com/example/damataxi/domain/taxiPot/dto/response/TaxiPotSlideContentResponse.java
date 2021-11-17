@@ -41,6 +41,7 @@ public class TaxiPotSlideContentResponse {
                 .latitude(taxiPot.getDestinationLatitude())
                 .longitude(taxiPot.getDestinationLongitude())
                 .title(taxiPot.getTitle())
+                .address(taxiPot.getAddress())
                 .build();
     }
 }
