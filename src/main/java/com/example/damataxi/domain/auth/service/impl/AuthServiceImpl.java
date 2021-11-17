@@ -81,7 +81,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public TokenResponse getTestUserToken() {
-        User user = userRepository.findById("hellohello@gmail.com")
+        User user = userRepository.findById("201406psh@dsm.hs.kr")
                 .orElseThrow(UserNotFoundException::new);
         String email = user.getEmail();
 
