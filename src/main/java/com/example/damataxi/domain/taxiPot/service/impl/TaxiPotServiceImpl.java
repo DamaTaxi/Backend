@@ -232,6 +232,10 @@ TaxiPotServiceImpl implements TaxiPotService {
     @Transactional
     public void cancelApplyTaxiPot(User user, int id) {
         TaxiPot taxiPot = taxiPotCheckProvider.getTaxiPot(id);
+        if (taxiPot.getCreator().getEmail().equals(user.getEmail())) {
+            this.deleteTaxiPot(user, id);
+            return;
+        }
         taxiPotCheckProvider.getReservation(user, id);
 
         reservationRepository.deleteById(new ReservationId(id, user.getEmail()));
