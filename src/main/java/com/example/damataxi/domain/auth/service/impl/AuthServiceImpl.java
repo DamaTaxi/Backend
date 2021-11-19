@@ -41,16 +41,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public UserTokenResponse userLogin(String code) {
-        TokenResponse response;
-        try {
-            CodeResponse codeResponse = codeClient.getUserToken(new CodeReqeust(
-                    client_id, client_secret, code
-            ));
+        CodeResponse codeResponse = codeClient.getUserToken(new CodeReqeust(
+           client_id, client_secret, code
+        ));
 
-            response = tokenClient.getUserInfo(codeResponse.getAccess_token());
-        } catch (Exception e) {
-            throw new InvalidTokenException();
-        }
+        TokenResponse response = tokenClient.getUserInfo(codeResponse.getAccess_token());
 
         boolean firstLogin = false;
         if(userRepository.findById(response.getEmail()).isEmpty()) {
