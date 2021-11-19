@@ -45,7 +45,7 @@ public class AuthServiceImpl implements AuthService {
            client_id, client_secret, code
         ));
 
-        TokenResponse response = tokenClient.getUserInfo("Bearer" + codeResponse.getAccess_token());
+        TokenResponse response = tokenClient.getUserInfo("Bearer " + codeResponse.getAccess_token());
 
         boolean firstLogin = false;
         if(userRepository.findById(response.getEmail()).isEmpty()) {
