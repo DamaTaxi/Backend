@@ -18,7 +18,7 @@ public class FeignClientErrorDecoder implements ErrorDecoder {
         if (response.body() != null) {
             try {
                 message = objectMapper.readTree(response.body().toString())
-                        .get("msg").asText();
+                        .get("message").asText();
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
