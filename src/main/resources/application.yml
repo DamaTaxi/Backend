@@ -1,6 +1,9 @@
 auth:
   jwt:
     secret: ${JWT_SECRET:}
+  client:
+    id: ${CLIENT_ID:}
+    secret: ${CLIENT_SECRET:}
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

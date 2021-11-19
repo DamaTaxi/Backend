@@ -8,8 +8,8 @@ import javax.validation.constraints.NotNull;
 @Getter
 public class UserLoginRequest {
 
-    @ApiModelProperty(value = "Dsm Oauth Access Token", example = "dsmOauthAccessToken")
+    @ApiModelProperty(value = "code", example = "code")
     @NotNull
-    private String accessToken;
+    private String code;
 
 }
