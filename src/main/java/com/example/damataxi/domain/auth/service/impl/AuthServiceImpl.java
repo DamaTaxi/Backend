@@ -6,18 +6,18 @@ import com.example.damataxi.domain.auth.domain.User;
 import com.example.damataxi.domain.auth.domain.UserRepository;
 import com.example.damataxi.domain.auth.dto.request.AdminLoginRequest;
 import com.example.damataxi.domain.auth.dto.request.TokenRefreshRequest;
-import com.example.damataxi.domain.auth.dto.response.TokenResponse;
 import com.example.damataxi.domain.auth.dto.response.UserTokenResponse;
-import com.example.damataxi.domain.auth.retrofit.dto.DsmOauthResponse;
 import com.example.damataxi.domain.auth.service.AuthService;
-import com.example.damataxi.domain.auth.service.DsmOauthAccountProvider;
+import com.example.damataxi.domain.auth.util.api.client.CodeClient;
+import com.example.damataxi.domain.auth.util.api.client.TokenClient;
+import com.example.damataxi.domain.auth.util.api.dto.CodeReqeust;
+import com.example.damataxi.domain.auth.util.api.dto.CodeResponse;
+import com.example.damataxi.domain.auth.util.api.dto.TokenResponse;
 import com.example.damataxi.global.error.exception.InvalidTokenException;
 import com.example.damataxi.global.error.exception.UserNotFoundException;
 import com.example.damataxi.global.security.JwtTokenProvider;
-import com.example.damataxi.global.security.details.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,15 +25,27 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final DsmOauthAccountProvider dsmOauthAccountProvider;
     private final JwtTokenProvider jwtTokenProvider;
     private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
+    private final CodeClient codeClient;
+    private final TokenClient tokenClient;
+
+    @Value("${auth.client.secret}")
+    private String client_secret;
+
+    @Value("${auth.client.id}")
+    private String client_id;
+
     @Override
-    public UserTokenResponse userLogin(String oauthAccessToken) {
-        DsmOauthResponse response = dsmOauthAccountProvider.searchAccount(oauthAccessToken);
+    public UserTokenResponse userLogin(String code) {
+        CodeResponse codeResponse = codeClient.getUserToken(new CodeReqeust(
+           client_id, client_secret, code
+        ));
+
+        TokenResponse response = tokenClient.getUserInfo(codeResponse.getAccess_token());
 
         boolean firstLogin = false;
         if(userRepository.findById(response.getEmail()).isEmpty()) {
@@ -52,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public TokenResponse adminLogin(AdminLoginRequest adminLoginRequest) {
+    public com.example.damataxi.domain.auth.dto.response.TokenResponse adminLogin(AdminLoginRequest adminLoginRequest) {
         String id = adminLoginRequest.getId();
         Admin admin = adminRepository.findById(adminLoginRequest.getId())
                 .orElseThrow(UserNotFoundException::new);
@@ -63,31 +75,31 @@ public class AuthServiceImpl implements AuthService {
 
         String accessToken = jwtTokenProvider.generateAccessToken(id);
         String refreshToken = jwtTokenProvider.generateRefreshToken(id);
-        return new TokenResponse(accessToken, refreshToken);
+        return new com.example.damataxi.domain.auth.dto.response.TokenResponse(accessToken, refreshToken);
     }
 
     @Override
-    public TokenResponse tokenRefresh(TokenRefreshRequest tokenRefreshRequest) {
+    public com.example.damataxi.domain.auth.dto.response.TokenResponse tokenRefresh(TokenRefreshRequest tokenRefreshRequest) {
         if (jwtTokenProvider.validateRefreshToken(tokenRefreshRequest.getRefreshToken())) {
             String id = jwtTokenProvider.getId(tokenRefreshRequest.getRefreshToken());
 
             String accessToken = jwtTokenProvider.generateAccessToken(id);
             String refreshToken = jwtTokenProvider.generateRefreshToken(id);
-            return new TokenResponse(accessToken, refreshToken);
+            return new com.example.damataxi.domain.auth.dto.response.TokenResponse(accessToken, refreshToken);
         } else {
             throw new InvalidTokenException();
         }
     }
 
     @Override
-    public TokenResponse getTestUserToken() {
+    public com.example.damataxi.domain.auth.dto.response.TokenResponse getTestUserToken() {
         User user = userRepository.findById("201406psh@dsm.hs.kr")
                 .orElseThrow(UserNotFoundException::new);
         String email = user.getEmail();
 
         String accessToken = jwtTokenProvider.generateAccessToken(email);
         String refreshToken = jwtTokenProvider.generateRefreshToken(email);
-        return new TokenResponse(accessToken, refreshToken);
+        return new com.example.damataxi.domain.auth.dto.response.TokenResponse(accessToken, refreshToken);
     }
 
 }

@@ -1,6 +1,9 @@
 auth:
   jwt:
     secret:  ${JWT_SECRET:asdf}
+  client:
+    id: ${CLIENT_ID:asdf}
+    secret: ${CLIENT_SECRET:asdf}
 spring:
   h2:
     console:
