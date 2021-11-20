@@ -25,4 +25,8 @@ public class MypageRequest {
     @ApiModelProperty(value = "자주가는 곳 경도", example = "34.5678")
     @NotNull
     private double longitude;
+
+    @ApiModelProperty(value = "자주가는 곳 주소", example = "대전광역시 유성구 장동 가정북로 76")
+    @NotNull
+    private String address;
 }

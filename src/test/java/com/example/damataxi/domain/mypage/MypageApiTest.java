@@ -60,6 +60,7 @@ public class MypageApiTest extends ApiTest {
                 .tel("01001010101")
                 .latitude(12.2312)
                 .longitude(23.4343)
+                .address("address")
                 .build();
 
         // when
@@ -75,6 +76,7 @@ public class MypageApiTest extends ApiTest {
         Assertions.assertEquals(user.getTel(), "01001010101");
         Assertions.assertEquals(user.getLatitude(), 12.2312);
         Assertions.assertEquals(user.getLongitude(), 23.4343);
+        Assertions.assertEquals(user.getAddress(), "address");
     }
 
     private ResultActions requestSetUser(MypageRequest request, String token) throws Exception {
@@ -88,6 +90,7 @@ public class MypageApiTest extends ApiTest {
         user.setTel("01001010101");
         user.setLatitude(12.2312);
         user.setLongitude(23.4343);
+        user.setAddress("address");
         userRepository.save(user);
         String token = makeAccessToken("xxxx@gmail.com");
 
@@ -100,8 +103,7 @@ public class MypageApiTest extends ApiTest {
                 .andExpect(jsonPath("name").value("user"))
                 .andExpect(jsonPath("tel").value("01001010101"))
                 .andExpect(jsonPath("email").value("xxxx@gmail.com"))
-                .andExpect(jsonPath("latitude").value(12.2312))
-                .andExpect(jsonPath("longitude").value(23.4343))
+                .andExpect(jsonPath("address").value("address"))
                 .andExpect(jsonPath("potId").isEmpty())
                 .andDo(print());
 

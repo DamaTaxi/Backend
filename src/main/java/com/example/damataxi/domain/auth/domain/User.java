@@ -36,6 +36,10 @@ public class User {
     private double longitude;
 
     @Setter
+    @Column(name = "address", nullable = true)
+    private String address;
+
+    @Setter
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private Reservation reservation;
 }

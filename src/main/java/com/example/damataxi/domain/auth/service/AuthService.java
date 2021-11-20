@@ -9,5 +9,4 @@ public interface AuthService {
     UserTokenResponse userLogin(String oauthAccessToken);
     TokenResponse adminLogin(AdminLoginRequest adminLoginRequest);
     TokenResponse tokenRefresh(TokenRefreshRequest tokenRefreshRequest);
-    TokenResponse getTestUserToken();
 }

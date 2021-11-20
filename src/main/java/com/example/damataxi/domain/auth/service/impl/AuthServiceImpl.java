@@ -91,15 +91,4 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
-    @Override
-    public com.example.damataxi.domain.auth.dto.response.TokenResponse getTestUserToken() {
-        User user = userRepository.findById("201406psh@dsm.hs.kr")
-                .orElseThrow(UserNotFoundException::new);
-        String email = user.getEmail();
-
-        String accessToken = jwtTokenProvider.generateAccessToken(email);
-        String refreshToken = jwtTokenProvider.generateRefreshToken(email);
-        return new com.example.damataxi.domain.auth.dto.response.TokenResponse(accessToken, refreshToken);
-    }
-
 }

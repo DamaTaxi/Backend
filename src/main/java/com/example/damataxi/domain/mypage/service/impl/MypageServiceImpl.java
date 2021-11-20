@@ -28,6 +28,7 @@ public class MypageServiceImpl implements MypageService {
         user.setTel(request.getTel());
         user.setLatitude(request.getLatitude());
         user.setLongitude(request.getLongitude());
+        user.setAddress(request.getAddress());
         userRepository.save(user);
     }
 
