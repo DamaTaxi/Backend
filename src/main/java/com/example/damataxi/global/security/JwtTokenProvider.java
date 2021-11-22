@@ -25,7 +25,7 @@ public class JwtTokenProvider {
     private String secretKey;
 
     public String generateAccessToken(String value) {
-        return makingToken(value, "access", 7200L);
+        return makingToken(value, "access", 172800L);
     }
 
     public String generateRefreshToken(String value) {
